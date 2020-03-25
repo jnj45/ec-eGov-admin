@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>ec-eGov-admin</title>
+<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		//alert('webjar jquery');
+	});
+
+function search(){
+	alert($("#searchForm").serialize());
+	$.post("/sample/books", 
+		$("#searchForm").serialize(), 
+		function(data){
+			$("#result").val(JSON.stringify(data));
+	    }
+	);
+}
+</script>
+</head>
+<body>
+<h1>Book List</h1>
+<form id="searchForm" name="searchForm">
+	책제목:<input type="text" name="bookTitle"/><br>
+	총페이지수:<input type="text" name="totalPageLoe" size="3"/> ~ <input type="text" name="totalPageGoe" size="3"/><br>
+	저자이름:<input type="text" name="authorName"/><br>
+	<input type="button" value="조회" onclick="search();"/>
+</form>
+<br>
+<textarea id="result" rows="10" cols="100"></textarea>
+</body>
+</html>
