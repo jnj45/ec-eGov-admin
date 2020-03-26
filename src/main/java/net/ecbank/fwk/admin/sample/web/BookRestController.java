@@ -19,7 +19,7 @@ public class BookRestController {
 	BookService bookService;
 	
 	@RequestMapping("/books")
-	public Page<BookAuthorDto> serachBbooks(BookSearchCondition cond, Pageable pageable){
-		return bookService.searchBook(cond, pageable);
+	public Page<BookAuthorDto> searchBbooks(BookSearchCondition cond, Pageable pageable){
+		return bookService.searchBooksDto(cond, pageable);
 	}
 }

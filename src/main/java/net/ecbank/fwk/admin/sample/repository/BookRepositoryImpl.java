@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import net.ecbank.fwk.admin.sample.dto.BookAuthorDto;
 import net.ecbank.fwk.admin.sample.dto.BookSearchCondition;
 import net.ecbank.fwk.admin.sample.dto.QBookAuthorDto;
+import net.ecbank.fwk.admin.sample.entity.Book;
 
 @RequiredArgsConstructor //생성자로 em, queryFacotry 주입
 public class BookRepositoryImpl implements BookRepositoryCustom {
@@ -28,15 +29,16 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
 	private final JPAQueryFactory queryFactory; //@Bean으로 등록했음.
 	
 	@Override
-	public Page<BookAuthorDto> searchBook(BookSearchCondition cond, Pageable pageable){
+	public Page<BookAuthorDto> searchBooksDto(BookSearchCondition cond, Pageable pageable){
 		QueryResults<BookAuthorDto> results = queryFactory
-			.select(new QBookAuthorDto(
-						book.id.as("bookId"),
-						book.title.as("bookTitle"),
-						book.totalPage,
-						author.id.as("authorId"),
-						author.name.as("authorName")
-					))
+//			.select(new QBookAuthorDto(
+//						book.id.as("bookId"),
+//						book.title.as("bookTitle"),
+//						book.totalPage,
+//						author.id.as("authorId"),
+//						author.name.as("authorName")
+//					))
+			.select(new QBookAuthorDto(book))
 			.from(book)
 			.where(
 					bookTitleLike(cond.getBookTitle()),
@@ -50,6 +52,28 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
 			.fetchResults();
 		
 		List<BookAuthorDto> list = results.getResults();
+		long totalCnt = results.getTotal();
+						
+		return new PageImpl<>(list, pageable, totalCnt);
+	}
+	
+	@Override
+	public Page<Book> searchBooks(BookSearchCondition cond, Pageable pageable){
+		QueryResults<Book> results = queryFactory
+			.select(book)
+			.from(book)
+			.where(
+					bookTitleLike(cond.getBookTitle()),
+					authorNameLike(cond.getAuthorName()),
+					totalPageLoe(cond.getTotalPageLoe()),
+					totalPageGoe(cond.getTotalPageGoe())
+				  )
+			.leftJoin(book.author, author)
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
+			.fetchResults();
+		
+		List<Book> list = results.getResults();
 		long totalCnt = results.getTotal();
 						
 		return new PageImpl<>(list, pageable, totalCnt);
