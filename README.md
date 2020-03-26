@@ -15,10 +15,10 @@ Spring boot, Spring Data JPA, Thymeleaf 기반.
     * grid 라이브러리 및 tree 라이브러리 적용. (jqgrid등)
   ### Back-end
     * 전자정부 시스템관리 메뉴 중 필수기능 구현.
-      1. 보안
+      1. 보안 (net.ecbank.fwk.admin.sec 패키지) (각 entity,web,repository,service)
         -  롤관리, 권한관리(권한-롤맵핑), 사용자별 권한관리, 
-      2. 시스템관리
+      2. 시스템관리(net.ecbank.fwk.admin.sys 패키지)
         - 코드그룹-코드관리, 프로그램 관리, 메뉴관리, 권한별 메뉴관리
-      3. 로그조회
+      3. 로그조회(net.ecbank.fwk.admin.log 패키지)
         - 
       
