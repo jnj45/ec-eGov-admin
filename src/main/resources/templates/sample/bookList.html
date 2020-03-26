@@ -27,6 +27,7 @@ function searchEntity(){
 	    }
 	);
 }
+
 </script>
 </head>
 <body>
@@ -40,5 +41,8 @@ function searchEntity(){
 </form>
 <br>
 <textarea id="result" rows="10" cols="100"></textarea>
+<form id="detailForm" name="detailForm" action="/sample/bookDetail" th:action="@{/sample/bookDetail}" method="post">
+<input type="text" name="bookId"/><input type="submit" value="상세조회"/>
+</form>
 </body>
 </html>

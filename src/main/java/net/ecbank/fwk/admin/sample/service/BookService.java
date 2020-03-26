@@ -35,4 +35,8 @@ public class BookService {
 	public Page<Book> searchBooks(BookSearchCondition cond, Pageable pageable){
 		return bookRepository.searchBooks(cond, pageable);
 	}
+	
+	public Book findBook(Long bookId) {
+		return bookRepository.findById(bookId).orElse(new Book());
+	}
 }

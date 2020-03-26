@@ -26,7 +26,7 @@ import net.ecbank.fwk.admin.entity.BaseEntity;
 @Getter @Setter
 @ToString(of= {"id","title","totalPage"})
 @EqualsAndHashCode(callSuper=false)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Entity
 @Table(name="Z_BOOK") //샘플 테이블 'Z_' prefix
 @TableGenerator(name="Z_BOOK_SEQ_GENERATOR", table="COMTECOPSEQ", pkColumnValue="Z_BOOK_ID", pkColumnName="TABLE_NAME", valueColumnName="NEXT_ID", allocationSize=1)

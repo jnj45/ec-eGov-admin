@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>ec-eGov-admin</title>
+<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		//alert('webjar jquery');
+	});
+</script>
+</head>
+<body>
+<h1>Book List</h1>
+책제목:<sapn th:text="${book.title}">제목</sapn><br>
+총페이지수:<sapn th:text="${book.totalPage}">페이지수</sapn><br>
+저자:<sapn th:text="${book.author.name}">저자</sapn><br><!-- 스프링 OSIV가 기본적용되어 있으므로 lazy loading 데이타를 view단에서 조회가능함. -->
+</body>
+</html>
