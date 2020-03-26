@@ -1,5 +1,7 @@
 package net.ecbank.fwk.admin.sample.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,14 +16,18 @@ import javax.persistence.TableGenerator;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import net.ecbank.fwk.admin.entity.BaseEntity;
 
-@Entity
-@Data
+//@Data
+@Getter @Setter
+@ToString(of= {"id","title","totalPage"})
 @EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 @Table(name="Z_BOOK") //샘플 테이블 'Z_' prefix
 @TableGenerator(name="Z_BOOK_SEQ_GENERATOR", table="COMTECOPSEQ", pkColumnValue="Z_BOOK_ID", pkColumnName="TABLE_NAME", valueColumnName="NEXT_ID", allocationSize=1)
 public class Book extends BaseEntity {
@@ -36,7 +42,6 @@ public class Book extends BaseEntity {
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="author_id")
-	@ToString.Exclude
 	private Author author;
 
 	public Book(String title, long totalPage, Author author) {

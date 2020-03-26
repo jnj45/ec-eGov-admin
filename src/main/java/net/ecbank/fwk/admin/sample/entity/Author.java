@@ -15,11 +15,15 @@ import javax.persistence.TableGenerator;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import net.ecbank.fwk.admin.entity.BaseEntity;
 
-@Data
+//@Data
+@Getter @Setter
+@ToString(of= {"id","name"})
 @EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -34,7 +38,6 @@ public class Author extends BaseEntity {
 	private String name;
 	
 	
-	@ToString.Exclude
 	@OneToMany(mappedBy="author", fetch=FetchType.LAZY)
 	private List<Book> books;
 	

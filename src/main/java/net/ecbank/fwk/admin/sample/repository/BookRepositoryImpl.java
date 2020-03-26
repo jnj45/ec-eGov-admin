@@ -38,7 +38,8 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
 //						author.id.as("authorId"),
 //						author.name.as("authorName")
 //					))
-			.select(new QBookAuthorDto(book))
+//			.select(new QBookAuthorDto(book)) //-->이렇게 할 때 fetchjoin 하지 않으면 N+1 발생.
+			.select(new QBookAuthorDto(book, author))
 			.from(book)
 			.where(
 					bookTitleLike(cond.getBookTitle()),
@@ -47,6 +48,7 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
 					totalPageGoe(cond.getTotalPageGoe())
 				  )
 			.leftJoin(book.author, author)
+			.fetchJoin()
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetchResults();
@@ -69,6 +71,7 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
 					totalPageGoe(cond.getTotalPageGoe())
 				  )
 			.leftJoin(book.author, author)
+			.fetchJoin()
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetchResults();

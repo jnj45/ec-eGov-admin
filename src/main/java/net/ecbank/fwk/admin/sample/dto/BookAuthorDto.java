@@ -3,6 +3,7 @@ package net.ecbank.fwk.admin.sample.dto;
 import com.querydsl.core.annotations.QueryProjection;
 
 import lombok.Data;
+import net.ecbank.fwk.admin.sample.entity.Author;
 import net.ecbank.fwk.admin.sample.entity.Book;
 
 @Data
@@ -31,6 +32,15 @@ public class BookAuthorDto {
 		this.totalPage = book.getTotalPage();
 		this.authorId = book.getAuthor().getId();
 		this.authorName = book.getAuthor().getName();
+	}
+	
+	@QueryProjection
+	public BookAuthorDto(Book book, Author author) {
+		this.bookId = book.getId();
+		this.bookTitle = book.getTitle();
+		this.totalPage = book.getTotalPage();
+		this.authorId = author.getId();
+		this.authorName = author.getName();
 	}
 		
 }

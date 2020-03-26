@@ -9,9 +9,18 @@
 		//alert('webjar jquery');
 	});
 
-function search(){
+function searchDto(){
 	alert($("#searchForm").serialize());
-	$.post("/sample/books", 
+	$.post( "/sample/booksDto", 
+		$("#searchForm").serialize(), 
+		function(data){
+			$("#result").val(JSON.stringify(data));
+	    }
+	);
+}
+function searchEntity(){
+	alert($("#searchForm").serialize());
+	$.post( "/sample/booksEntity", 
 		$("#searchForm").serialize(), 
 		function(data){
 			$("#result").val(JSON.stringify(data));
@@ -26,7 +35,8 @@ function search(){
 	책제목:<input type="text" name="bookTitle"/><br>
 	총페이지수:<input type="text" name="totalPageLoe" size="3"/> ~ <input type="text" name="totalPageGoe" size="3"/><br>
 	저자이름:<input type="text" name="authorName"/><br>
-	<input type="button" value="조회" onclick="search();"/>
+	<input type="button" value="조회1" onclick="searchDto();"/>
+	<input type="button" value="조회2" onclick="searchEntity();"/>
 </form>
 <br>
 <textarea id="result" rows="10" cols="100"></textarea>
