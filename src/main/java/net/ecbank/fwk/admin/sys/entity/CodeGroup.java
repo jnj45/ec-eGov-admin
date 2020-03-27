@@ -52,7 +52,7 @@ public class CodeGroup extends BaseEntity {
 	private CodeClass codeClass;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy="codeGrp",fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="codeGrp",fetch=FetchType.LAZY)
 	private List<CodeDetail> codeDetails;
 	
 	public CodeGroup(String codeGrp, String codeGrpNm, String codeGrpDesc, String useYn) {

@@ -48,9 +48,9 @@ public class CodeManageRestController {
 	@PostMapping("/codeDetailList")
 	public List<CodeDetail> codeDetailList(@RequestBody CodeGroup codeGroup) {
 		
-		CodeGroup list = codeMngService.searchCodeDetailList(codeGroup);
+		List<CodeDetail> list = codeMngService.searchCodeDetailList(codeGroup);
 		
-		return list.getCodeDetails();
+		return list;
 	}
 	
 }

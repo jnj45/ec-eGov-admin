@@ -1,11 +1,13 @@
 package net.ecbank.fwk.admin.sys.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import net.ecbank.fwk.admin.sys.entity.CodeDetail;
 import net.ecbank.fwk.admin.sys.entity.CodeGroup;
 import net.ecbank.fwk.admin.sys.repository.CodeDetailRepository;
 import net.ecbank.fwk.admin.sys.repository.CodeGroupRepository;
@@ -36,17 +38,15 @@ public class CodeManageService {
 		
 		list = codeGrpRepImpl.searchCodeGroup(codeGroup);
 		
-		System.out.println("bio1215 = " + list);
-		
 		return list;
 	}
 	
 	@Transactional
-	public CodeGroup searchCodeDetailList(CodeGroup codeGroup) {
+	public List<CodeDetail> searchCodeDetailList(CodeGroup codeGroup) {
 		
-		CodeGroup cocdGroup = codeGrpRep.findOneBycodeGrp(codeGroup.getCodeGrp());
+		List<CodeDetail> list = codeDetailRep.findByCodeGrp(codeGroup);
 		
-		return cocdGroup;
+		return list;
 	}
 	
 	
