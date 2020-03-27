@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import net.ecbank.fwk.admin.sys.entity.CodeGroup;
 import net.ecbank.fwk.admin.sys.repository.CodeDetailRepository;
 import net.ecbank.fwk.admin.sys.repository.CodeGroupRepository;
+import net.ecbank.fwk.admin.sys.repository.CodeGroupRepositoryImpl;
 
 @Service
 public class CodeManageService {
@@ -17,8 +18,10 @@ public class CodeManageService {
 	private CodeGroupRepository codeGrpRep;
 	
 	@Autowired
-	private CodeDetailRepository codeDetailRep;
+	private CodeGroupRepositoryImpl codeGrpRepImpl;
 	
+	@Autowired
+	private CodeDetailRepository codeDetailRep;
 	
 	@Transactional
 	public List<CodeGroup> selectCodeGroupList() {
@@ -27,13 +30,15 @@ public class CodeManageService {
 	}
 	
 	@Transactional
-	public CodeGroup findBycodeGrp(String codeGrp) {
+	public List<CodeGroup> findBycodeGrp(CodeGroup codeGroup) {
 		
-		CodeGroup cg = codeGrpRep.findBycodeGrp(codeGrp);
+		List<CodeGroup> list = null;
 		
-		System.out.println("bio1215 = " + cg);
+		list = codeGrpRepImpl.searchCodeGroup(codeGroup);
 		
-		return cg;
+		System.out.println("bio1215 = " + list);
+		
+		return list;
 	}
 	
 }

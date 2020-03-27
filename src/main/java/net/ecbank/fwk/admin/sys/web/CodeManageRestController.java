@@ -4,8 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.ecbank.fwk.admin.sys.entity.CodeGroup;
@@ -35,10 +36,10 @@ public class CodeManageRestController {
 		return list;
 	}
 	
-	@GetMapping("/codeGrpList")
-	public CodeGroup codeGrpList(@RequestParam("codeGrp") String codeGrp) {
+	@PostMapping("/codeGrpList")
+	public List<CodeGroup> codeGrpList(@RequestBody CodeGroup codeGroup) {
 		
-		CodeGroup list = codeMngService.findBycodeGrp(codeGrp);
+		List<CodeGroup> list = codeMngService.findBycodeGrp(codeGroup);
 		
 		return list;
 	}
