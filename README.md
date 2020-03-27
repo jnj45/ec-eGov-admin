@@ -20,5 +20,7 @@ Spring boot, Spring Data JPA, Thymeleaf 기반.
       2. 시스템관리(net.ecbank.fwk.admin.sys 패키지)
         - 코드그룹-코드관리, 프로그램 관리, 메뉴관리, 권한별 메뉴관리
       3. 로그조회(net.ecbank.fwk.admin.log 패키지)
-        - 
+    
+    * MyBatis 적용
+     
       
