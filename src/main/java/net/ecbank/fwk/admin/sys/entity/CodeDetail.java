@@ -8,6 +8,7 @@ import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -32,7 +33,7 @@ import net.ecbank.fwk.admin.entity.BaseEntity;
 public class CodeDetail extends BaseEntity {
 	
 	@Id
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="CODE_ID")
 	private CodeGroup codeGrp;
 	
@@ -52,6 +53,11 @@ public class CodeDetail extends BaseEntity {
 	
 	@Column(name="USE_AT", columnDefinition ="char")
 	private String useYn;
-
 	
+	@Transient
+	private String codeGroupCd;
+	
+	public String getCodeGroupCd(){
+		return codeGrp.getCodeGrp();
+	}
 }

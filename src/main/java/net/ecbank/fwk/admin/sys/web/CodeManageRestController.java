@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.ecbank.fwk.admin.sys.entity.CodeDetail;
 import net.ecbank.fwk.admin.sys.entity.CodeGroup;
 import net.ecbank.fwk.admin.sys.service.CodeManageService;
 
@@ -39,8 +40,17 @@ public class CodeManageRestController {
 	@PostMapping("/codeGrpList")
 	public List<CodeGroup> codeGrpList(@RequestBody CodeGroup codeGroup) {
 		
-		List<CodeGroup> list = codeMngService.findBycodeGrp(codeGroup);
+		List<CodeGroup> list = codeMngService.searchCodeGrpList(codeGroup);
 		
 		return list;
 	}
+	
+	@PostMapping("/codeDetailList")
+	public List<CodeDetail> codeDetailList(@RequestBody CodeGroup codeGroup) {
+		
+		CodeGroup list = codeMngService.searchCodeDetailList(codeGroup);
+		
+		return list.getCodeDetails();
+	}
+	
 }

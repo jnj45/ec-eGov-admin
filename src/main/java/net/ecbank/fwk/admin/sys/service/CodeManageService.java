@@ -30,7 +30,7 @@ public class CodeManageService {
 	}
 	
 	@Transactional
-	public List<CodeGroup> findBycodeGrp(CodeGroup codeGroup) {
+	public List<CodeGroup> searchCodeGrpList(CodeGroup codeGroup) {
 		
 		List<CodeGroup> list = null;
 		
@@ -40,5 +40,14 @@ public class CodeManageService {
 		
 		return list;
 	}
+	
+	@Transactional
+	public CodeGroup searchCodeDetailList(CodeGroup codeGroup) {
+		
+		CodeGroup cocdGroup = codeGrpRep.findOneBycodeGrp(codeGroup.getCodeGrp());
+		
+		return cocdGroup;
+	}
+	
 	
 }

@@ -10,6 +10,8 @@ public interface CodeGroupRepository extends JpaRepository<CodeGroup, String> {
 	
 	List<CodeGroup> findBycodeGrp(String codeGrp);
 	
+	CodeGroup findOneBycodeGrp(String codeGrp);
+	
 	List<CodeGroup> findBycodeGrpAndCodeGrpNmContaining(String codeGrp, String codeGrpNm);
 	
 	List<CodeGroup> findByCodeGrpNmContaining(String codeGrpNm);

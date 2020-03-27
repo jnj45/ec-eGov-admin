@@ -46,12 +46,13 @@ public class CodeGroup extends BaseEntity {
 	@Column(name="USE_AT", columnDefinition ="char")
 	private String useYn;
 	
-	@ManyToOne(fetch=FetchType.EAGER)
+	@JsonIgnore
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="CL_CODE")
 	private CodeClass codeClass;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy="codeGrp",fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="codeGrp",fetch=FetchType.EAGER)
 	private List<CodeDetail> codeDetails;
 	
 	public CodeGroup(String codeGrp, String codeGrpNm, String codeGrpDesc, String useYn) {
