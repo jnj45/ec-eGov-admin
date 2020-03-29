@@ -27,5 +27,8 @@ Spring boot, Spring Data JPA, Thymeleaf 기반.
         
     * MyBatis적용
         - jpa 동시사용 트랜잭션 test 및 예제.
+        
+## 일정
+   - 
      
       
