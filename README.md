@@ -18,9 +18,14 @@ Spring boot, Spring Data JPA, Thymeleaf 기반.
       1. 보안 (net.ecbank.fwk.admin.sec 패키지) (각 entity,web,repository,service)
         -  롤관리, 권한관리(권한-롤맵핑), 사용자별 권한관리, 
       2. 시스템관리(net.ecbank.fwk.admin.sys 패키지)
-        - 코드그룹-코드관리, 프로그램 관리, 메뉴관리, 권한별 메뉴관리
+        - 코드그룹-코드관리, 메뉴관리, 권한별 메뉴관리, 프로그램 관리
       3. 로그조회(net.ecbank.fwk.admin.log 패키지)
-    
-    * MyBatis 적용
+        - 시스템 로그 조회
+      4. 시스템 통계
+        - 로그인,아웃 통계
+        - 프로그램 사용통계
+        
+    * MyBatis적용
+        - jpa 동시사용 트랜잭션 test 및 예제.
      
       
