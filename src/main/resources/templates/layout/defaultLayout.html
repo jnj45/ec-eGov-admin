@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title layout:title-pattern="$CONTENT_TITLE"></title>
+    <th:block th:replace="fragments/main/common_header"></th:block>
+    <th:block layout:fragment="pageCustomCss"></th:block>
+    <th:block layout:fragment="pageCustomScript"></th:block>
+</head>
+<body>
+    <div style="height:100px;width: 100%;padding-left: 10px;padding-top: 10px">
+    	<table>
+    		<tr>
+    			<td><a href="/sys/codeManage">코드관리</a></td>
+    			<td><a href="#">롤관리</a></td>
+    			<td><a href="#">메뉴관리</a></td>
+    			<td><a href="#">프로그램관리</a></td>
+    		</tr>
+    	</table>
+		    
+    </div>
+    <!-- page content body 구성 -->
+    <th:block layout:fragment="content"></th:block>
+    
+    <!-- 공통 footer -->
+    <footer th:replace="fragments/main/common_footer"></footer>
+</body>
+</html>
