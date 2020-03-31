@@ -57,7 +57,34 @@ public class CodeDetail extends BaseEntity {
 	@Transient
 	private String codeGroupCd;
 	
+	@Transient
+	private String modCode;
+	
 	public String getCodeGroupCd(){
 		return codeGrp.getCodeGrp();
+	}
+	
+	public String getModCode(){
+		return this.getCode();
+	}
+	
+	public CodeDetail(String codeGrp, String code, String codeNm,String codeDesc, String useYn) {
+		this.codeGrp = new CodeGroup();
+		this.codeGrp.setCodeGrp(codeGrp);
+		this.code = code;
+		this.codeNm = codeNm;
+		this.codeDesc = codeDesc;
+		this.useYn = useYn;
+	}
+	
+	public CodeDetail(String codeGrp, String code) {
+		this.codeGrp = new CodeGroup();
+		this.codeGrp.setCodeGrp(codeGrp);
+		this.code = code;
+	}
+	
+	public CodeDetail(String codeGrp) {
+		this.codeGrp = new CodeGroup();
+		this.codeGrp.setCodeGrp(codeGrp);
 	}
 }

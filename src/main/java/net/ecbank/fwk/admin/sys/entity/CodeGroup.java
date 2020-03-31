@@ -1,5 +1,6 @@
 package net.ecbank.fwk.admin.sys.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -10,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -51,9 +53,12 @@ public class CodeGroup extends BaseEntity {
 	@JoinColumn(name="CL_CODE")
 	private CodeClass codeClass;
 	
+	@Transient
+	private String modCodeGrp;
+	
 	@JsonIgnore
 	@OneToMany(mappedBy="codeGrp",fetch=FetchType.LAZY)
-	private List<CodeDetail> codeDetails;
+	private List<CodeDetail> codeDetails = new ArrayList<CodeDetail>();
 	
 	public CodeGroup(String codeGrp, String codeGrpNm, String codeGrpDesc, String useYn) {
 		this.codeGrp = codeGrp;
@@ -62,4 +67,11 @@ public class CodeGroup extends BaseEntity {
 		this.useYn = useYn;
 	}
 	
+	public CodeGroup(String codeGrp) {
+		this.codeGrp = codeGrp;
+	}
+	
+	public String getModCodeGrp(){
+		return this.getCodeGrp();
+	}
 }

@@ -11,4 +11,6 @@ public interface CodeDetailRepository extends JpaRepository<CodeDetail, String> 
 	
 	List<CodeDetail> findByCodeGrp(CodeGroup codeGrp);
 	
+	void deleteByCodeGrp(CodeGroup codeGrp);
+	
 }
