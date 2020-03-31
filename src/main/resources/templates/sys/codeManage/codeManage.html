@@ -385,32 +385,71 @@
 <body>
 <th:block layout:fragment="content">
 <input type="hidden" id="selCodeGroup" name="selCodeGroup" value="" />
-<p style="font-size: 18px;font-weight: bold;">공통코드 관리</p>
-<table style="width: 100%;border: 1px solid">
-	<tr>
-		<th>그룹코드</th>
-		<td><input type="text" id="codeGrp" name="codeGroup" value="" ></td>
-		<th>그룹코드명</th>
-		<td><input type="text" id="codeGrpNm" name="codeGroupNm" value="" ></td>
-		<td><button type="button" id="btnSearch">조회</button></td>
-	</tr>
-</table>
-<br>
-<div style="position: relative;display: inline-block;width: 100%;">
-<div style="float: left;"><p style="font-size: 15px">그룹코드</p></div>
-<div style="float: right;padding-top: 15px"><button type="button" id="btnSaveCodeGroup">저장</button>&nbsp;</div>
-<div style="float: right;padding-top: 15px"><button type="button" id="btnDeleteCodeGroup">삭제</button>&nbsp;</div>
-<div style="float: right;padding-top: 15px"><button type="button" id="btnAddCodeGroup">그룹추가</button>&nbsp;</div>
+
+<div class="tit-area">
+	<h3>코드관리</h3>
+	<ul class="location-area">
+		<li><a href="#none" class="home">Home</a></li>
+		<li><a href="#none">시스템관리</a></li>
+		<li><a href="#none">코드관리</a></li>
+		<li><strong>공통코드관리</strong></li>
+	</ul>
 </div>
-<br>
-<table id="grid1" style="width:100%;height:100%;"></table>
-<div style="position: relative;display: inline-block;width: 100%;">
-<div style="float: left;"><p style="font-size: 15px">상세코드</p></div>
-<div style="float: right;padding-top: 15px"><button type="button" id="btnSaveCodeDetail">저장</button>&nbsp;</div>
-<div style="float: right;padding-top: 15px"><button type="button" id="btnDeleteCodeDetail">삭제</button>&nbsp;</div>
-<div style="float: right;padding-top: 15px"><button type="button" id="btnAddCodeDetail">상세추가</button>&nbsp;</div>
+
+<div class="tbl-search-wrap">
+	<div class="tbl-search-area">
+		<table class="tbl-search">
+			<colgroup>
+				<col style="width:95px">
+				<col>
+				<col style="width:95px">
+				<col>
+			</colgroup>
+			<tbody>
+				<tr>
+					<th><span>그룹코드</span></th>
+					<td>
+						<input type="text" id="codeGrp" name="codeGroup" value="" >
+					</td>
+					<th><span>그룹코드명</span></th>
+					<td><input type="text" id="codeGrpNm" name="codeGroupNm" value="" ></td>
+				</tr>
+			</tbody>
+		</table>	
+	</div>
+	<div class="tbl-search-btn">
+		<button type="button" id="btnSearch" class="btn-search">조회</button>
+	</div>
 </div>
-<table id="grid2" style="width:100%;height:100%;"></table>
+<div class="layout-box">
+	<div class="layout">
+		<div class="sub-tit">
+			<h4>그룹코드</h4>
+			<div class="icon-area">
+				<button type="button" id="btnAddCodeGroup" class="i-btn"><em class="icon01"></em>그룹추가</button>
+				<button type="button" id="btnDeleteCodeGroup" class="i-btn"><em class="icon02"></em>삭제</button>
+				<button type="button" id="btnSaveCodeGroup" class="i-btn"><em class="icon03"></em>저장</button>
+			</div>
+		</div>
+		<div class="jqGridArea">	 
+			<table id="grid1"></table>
+		</div>
+		
+		<div class="layout">
+			<div class="sub-tit">
+				<h4>상세코드</h4>
+				<div class="icon-area">
+					<button type="button" id="btnAddCodeDetail" class="i-btn"><em class="icon01"></em>상세추가</button>
+					<button type="button" id="btnDeleteCodeDetail" class="i-btn"><em class="icon02"></em>삭제</button>
+					<button type="button" id="btnSaveCodeDetail" class="i-btn"><em class="icon03"></em>저장</button>
+				</div>
+			</div>
+			<div class="jqGridArea">	 
+				<table id="grid2"></table>
+			</div>	
+		</div>	
+	</div>
+</div>
 </th:block>
 </body>
 </html>
