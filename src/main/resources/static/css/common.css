@@ -1563,7 +1563,7 @@ html,body{
 .jqGridArea .ui-jqgrid-hbox .ui-jqgrid-htable thead th {
 	background:#fafafa;
 	height:35px;
-	padding:0 5px;
+	padding:0 0px;
 	box-sizing:border-box;
 }
 .jqGridArea .ui-jqgrid-hbox .ui-jqgrid-htable thead th .ui-jqgrid-sortable {
