@@ -19,5 +19,9 @@ public class EcEGovAdminApplication {
 	JPAQueryFactory jpaQueryFactory(EntityManager em) {
 		return new JPAQueryFactory(em);
 	}
-
+	
+	/*@Bean
+	public ModelMapper modelMapper() {
+	    return new ModelMapper();
+	}*/
 }
