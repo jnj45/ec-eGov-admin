@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.ecbank.fwk.admin.sys.dto.AuthInfoDto;
 import net.ecbank.fwk.admin.sys.dto.CodeGroupDto;
 import net.ecbank.fwk.admin.sys.dto.Response;
 import net.ecbank.fwk.admin.sys.dto.RoleInfoDto;
@@ -79,6 +80,14 @@ public class RoleManageRestController {
 		return roleInfoDto;
 	}
 	
+	@PostMapping("/authRoleList")
+	@ResponseBody
+	public List<RoleInfoDto> authRoleList(@RequestBody AuthInfoDto authInfoDto) {
+		
+		List<RoleInfo> list = roleMngService.searchAuthRoleList(authInfoDto);
+		
+		return convertToDtoList(list);
+	}
 	
 	private List<RoleInfoDto> convertToDtoList(List<RoleInfo> roleInfoList) {
 	    return roleInfoList.stream().map(this::convertToDto).collect(Collectors.toList());
@@ -87,6 +96,13 @@ public class RoleManageRestController {
 	private RoleInfoDto convertToDto(RoleInfo roleInfo) {
 		RoleInfoDto roleInfoDto = ModelMapperUtils.getModelMapper().map(roleInfo, RoleInfoDto.class);
 		roleInfoDto.setModRoleCode(roleInfo.getRoleCode());
+		
+		if(roleInfo.getRoleRegYn() == null || roleInfo.getRoleRegYn().equals("")) {
+			roleInfoDto.setRoleRegYn("N");
+		}else {
+			roleInfoDto.setRoleRegYn("Y");
+		}
+		
 	    return roleInfoDto;
 	}
 }

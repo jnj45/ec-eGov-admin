@@ -1,16 +1,13 @@
 package net.ecbank.fwk.admin.sys.service;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import net.ecbank.fwk.admin.sys.dto.CodeGroupDto;
+import net.ecbank.fwk.admin.sys.dto.AuthInfoDto;
 import net.ecbank.fwk.admin.sys.dto.RoleInfoDto;
-import net.ecbank.fwk.admin.sys.entity.CodeDetail;
-import net.ecbank.fwk.admin.sys.entity.CodeGroup;
 import net.ecbank.fwk.admin.sys.entity.RoleInfo;
 import net.ecbank.fwk.admin.sys.repository.RoleInfoRepository;
 import net.ecbank.fwk.admin.sys.repository.RoleInfoRepositoryImpl;
@@ -28,6 +25,11 @@ public class RoleManageService {
 	public List<RoleInfo> searchRoleInfoList(RoleInfoDto roleInfoDto){
 		
 		return roleInfoRepImpl.searchRoleInfoList(roleInfoDto);
+	}
+	
+	public List<RoleInfo> searchAuthRoleList(AuthInfoDto authInfoDto){
+		
+		return roleInfoRepImpl.searchAuthRoleList(authInfoDto);
 	}
 	
 	@Transactional
