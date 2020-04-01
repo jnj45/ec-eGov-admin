@@ -3,6 +3,8 @@ package net.ecbank.fwk.admin.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import net.ecbank.fwk.admin.entity.AdminProperties;
 
@@ -13,9 +15,8 @@ import net.ecbank.fwk.admin.entity.AdminProperties;
  */
 public interface AdminPropertiesRepository extends JpaRepository<AdminProperties, Long> {
 
-	public List<AdminProperties> findByPropKeyLike(String propKey);
-
-	public List<AdminProperties> findByPropKeyStartingWith(String string);
-
+	@Query("select p from AdminProperties p where p.propKey like :propKey||'%' and p.useYn='Y'")
+	public List<AdminProperties> findProperties(@Param("propKey") String propKey);
+	
 	public AdminProperties findByPropKey(String string);
 }

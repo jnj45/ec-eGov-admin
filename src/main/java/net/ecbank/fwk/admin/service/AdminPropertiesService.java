@@ -20,7 +20,7 @@ public class AdminPropertiesService {
 	AdminPropertiesRepository adminPropertiesRepository;
 	
 	public List<AdminProperties> findProperties(String propKey){
-		return adminPropertiesRepository.findByPropKeyStartingWith(propKey);
+		return adminPropertiesRepository.findProperties(propKey);
 	}
 	
 	public AdminProperties findProperty(String propKey) {

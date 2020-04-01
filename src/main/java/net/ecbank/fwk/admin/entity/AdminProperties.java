@@ -35,10 +35,13 @@ public class AdminProperties extends BaseEntity {
 	private String propVal;
 	@Column
 	private String propDesc;
+	@Column
+	private String useYn;
 	
 	public AdminProperties(String propKey, String propVal, String propDesc) {
 		this.propKey = propKey;
 		this.propVal = propVal;
 		this.propDesc = propDesc;
+		this.useYn = "Y";
 	}
 }

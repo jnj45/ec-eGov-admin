@@ -25,7 +25,7 @@ class AdminPropertiesRepositoryTest {
 //		adminPropertiesRepository.save(new AdminProperties("aaa2", "aaa2", null));
 //		adminPropertiesRepository.save(new AdminProperties("bbb", "aaa", null));
 		
-		List<AdminProperties> findByPropKeyLike = adminPropertiesRepository.findByPropKeyStartingWith("aaa");
+		List<AdminProperties> findByPropKeyLike = adminPropertiesRepository.findProperties("aaa");
 		for (AdminProperties adminProperties : findByPropKeyLike) {
 			System.out.println(adminProperties);
 		}
