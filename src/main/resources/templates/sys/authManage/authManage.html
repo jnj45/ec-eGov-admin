@@ -39,6 +39,11 @@
 			saveAuthRelation();
 	    });
 		
+		$("#btnReflectRuntime").click(function(e) {
+			reflectRuntime();
+	    });
+		
+		
 		init();
 		
 		$(window).resize(function() {
@@ -341,6 +346,23 @@
 		
 	}
 	
+	function reflectRuntime(){
+		
+		var params = new Object();
+		
+		if(confirm("반영하시겠습니까?")){
+		    ajaxJsonCall('/sys/reflectRuntime',  params, function(data){
+		    	
+		    	if(data.response.responseCd == "S"){
+		    		alert(data.response.responseMsg);
+		    	}else{
+		    		alert(data.response.responseErrMsg);
+		    	}
+		    	
+		    });
+		}
+	}
+	
 	function reload(){
 		
 	}
@@ -404,6 +426,7 @@
 				<h4>롤정보</h4>
 				<div class="icon-area">
 					<button type="button" id="btnSaveAuthRelation" class="i-btn"><em class="icon03"></em>저장</button>
+					<button type="button" id="btnReflectRuntime" class="i-btn">Runtime 반영</button>
 				</div>
 			</div>
 			<div class="jqGridArea">	 
