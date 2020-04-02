@@ -94,44 +94,6 @@
 		
 	}
 	
-	function delelteInfoDetail(){
-		
-		 var rows = $('#grid2').getGridParam("selarrrow").reverse();
-		 if(rows.length < 1) {
-			 alert("삭제할 코드를 선택하세요.");
-		 	 return;
-		 } 
-		 	
-		 if(confirm("삭제하시겠습니까?")){
-			 var delList = new Array();
-			 
-			 for(var i=0;i<rows.length;i++){
-				 var rowVal = $('#grid2').getRowData(rows[i]);
-				 delList.push(rowVal);
-			 }
-			 
-			 //alert(JSON.stringify(delList));
-			 
-			 var params = new Object();
-				
-			 params.deleteList = delList;
-			 
-			 ajaxJsonCall('/sys/deleteInfoDetail',  params, function(data){
-			    	
-			    	if(data.response.responseCd == "S"){
-			    		alert(data.response.responseMsg);
-			    		searchAuthRolelList($("#selAuthCode").val());
-			    	}else{
-			    		alert(data.response.responseErrMsg);
-			    	}
-			    	
-			    });
-			 
-		 } 
-		 
-		
-	}
-	
 	function addAuthInfoGridRow(){
 		
 		var rowCnt = $("#grid1").getGridParam("reccount");
@@ -161,7 +123,7 @@
 			
 			params.saveList = updateList;
 			
-			if(confirm("변경하시겠습니까?")){
+			if(confirm("저장하시겠습니까?")){
 			    ajaxJsonCall('/sys/saveAuthInfo',  params, function(data){
 			    	
 			    	//alert(JSON.stringify(data));
@@ -181,20 +143,21 @@
 		}
 	}
 	
-	function saveInfoDetail(){
+	function saveAuthRelation(){
 		var updateList = $("#grid2").getChangedCells('all');
 		
 		if(updateList.length > 0){
 			var params = new Object();
 			
+			params.authCode = $("#selAuthCode").val();
 			params.saveList = updateList;
 			
-			if(confirm("변경하시겠습니까?")){
-			    ajaxJsonCall('/sys/saveInfoDetail',  params, function(data){
+			if(confirm("저장하시겠습니까?")){
+			    ajaxJsonCall('/sys/saveAuthRelation',  params, function(data){
 			    	
 			    	if(data.response.responseCd == "S"){
 			    		alert(data.response.responseMsg);
-			    		searchAuthRolelList($("#selAuthInfo").val());
+			    		searchAuthRolelList($("#selAuthCode").val());
 			    	}else{
 			    		alert(data.response.responseErrMsg);
 			    	}
@@ -216,9 +179,9 @@
     		rowList: [10000],
     	   	colNames:['권한코드','권한명', '설명', '등록일', 'orgAuthCode'],
     	   	colModel:[
-    	   		{name:'modAuthCode',index:'modAuthCode', width:150, align:"center",	editable:true, editrules:{required:true}},
-    	   		{name:'authNm',index:'authNm', width:150,	editable:true, editrules:{required:true}},
-    	   		{name:'authDesc',index:'authDesc', width:300, align:"left",	editable:true},		
+    	   		{name:'modAuthCode',index:'modAuthCode', width:150, align:"center",	editable:false, editrules:{required:true}},
+    	   		{name:'authNm',index:'authNm', width:150,	editable:false, editrules:{required:true}},
+    	   		{name:'authDesc',index:'authDesc', width:300, align:"left",	editable:false},		
     	   		{name:'createDate',index:'createDate', width:80, align:"center",	editable:false},
     	   		{name:'authCode',index:'authCode', width:150, align:"center",	editable:false, hidden:true}
     	   	],
@@ -232,28 +195,39 @@
     	    multiboxonly: true,
     	    beforeSelectRow: function(rowId, e){
     	    },
-    	   	onSelectRow: function(rowId,e){	// row 선택시 발생하는 이벤트	
-    	   		/* if(rowId != null){
-					selAuthInfo($(this), rowId);			
-    	   		} */
-			},
-			beforeEditCell: function (rowId,name,val,iRow,iCol){
-				if(rowId != null){
-					if(name == "modAuthCode"){
-						selAuthCode($(this), rowId);			
+    	    onCellSelect: function(rowid,iCol,cellcontent,e){	// cell 선택시 발생하는 이벤트	
+    	    	var colModels = $(this).getGridParam('colModel'); 
+				var colName = colModels[iCol].name;
+				
+    	    	if(rowid != null){
+					if(colName == "modAuthCode"){
+						selAuthCode($(this), rowid);			
 					}
     	   		}
+			},
+			beforeEditCell: function (rowId,name,val,iRow,iCol){
+				
 			},
 			afterEditCell: function (id,name,val,iRow,iCol){
 				$("#"+id+"_"+name).blur(function(){
 			        $("#grid1").jqGrid("saveCell",iRow,iCol);
 			    });
+				
+				$(this).setColProp(name, { editable: false });
 				return true;
 		  	},
 		  	afterSaveCell : function(rowid,name,val,iRow,iCol) {
 		  		$("#grid1").setRowData(rowid,false,{background: '#F5BCA9'});
 		  		//$("#"+rowid).css("background", "#F5BCA9");
-		  	}
+		  	},
+		  	ondblClickRow: function (rowid, iRow, iCol) { 
+				var colModels = $(this).getGridParam('colModel'); 
+				var colName = colModels[iCol].name;
+				if(colName != "createDate"){
+					$(this).setColProp(colName, { editable: true }); 
+					$(this).editCell(iRow, iCol, true);
+				}
+			}
     	});
 	}
 	
@@ -312,7 +286,7 @@
     		rowList: [10000],
     		colNames:['롤 코드','롤 명','패턴', '타입', 'Sort', '설명', '등록일','등록여부'],
     	   	colModel:[
-    	   		{name:'modRoleCode',index:'modRoleCode', width:80, align:"center",	editable:false, editrules:{required:true}},
+    	   		{name:'roleCode',index:'roleCode', width:80, align:"center",	editable:false, editrules:{required:true}},
     	   		{name:'roleNm',index:'roleNm', width:120,	editable:false, editrules:{required:true}},
     	   		{name:'rolePattern',index:'rolePattern', width:250,	editable:false, editrules:{required:true}},
     	   		{name:"roleType", index:"roleType", width:60, align:"center" ,	sortable:false,	editable:false, editrules:{required:true},
@@ -329,16 +303,12 @@
     	   		{name:'roleSort',index:'roleSort', width:60, align:"center",	editable:false},		
 				{name:'roleDesc',index:'roleDesc', width:200, align:"left",	editable:false},
 				{name:'createDate',index:'createDate', width:50, align:"center",	editable:false},
-				{name:"roleRegYn", index:"roleRegYn", width:60, align:"center" ,	sortable:false,	editable:true, editrules:{required:true},
-					edittype:"select",
-					formatter: "select",
-					editoptions:{
-						value:{
-							"Y":"등록",
-							"N":"미등록"
-						}
-					}					
-				 },
+				{name:"roleRegYn", index:"roleRegYn", width:50, align:"center" ,	sortable:false,	editable:true, editrules:{required:true},
+					edittype:"checkbox",
+					formatter: "checkbox",
+					formatoptions: {disabled : true},
+					editoptions: { value: "Y:N"}
+				}
     	   	],
     	   	pager: "",
     	   	viewrecords: true,

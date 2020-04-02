@@ -170,7 +170,7 @@
 			
 			params.saveList = updateList;
 			
-			if(confirm("변경하시겠습니까?")){
+			if(confirm("저장하시겠습니까?")){
 			    ajaxJsonCall('/sys/saveCodeGroup',  params, function(data){
 			    	
 			    	//alert(JSON.stringify(data));
@@ -198,7 +198,7 @@
 			
 			params.saveList = updateList;
 			
-			if(confirm("변경하시겠습니까?")){
+			if(confirm("저장하시겠습니까?")){
 			    ajaxJsonCall('/sys/saveCodeDetail',  params, function(data){
 			    	
 			    	if(data.response.responseCd == "S"){
@@ -225,18 +225,14 @@
     		rowList: [10000],
     	   	colNames:['코드그룹','코드그룹명', '설명', '사용여부', 'orgCodeGrp'],
     	   	colModel:[
-    	   		{name:'modCodeGrp',index:'modCodeGrp', width:150, align:"center",	editable:true, editrules:{required:true}},
-    	   		{name:'codeGrpNm',index:'codeGrpNm', width:150,	editable:true, editrules:{required:true}},
-    	   		{name:'codeGrpDesc',index:'codeGrpDesc', width:300, align:"left",	editable:true},		
+    	   		{name:'modCodeGrp',index:'modCodeGrp', width:150, align:"center",	editable:false, editrules:{required:true}},
+    	   		{name:'codeGrpNm',index:'codeGrpNm', width:150,	editable:false, editrules:{required:true}},
+    	   		{name:'codeGrpDesc',index:'codeGrpDesc', width:300, align:"left",	editable:false},		
     	   		{name:"useYn", index:"useYn", width:50, align:"center" ,	sortable:false,	editable:true, editrules:{required:true},
-					edittype:"select",
-					formatter: "select",
-					editoptions:{
-						value:{
-							"Y":"사용",
-							"N":"미사용"
-						}
-					}					
+					edittype:"checkbox",
+					formatter: "checkbox",
+					formatoptions: {disabled : true},
+					editoptions: { value: "Y:N"}
 				 },
 				 {name:'codeGrp',index:'codeGrp', width:150, align:"center",	editable:false, hidden:true}
     	   	],
@@ -248,24 +244,43 @@
     	    cellsubmit: 'clientArray',
     	    multiselect: true,
     	    multiboxonly: true,
-    	    beforeSelectRow: function(rowId, e){
+    	    beforeCellSelect: function(rowId,e){
     	    },
-    	   	onSelectRow: function(rowId,e){	// row 선택시 발생하는 이벤트	
-    	   		/* if(rowId != null){
-					selCodeGroup($(this), rowId);			
-    	   		} */
-			},
+    	   	onCellSelect: function(rowid,iCol,cellcontent,e){	// row 선택시 발생하는 이벤트	
+				
+    	   		var colModels = $(this).getGridParam('colModel'); 
+				var colName = colModels[iCol].name;
+    	   		
+				if(colName == "modCodeGrp"){
+					if(rowid != null){
+		    	    	selCodeGroup($(this), rowid);
+	    	    	}
+				}
+				if(colName == "useYn"){
+				}
+				
+    	   	},
 			beforeEditCell: function (rowId,name,val,iRow,iCol){
-				if(rowId != null){
-					if(name == "modCodeGrp"){
-						selCodeGroup($(this), rowId);			
-					}
-    	   		}
+				//alert("");
+			},
+			ondblClickRow: function (rowid, iRow, iCol) { 
+				var colModels = $(this).getGridParam('colModel'); 
+				var colName = colModels[iCol].name;
+				
+				if(colName != "useYn"){
+					$(this).setColProp(colName, { editable: true }); 
+					$(this).editCell(iRow, iCol, true);
+				}
 			},
 			afterEditCell: function (id,name,val,iRow,iCol){
+				
 				$("#"+id+"_"+name).blur(function(){
 			        $("#grid1").jqGrid("saveCell",iRow,iCol);
 			    });
+				
+				if(name != "useYn"){
+					$(this).setColProp(name, { editable: false });
+				}
 				return true;
 		  	},
 		  	afterSaveCell : function(rowid,name,val,iRow,iCol) {
@@ -331,18 +346,14 @@
     	   	colNames:['코드그룹', '코드', '코드명', '설명', '사용여부','orgCode'],
     	   	colModel:[
     	   		{name:'codeGroupCd',index:'codeGroupCd', width:150, align:"center"},
-    	   		{name:'modCode',index:'modCode', width:150, align:"center",	editable:true, editrules:{required:true}},
-    	   		{name:'codeNm',index:'codeNm', width:150, align:"left",	editable:true, editrules:{required:true}},
-    	   		{name:'codeDesc',index:'codeDesc', width:300, align:"left",	editable:true},
+    	   		{name:'modCode',index:'modCode', width:150, align:"center",	editable:false, editrules:{required:true}},
+    	   		{name:'codeNm',index:'codeNm', width:150, align:"left",	editable:false, editrules:{required:true}},
+    	   		{name:'codeDesc',index:'codeDesc', width:300, align:"left",	editable:false},
     	   		{name:"useYn", index:"useYn", width:50, align:"center" ,	sortable:false,	editable:true, editrules:{required:true},
-					edittype:"select",
-					formatter: "select",
-					editoptions:{
-						value:{
-							"Y":"사용",
-							"N":"미사용"
-						}
-					}					
+					edittype:"checkbox",
+					formatter: "checkbox",
+					formatoptions: {disabled : true},
+					editoptions: { value: "Y:N"}
 				 },
 				 {name:'code',index:'code', width:150, align:"center",	editable:false, hidden:true}
     	   	],
@@ -367,12 +378,25 @@
 				$("#"+id+"_"+name).blur(function(){
 			        $("#grid2").jqGrid("saveCell",iRow,iCol);
 			    });
+				
+				if(name != "useYn"){
+					$(this).setColProp(name, { editable: false });
+				}
 				return true;
 		  	},
 		  	afterSaveCell : function(rowid,name,val,iRow,iCol) {
 		  		$("#grid2").setRowData(rowid,false,{background: '#F5BCA9'});
 		  		//$("#"+rowid).css("background", "#F5BCA9");
-		  	}
+		  	},
+		  	ondblClickRow: function (rowid, iRow, iCol) { 
+				var colModels = $(this).getGridParam('colModel'); 
+				var colName = colModels[iCol].name;
+				
+				if(colName != "useYn"){
+					$(this).setColProp(colName, { editable: true }); 
+					$(this).editCell(iRow, iCol, true);
+				}
+			}
     	});
 		
 	}

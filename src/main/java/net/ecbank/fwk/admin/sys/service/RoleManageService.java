@@ -8,7 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.ecbank.fwk.admin.sys.dto.AuthInfoDto;
 import net.ecbank.fwk.admin.sys.dto.RoleInfoDto;
+import net.ecbank.fwk.admin.sys.entity.AuthRoleRel;
 import net.ecbank.fwk.admin.sys.entity.RoleInfo;
+import net.ecbank.fwk.admin.sys.repository.AuthRoleRelRepository;
 import net.ecbank.fwk.admin.sys.repository.RoleInfoRepository;
 import net.ecbank.fwk.admin.sys.repository.RoleInfoRepositoryImpl;
 import net.ecbank.fwk.admin.util.EcStringUtil;
@@ -21,6 +23,9 @@ public class RoleManageService {
 	
 	@Autowired
 	private RoleInfoRepositoryImpl roleInfoRepImpl;
+	
+	@Autowired
+	private AuthRoleRelRepository authRoleRelRep;
 	
 	public List<RoleInfo> searchRoleInfoList(RoleInfoDto roleInfoDto){
 		
@@ -65,5 +70,24 @@ public class RoleManageService {
 			roleInfoRep.delete(new RoleInfo(roleInfoDto.getRoleCode()));
 			
 		}
+	}
+	
+	@Transactional
+	public void saveAuthRelation(List<RoleInfoDto> saveList, String authCode) {
+		
+		for(int i=0;i<saveList.size();i++) {
+			
+			RoleInfoDto roleInfoDto = saveList.get(i);
+			
+			AuthRoleRel authRoleRel = new AuthRoleRel(authCode,roleInfoDto.getRoleCode());
+			
+			if(roleInfoDto.getRoleRegYn().equals("Y")) {
+				authRoleRelRep.save(authRoleRel);
+			}else {
+				authRoleRelRep.delete(authRoleRel);
+			}
+			
+		}
+		
 	}
 }

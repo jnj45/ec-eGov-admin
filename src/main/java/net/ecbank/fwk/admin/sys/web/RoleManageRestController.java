@@ -89,6 +89,30 @@ public class RoleManageRestController {
 		return convertToDtoList(list);
 	}
 	
+	@PostMapping("/saveAuthRelation")
+	public RoleInfoDto saveAuthRelation(@RequestBody RoleInfoDto roleInfoDto) {
+		
+		System.out.println("save size : " + roleInfoDto.getSaveList().size());
+		
+		Response res = new Response();
+		
+		try {
+			roleMngService.saveAuthRelation(roleInfoDto.getSaveList(),roleInfoDto.getAuthCode());
+			
+			res.setResponseCd("S");
+			res.setResponseMsg("처리가 완료되었습니다.");
+		}catch (Exception e) {
+			e.printStackTrace();
+			res.setResponseCd("E");
+			res.setResponseErrMsg(e.getMessage());
+		}
+		
+		roleInfoDto.setResponse(res);
+		
+		return roleInfoDto;
+	}
+	
+	
 	private List<RoleInfoDto> convertToDtoList(List<RoleInfo> roleInfoList) {
 	    return roleInfoList.stream().map(this::convertToDto).collect(Collectors.toList());
 	}

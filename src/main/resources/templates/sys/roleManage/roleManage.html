@@ -102,7 +102,7 @@
 			
 			params.saveList = updateList;
 			
-			if(confirm("변경하시겠습니까?")){
+			if(confirm("저장하시겠습니까?")){
 			    ajaxJsonCall('/sys/saveRoleInfo',  params, function(data){
 			    	
 			    	if(data.response.responseCd == "S"){
@@ -130,10 +130,10 @@
     		rowList: [10000],
     	   	colNames:['롤 코드','롤 명','패턴', '타입', 'Sort', '설명', '등록일','orgRoleCode'],
     	   	colModel:[
-    	   		{name:'modRoleCode',index:'modRoleCode', width:80, align:"center",	editable:true, editrules:{required:true}},
-    	   		{name:'roleNm',index:'roleNm', width:120,	editable:true, editrules:{required:true}},
-    	   		{name:'rolePattern',index:'rolePattern', width:250,	editable:true, editrules:{required:true}},
-    	   		{name:"roleType", index:"roleType", width:60, align:"center" ,	sortable:false,	editable:true, editrules:{required:true},
+    	   		{name:'modRoleCode',index:'modRoleCode', width:80, align:"center",	editable:false, editrules:{required:true}},
+    	   		{name:'roleNm',index:'roleNm', width:120,	editable:false, editrules:{required:true}},
+    	   		{name:'rolePattern',index:'rolePattern', width:250,	editable:false, editrules:{required:true}},
+    	   		{name:"roleType", index:"roleType", width:60, align:"center" ,	sortable:false,	editable:false, editrules:{required:true},
 					edittype:"select",
 					formatter: "select",
 					editoptions:{
@@ -144,8 +144,8 @@
 						}
 					}					
 				 },
-    	   		{name:'roleSort',index:'roleSort', width:60, align:"center",	editable:true},		
-				{name:'roleDesc',index:'roleDesc', width:200, align:"left",	editable:true},
+    	   		{name:'roleSort',index:'roleSort', width:60, align:"center",	editable:false},		
+				{name:'roleDesc',index:'roleDesc', width:200, align:"left",	editable:false},
 				{name:'createDate',index:'createDate', width:50, align:"center",	editable:false},
 				{name:'roleCode',index:'roleCode', width:50, align:"center",	editable:false,hidden:true}
     	   	],
@@ -167,11 +167,21 @@
 				$("#"+id+"_"+name).blur(function(){
 			        $("#grid1").jqGrid("saveCell",iRow,iCol);
 			    });
+				
+				$(this).setColProp(name, { editable: false });
 				return true;
 		  	},
 		  	afterSaveCell : function(rowid,name,val,iRow,iCol) {
 		  		$("#grid1").setRowData(rowid,false,{background: '#F5BCA9'});
-		  	}
+		  	},
+		  	ondblClickRow: function (rowid, iRow, iCol) { 
+				var colModels = $(this).getGridParam('colModel'); 
+				var colName = colModels[iCol].name;
+				if(colName != "createDate"){
+					$(this).setColProp(colName, { editable: true }); 
+					$(this).editCell(iRow, iCol, true);
+				}
+			}
     	});
 	}
 	

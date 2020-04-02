@@ -23,7 +23,7 @@ public class CodeGroupRepositoryImpl {
 		List<CodeGroup> results = queryFactory.selectFrom(new QCodeGroup("codeGroup"))
 				.where(
 						codeGroupNmLike(codeGrp.getCodeGrpNm()),
-						codeGroupCdEq(codeGrp.getCodeGrp())
+						codeGroupCdLike(codeGrp.getCodeGrp())
 						)
 				.fetch();
 		
@@ -34,7 +34,7 @@ public class CodeGroupRepositoryImpl {
 		return hasText(codeGroupNm) ? codeGroup.codeGrpNm.contains(codeGroupNm) : null;
 	}
 	
-	private BooleanExpression codeGroupCdEq(String codeGroupCd) {
-		return hasText(codeGroupCd) ? codeGroup.codeGrp.eq(codeGroupCd) : null;
+	private BooleanExpression codeGroupCdLike(String codeGroupCd) {
+		return hasText(codeGroupCd) ? codeGroup.codeGrp.contains(codeGroupCd) : null;
 	}
 }

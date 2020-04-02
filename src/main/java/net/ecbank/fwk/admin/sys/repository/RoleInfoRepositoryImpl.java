@@ -28,7 +28,7 @@ public class RoleInfoRepositoryImpl {
 		List<RoleInfo> results = queryFactory.selectFrom(new QRoleInfo("roleInfo"))
 				.where(
 						roleNmLike(roleInfoDto.getRoleNm()),
-						roleCdEq(roleInfoDto.getRoleCode())
+						roleCdLike(roleInfoDto.getRoleCode())
 						)
 				.fetch();
 		
@@ -45,11 +45,11 @@ public class RoleInfoRepositoryImpl {
 													roleInfo.roleType,
 													roleInfo.roleSort,
 													roleInfo.createDate,
-													authRoleRel.roleCode.as("roleRegYn")
+													authRoleRel.roleInfo.roleCode.as("roleRegYn")
 													))
 				.from(new QRoleInfo("roleInfo"))
 				.leftJoin(new QAuthRoleRel("authRoleRel"))
-				.on(roleInfo.roleCode.eq(authRoleRel.roleCode),authRoleRel.authCode.eq(authInfoDto.getAuthCode()))
+				.on(roleInfo.roleCode.eq(authRoleRel.roleInfo.roleCode),authRoleRel.authInfo.authCode.eq(authInfoDto.getAuthCode()))
 				.fetch();
 		
 		return results;
@@ -59,7 +59,7 @@ public class RoleInfoRepositoryImpl {
 		return hasText(roleNm) ? roleInfo.roleNm.contains(roleNm) : null;
 	}
 	
-	private BooleanExpression roleCdEq(String roleCd) {
-		return hasText(roleCd) ? roleInfo.roleCode.eq(roleCd) : null;
+	private BooleanExpression roleCdLike(String roleCd) {
+		return hasText(roleCd) ? roleInfo.roleCode.contains(roleCd) : null;
 	}
 }

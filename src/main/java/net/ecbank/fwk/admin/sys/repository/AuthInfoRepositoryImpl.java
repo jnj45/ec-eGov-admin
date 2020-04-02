@@ -32,7 +32,7 @@ public class AuthInfoRepositoryImpl {
 		List<AuthInfo> results = queryFactory.selectFrom(new QAuthInfo("authInfo"))
 				.where(
 						authNmLike(authInfoDto.getAuthNm()),
-						authCdEq(authInfoDto.getAuthCode())
+						authCdLike(authInfoDto.getAuthCode())
 						)
 				.fetch();
 		
@@ -43,7 +43,7 @@ public class AuthInfoRepositoryImpl {
 		return hasText(authNm) ? authInfo.authNm.contains(authNm) : null;
 	}
 	
-	private BooleanExpression authCdEq(String authCd) {
-		return hasText(authCd) ? authInfo.authCode.eq(authCd) : null;
+	private BooleanExpression authCdLike(String authCd) {
+		return hasText(authCd) ? authInfo.authCode.contains(authCd) : null;
 	}
 }

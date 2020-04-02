@@ -45,9 +45,9 @@ public class AuthInfo {
 	@Column(name="AUTHOR_CREAT_DE", columnDefinition ="char")
 	private String createDate;
 	
-	/*@JsonIgnore
-	@OneToMany(mappedBy="authInfo",fetch=FetchType.EAGER)
-	private List<RoleInfo> roleList = new ArrayList<RoleInfo>();*/
+	@JsonIgnore
+	@OneToMany(mappedBy="authInfo",fetch=FetchType.LAZY)
+	private List<AuthRoleRel> authRoleList = new ArrayList<AuthRoleRel>();
 	
 	public AuthInfo(String authCode) {
 		this.authCode = authCode;
