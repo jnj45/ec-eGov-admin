@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.ecbank.fwk.admin.jmx.ServerConfigService;
 import net.ecbank.fwk.admin.sys.dto.AuthInfoDto;
+import net.ecbank.fwk.admin.sys.dto.CommonDto;
 import net.ecbank.fwk.admin.sys.dto.Response;
 import net.ecbank.fwk.admin.sys.dto.RoleInfoDto;
 import net.ecbank.fwk.admin.sys.entity.AuthInfo;
@@ -24,6 +26,9 @@ public class AuthManageRestController {
 	
 	@Autowired
 	private AuthManageService authMngService;
+	
+	@Autowired
+	private ServerConfigService serverConfigService;
 	
 	@PostMapping("/authInfoList")
 	@ResponseBody
@@ -76,6 +81,29 @@ public class AuthManageRestController {
 		authInfoDto.setResponse(res);
 		
 		return authInfoDto;
+	}
+	
+	@PostMapping("/reflectRuntime")
+	public CommonDto reflectRuntime() {
+		
+		CommonDto commDto = new CommonDto();
+		
+		Response res = new Response();
+		
+		try {
+			serverConfigService.reloadRolesAndUrlMapping();
+			
+			res.setResponseCd("S");
+			res.setResponseMsg("처리가 완료되었습니다.");
+		}catch (Exception e) {
+			e.printStackTrace();
+			res.setResponseCd("E");
+			res.setResponseErrMsg(e.getMessage());
+		}
+		
+		commDto.setResponse(res);
+		
+		return commDto;
 	}
 	
 	private List<AuthInfoDto> convertToDtoList(List<AuthInfo> authInfoList) {

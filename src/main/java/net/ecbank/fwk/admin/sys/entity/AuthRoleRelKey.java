@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class AuthRoleRelKey implements Serializable {
 		
-	private String authCode;
-	private String roleCode; 
+	private String authInfo;
+	private String roleInfo; 
 	
 }

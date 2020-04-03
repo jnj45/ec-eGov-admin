@@ -4,8 +4,11 @@ import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.data.annotation.CreatedDate;
@@ -31,16 +34,36 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties({"hibernateLazyInitializer"}) 
 public class AuthRoleRel {
 	
-	@Id
+	/*@Id
 	@Column(name="AUTHOR_CODE")
 	private String authCode;
 	
 	@Id
 	@JsonIgnore
 	@Column(name="ROLE_CODE")
-	private String roleCode;
+	private String roleCode;*/
+	
+	@Id
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="AUTHOR_CODE")
+	private AuthInfo authInfo;
+	
+	@Id
+	@JsonIgnore
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="ROLE_CODE")
+	private RoleInfo roleInfo;
 	
 	@CreatedDate
 	@Column(updatable = false, name="CREAT_DT")
 	private LocalDateTime createdDate;
+	
+	public AuthRoleRel(String authCode, String roleCode) {
+		
+		/*this.authCode = authCode;
+		this.roleCode = roleCode;*/
+		
+		this.authInfo = new AuthInfo(authCode);
+		this.roleInfo = new RoleInfo(roleCode);
+	}
 }

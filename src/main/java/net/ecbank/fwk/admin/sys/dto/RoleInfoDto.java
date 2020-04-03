@@ -27,6 +27,8 @@ public class RoleInfoDto extends CommonDto{
 	
 	private String roleRegYn;
 	
+	private String authCode;
+	
 	private List<RoleInfoDto> saveList;
 	
 	private List<RoleInfoDto> deleteList;

@@ -67,6 +67,10 @@ public class RoleInfo {
 			  )
 	private AuthInfo authInfo;
 	
+	@JsonIgnore
+	@OneToMany(mappedBy="roleInfo",fetch=FetchType.LAZY)
+	private List<AuthRoleRel> authRoleRelList = new ArrayList<AuthRoleRel>();
+	
 	public RoleInfo(String roleCode) {
 		this.roleCode = roleCode;
 	}
