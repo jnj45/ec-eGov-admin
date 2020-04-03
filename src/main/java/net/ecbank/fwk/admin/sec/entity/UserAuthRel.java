@@ -1,4 +1,4 @@
-package net.ecbank.fwk.admin.sys.entity;
+package net.ecbank.fwk.admin.sec.entity;
 
 import java.util.List;
 

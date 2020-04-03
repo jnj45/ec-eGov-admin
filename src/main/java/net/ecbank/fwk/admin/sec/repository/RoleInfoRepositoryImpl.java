@@ -1,8 +1,7 @@
-package net.ecbank.fwk.admin.sys.repository;
+package net.ecbank.fwk.admin.sec.repository;
 
-import static net.ecbank.fwk.admin.sys.entity.QAuthRoleRel.authRoleRel;
-import static net.ecbank.fwk.admin.sys.entity.QCodeGroup.codeGroup;
-import static net.ecbank.fwk.admin.sys.entity.QRoleInfo.roleInfo;
+import static net.ecbank.fwk.admin.sec.entity.QAuthRoleRel.authRoleRel;
+import static net.ecbank.fwk.admin.sec.entity.QRoleInfo.roleInfo;
 import static org.springframework.util.StringUtils.hasText;
 
 import java.util.List;
@@ -12,11 +11,11 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
-import net.ecbank.fwk.admin.sys.dto.AuthInfoDto;
-import net.ecbank.fwk.admin.sys.dto.RoleInfoDto;
-import net.ecbank.fwk.admin.sys.entity.QAuthRoleRel;
-import net.ecbank.fwk.admin.sys.entity.QRoleInfo;
-import net.ecbank.fwk.admin.sys.entity.RoleInfo;
+import net.ecbank.fwk.admin.sec.dto.RoleInfoDto;
+import net.ecbank.fwk.admin.sec.entity.RoleInfo;
+import net.ecbank.fwk.admin.sec.dto.AuthInfoDto;
+import net.ecbank.fwk.admin.sec.entity.QAuthRoleRel;
+import net.ecbank.fwk.admin.sec.entity.QRoleInfo;
 
 @RequiredArgsConstructor
 public class RoleInfoRepositoryImpl {

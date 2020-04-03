@@ -1,10 +1,10 @@
-package net.ecbank.fwk.admin.sys.repository;
+package net.ecbank.fwk.admin.sec.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import net.ecbank.fwk.admin.sys.entity.RoleInfo;
+import net.ecbank.fwk.admin.sec.entity.RoleInfo;
 
 public interface RoleInfoRepository extends JpaRepository<RoleInfo, String> {
 	

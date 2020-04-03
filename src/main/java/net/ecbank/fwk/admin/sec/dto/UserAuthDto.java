@@ -1,7 +1,8 @@
-package net.ecbank.fwk.admin.sys.dto;
+package net.ecbank.fwk.admin.sec.dto;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import net.ecbank.fwk.admin.cmm.dto.CommonDto;
 
 @Data
 @EqualsAndHashCode(callSuper=false)

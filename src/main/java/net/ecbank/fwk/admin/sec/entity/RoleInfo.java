@@ -1,4 +1,4 @@
-package net.ecbank.fwk.admin.sys.entity;
+package net.ecbank.fwk.admin.sec.entity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import net.ecbank.fwk.admin.sys.dto.RoleInfoDto;
+import net.ecbank.fwk.admin.sec.dto.RoleInfoDto;
 
 @EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -1,4 +1,4 @@
-package net.ecbank.fwk.admin.sys.service;
+package net.ecbank.fwk.admin.sec.service;
 
 import java.util.List;
 
@@ -6,16 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import net.ecbank.fwk.admin.sys.dto.AuthInfoDto;
-import net.ecbank.fwk.admin.sys.dto.RoleInfoDto;
-import net.ecbank.fwk.admin.sys.dto.UserAuthDto;
-import net.ecbank.fwk.admin.sys.entity.AuthInfo;
-import net.ecbank.fwk.admin.sys.entity.AuthRoleRel;
-import net.ecbank.fwk.admin.sys.entity.RoleInfo;
-import net.ecbank.fwk.admin.sys.entity.UserAuthRel;
-import net.ecbank.fwk.admin.sys.repository.AuthInfoRepository;
-import net.ecbank.fwk.admin.sys.repository.AuthInfoRepositoryImpl;
-import net.ecbank.fwk.admin.sys.repository.UserAuthRelRepository;
+import net.ecbank.fwk.admin.sec.dto.AuthInfoDto;
+import net.ecbank.fwk.admin.sec.entity.AuthInfo;
+import net.ecbank.fwk.admin.sec.entity.UserAuthRel;
+import net.ecbank.fwk.admin.sec.repository.AuthInfoRepository;
+import net.ecbank.fwk.admin.sec.repository.AuthInfoRepositoryImpl;
+import net.ecbank.fwk.admin.sec.repository.UserAuthRelRepository;
 import net.ecbank.fwk.admin.util.EcStringUtil;
 
 @Service

@@ -1,4 +1,4 @@
-package net.ecbank.fwk.admin.sys.web;
+package net.ecbank.fwk.admin.sec.web;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.ecbank.fwk.admin.sys.dto.UserAuthDto;
-import net.ecbank.fwk.admin.sys.service.UserAuthManageService;
+import net.ecbank.fwk.admin.sec.dto.UserAuthDto;
+import net.ecbank.fwk.admin.sec.service.UserAuthManageService;
 import net.ecbank.fwk.admin.user.entity.Employee;
 import net.ecbank.fwk.admin.user.entity.VendorUser;
 import net.ecbank.fwk.admin.util.ModelMapperUtils;

@@ -1,4 +1,4 @@
-package net.ecbank.fwk.admin.sys.web;
+package net.ecbank.fwk.admin.sec.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

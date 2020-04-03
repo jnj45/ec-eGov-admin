@@ -1,4 +1,4 @@
-package net.ecbank.fwk.admin.sys.web;
+package net.ecbank.fwk.admin.sec.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

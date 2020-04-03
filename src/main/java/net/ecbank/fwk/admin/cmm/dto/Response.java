@@ -1,4 +1,4 @@
-package net.ecbank.fwk.admin.sys.dto;
+package net.ecbank.fwk.admin.cmm.dto;
 
 import lombok.Data;
 
