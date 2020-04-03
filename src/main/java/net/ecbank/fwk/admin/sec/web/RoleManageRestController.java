@@ -18,7 +18,7 @@ import net.ecbank.fwk.admin.sec.service.RoleManageService;
 import net.ecbank.fwk.admin.util.ModelMapperUtils;
 
 @RestController
-@RequestMapping("/sys")
+@RequestMapping("/sec")
 public class RoleManageRestController {
 	
 	@Autowired

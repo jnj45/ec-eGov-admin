@@ -81,7 +81,7 @@
 				
 			 params.deleteList = delList;
 			 
-			 ajaxJsonCall('/sys/deleteAuthInfo',  params, function(data){
+			 ajaxJsonCall('/sec/deleteAuthInfo',  params, function(data){
 			    	
 			    	//alert(JSON.stringify(data));
 			    	
@@ -129,7 +129,7 @@
 			params.saveList = updateList;
 			
 			if(confirm("저장하시겠습니까?")){
-			    ajaxJsonCall('/sys/saveAuthInfo',  params, function(data){
+			    ajaxJsonCall('/sec/saveAuthInfo',  params, function(data){
 			    	
 			    	//alert(JSON.stringify(data));
 			    	
@@ -158,7 +158,7 @@
 			params.saveList = updateList;
 			
 			if(confirm("저장하시겠습니까?")){
-			    ajaxJsonCall('/sys/saveAuthRelation',  params, function(data){
+			    ajaxJsonCall('/sec/saveAuthRelation',  params, function(data){
 			    	
 			    	if(data.response.responseCd == "S"){
 			    		alert(data.response.responseMsg);
@@ -250,7 +250,7 @@
 	function searchAuthInfoList(){
 		var params = fnGetParams();
 
-	    ajaxJsonCall('/sys/authInfoList',  params, fnSuccess);
+	    ajaxJsonCall('/sec/authInfoList',  params, fnSuccess);
 	}
 	
 	function fnSuccess(data){
@@ -268,7 +268,7 @@
     	
     	params.authCode = authCode;
 
-	    ajaxJsonCall('/sys/authRoleList',  params, fnSuccess2);
+	    ajaxJsonCall('/sec/authRoleList',  params, fnSuccess2);
     	
     }
     
@@ -351,7 +351,7 @@
 		var params = new Object();
 		
 		if(confirm("반영하시겠습니까?")){
-		    ajaxJsonCall('/sys/reflectRuntime',  params, function(data){
+		    ajaxJsonCall('/sec/reflectRuntime',  params, function(data){
 		    	
 		    	if(data.response.responseCd == "S"){
 		    		alert(data.response.responseMsg);

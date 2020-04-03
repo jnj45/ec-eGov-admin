@@ -19,7 +19,7 @@ import net.ecbank.fwk.admin.sec.service.AuthManageService;
 import net.ecbank.fwk.admin.util.ModelMapperUtils;
 
 @RestController
-@RequestMapping("/sys")
+@RequestMapping("/sec")
 public class AuthManageRestController {
 	
 	@Autowired

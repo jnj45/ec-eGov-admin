@@ -4,12 +4,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/sys")
+@RequestMapping("/sec")
 public class UserAuthManageController {
 	
 	@RequestMapping("/userAuthManage")
 	public String authManage() {
 		
-		return "sys/userAuthManage/userAuthManage";
+		return "sec/userAuthManage/userAuthManage";
 	}
 }

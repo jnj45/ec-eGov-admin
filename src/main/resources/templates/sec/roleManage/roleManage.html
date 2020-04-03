@@ -69,7 +69,7 @@
 				
 			 params.deleteList = delList;
 			 
-			 ajaxJsonCall('/sys/deleteRoleInfo',  params, function(data){
+			 ajaxJsonCall('/sec/deleteRoleInfo',  params, function(data){
 			    	
 			    	//alert(JSON.stringify(data));
 			    	
@@ -103,7 +103,7 @@
 			params.saveList = updateList;
 			
 			if(confirm("저장하시겠습니까?")){
-			    ajaxJsonCall('/sys/saveRoleInfo',  params, function(data){
+			    ajaxJsonCall('/sec/saveRoleInfo',  params, function(data){
 			    	
 			    	if(data.response.responseCd == "S"){
 			    		alert(data.response.responseMsg);
@@ -189,7 +189,7 @@
 	function searchRoleInfoList(){
 		var params = fnGetParams();
 
-	    ajaxJsonCall('/sys/roleInfoList',  params, fnSuccess);
+	    ajaxJsonCall('/sec/roleInfoList',  params, fnSuccess);
 	}
 	
 	function fnSuccess(data){

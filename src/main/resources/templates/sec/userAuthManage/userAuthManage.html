@@ -52,7 +52,7 @@
 			params.saveList = updateList;
 			
 			if(confirm("저장하시겠습니까?")){
-			    ajaxJsonCall('/sys/saveUserAuthRelation',  params, function(data){
+			    ajaxJsonCall('/sec/saveUserAuthRelation',  params, function(data){
 			    	
 			    	if(data.response.responseCd == "S"){
 			    		alert(data.response.responseMsg);
@@ -137,7 +137,7 @@
 	function searchUserList(){
 		var params = fnGetParams();
 
-	    ajaxJsonCall('/sys/userList',  params, fnSuccess);
+	    ajaxJsonCall('/sec/userList',  params, fnSuccess);
 	}
 	
 	function fnSuccess(data){
@@ -155,7 +155,7 @@
     	
     	params.userId = userId;
 
-	    ajaxJsonCall('/sys/userAuthList',  params, fnSuccess2);
+	    ajaxJsonCall('/sec/userAuthList',  params, fnSuccess2);
     	
     }
     

@@ -17,7 +17,7 @@ import net.ecbank.fwk.admin.user.entity.VendorUser;
 import net.ecbank.fwk.admin.util.ModelMapperUtils;
 
 @RestController
-@RequestMapping("/sys")
+@RequestMapping("/sec")
 public class UserAuthManageRestController {
 	
 	@Autowired
