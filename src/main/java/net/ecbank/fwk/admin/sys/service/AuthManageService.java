@@ -7,10 +7,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import net.ecbank.fwk.admin.sys.dto.AuthInfoDto;
+import net.ecbank.fwk.admin.sys.dto.RoleInfoDto;
+import net.ecbank.fwk.admin.sys.dto.UserAuthDto;
 import net.ecbank.fwk.admin.sys.entity.AuthInfo;
+import net.ecbank.fwk.admin.sys.entity.AuthRoleRel;
 import net.ecbank.fwk.admin.sys.entity.RoleInfo;
+import net.ecbank.fwk.admin.sys.entity.UserAuthRel;
 import net.ecbank.fwk.admin.sys.repository.AuthInfoRepository;
 import net.ecbank.fwk.admin.sys.repository.AuthInfoRepositoryImpl;
+import net.ecbank.fwk.admin.sys.repository.UserAuthRelRepository;
 import net.ecbank.fwk.admin.util.EcStringUtil;
 
 @Service
@@ -22,10 +27,19 @@ public class AuthManageService {
 	@Autowired
 	private AuthInfoRepositoryImpl authInfoRepImpl;
 	
+	@Autowired
+	private UserAuthRelRepository userAuthRelRepository;
+	
 	public List<AuthInfo> searchAuthInfoList(AuthInfoDto authInfoDto){
 		
 		return authInfoRepImpl.searchAuthInfoList(authInfoDto);
 	}
+	
+	public List<AuthInfo> searchUserAuthList(AuthInfoDto authInfoDto){
+		
+		return authInfoRepImpl.searchUserAuthList(authInfoDto);
+	}
+	
 	
 	@Transactional
 	public void saveAuthInfo(List<AuthInfoDto> saveList) {
@@ -60,5 +74,24 @@ public class AuthManageService {
 			authInfoRep.delete(new AuthInfo(authInfoDto.getAuthCode()));
 			
 		}
+	}
+	
+	@Transactional
+	public void saveUserAuthRelation(AuthInfoDto reqAuthInfoDto) {
+		
+		for(int i=0;i<reqAuthInfoDto.getSaveList().size();i++) {
+			
+			AuthInfoDto authInfoDto = reqAuthInfoDto.getSaveList().get(i);
+			
+			UserAuthRel userAuthRel = new UserAuthRel(reqAuthInfoDto.getUserId(),reqAuthInfoDto.getUserType(),authInfoDto.getAuthCode());
+			
+			if(authInfoDto.getRegYn().equals("Y")) {
+				userAuthRelRepository.save(userAuthRel);
+			}else {
+				userAuthRelRepository.delete(userAuthRel);
+			}
+			
+		}
+		
 	}
 }

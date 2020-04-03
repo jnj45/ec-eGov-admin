@@ -15,6 +15,7 @@ import net.ecbank.fwk.admin.sys.dto.AuthInfoDto;
 import net.ecbank.fwk.admin.sys.dto.CommonDto;
 import net.ecbank.fwk.admin.sys.dto.Response;
 import net.ecbank.fwk.admin.sys.dto.RoleInfoDto;
+import net.ecbank.fwk.admin.sys.dto.UserAuthDto;
 import net.ecbank.fwk.admin.sys.entity.AuthInfo;
 import net.ecbank.fwk.admin.sys.entity.RoleInfo;
 import net.ecbank.fwk.admin.sys.service.AuthManageService;
@@ -106,6 +107,38 @@ public class AuthManageRestController {
 		return commDto;
 	}
 	
+	@PostMapping("/userAuthList")
+	@ResponseBody
+	public List<AuthInfoDto> userAuthList(@RequestBody AuthInfoDto authInfoDto) {
+		
+		List<AuthInfo> list = authMngService.searchUserAuthList(authInfoDto);
+		
+		return convertToDtoList(list);
+	}
+	
+	@PostMapping("/saveUserAuthRelation")
+	public AuthInfoDto saveUserAuthRelation(@RequestBody AuthInfoDto authInfoDto) {
+		
+		System.out.println("save size : " + authInfoDto.getSaveList().size());
+		
+		Response res = new Response();
+		
+		try {
+			authMngService.saveUserAuthRelation(authInfoDto);
+			
+			res.setResponseCd("S");
+			res.setResponseMsg("처리가 완료되었습니다.");
+		}catch (Exception e) {
+			e.printStackTrace();
+			res.setResponseCd("E");
+			res.setResponseErrMsg(e.getMessage());
+		}
+		
+		authInfoDto.setResponse(res);
+		
+		return authInfoDto;
+	}
+	
 	private List<AuthInfoDto> convertToDtoList(List<AuthInfo> authInfoList) {
 	    return authInfoList.stream().map(this::convertToDto).collect(Collectors.toList());
 	}
@@ -113,6 +146,13 @@ public class AuthManageRestController {
 	private AuthInfoDto convertToDto(AuthInfo authInfo) {
 		AuthInfoDto authInfoDto = ModelMapperUtils.getModelMapper().map(authInfo, AuthInfoDto.class);
 		authInfoDto.setModAuthCode(authInfo.getAuthCode());
+		
+		if(authInfo.getRegYn() == null || authInfo.getRegYn().equals("")) {
+			authInfoDto.setRegYn("N");	
+		} else {
+			authInfoDto.setRegYn("Y");
+		}
+		
 	    return authInfoDto;
 	}
 }

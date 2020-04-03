@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -45,9 +46,16 @@ public class AuthInfo {
 	@Column(name="AUTHOR_CREAT_DE", columnDefinition ="char")
 	private String createDate;
 	
+	@Transient
+	private String regYn;
+	
 	@JsonIgnore
 	@OneToMany(mappedBy="authInfo",fetch=FetchType.LAZY)
 	private List<AuthRoleRel> authRoleList = new ArrayList<AuthRoleRel>();
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="authInfo",fetch=FetchType.LAZY)
+	private List<UserAuthRel> userAuthList = new ArrayList<UserAuthRel>();
 	
 	public AuthInfo(String authCode) {
 		this.authCode = authCode;
@@ -66,4 +74,13 @@ public class AuthInfo {
 		this.authDesc = authInfoDto.getAuthDesc();
 		this.createDate = authInfoDto.getCreateDate();
 	}
+	
+	public AuthInfo(String authCode, String authNm, String authDesc,String createDate, String regYn) {
+		this.authCode = authCode;
+		this.authNm = authNm;
+		this.authDesc = authDesc;
+		this.createDate = createDate;
+		this.regYn = regYn;
+	}
+	
 }

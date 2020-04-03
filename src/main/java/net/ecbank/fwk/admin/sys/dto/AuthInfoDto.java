@@ -19,6 +19,12 @@ public class AuthInfoDto extends CommonDto{
 	
 	private String modAuthCode;
 	
+	private String userId;
+	
+	private String userType;
+	
+	private String regYn;
+	
 	private List<AuthInfoDto> saveList;
 	
 	private List<AuthInfoDto> deleteList;
