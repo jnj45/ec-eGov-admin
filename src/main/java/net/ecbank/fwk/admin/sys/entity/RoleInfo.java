@@ -60,12 +60,12 @@ public class RoleInfo {
 	@Transient
 	private String roleRegYn;
 	
-	/*@ManyToOne(optional = false)
+	@ManyToOne(optional = false)
 	@JoinTable(name = "COMTNAUTHORROLERELATE",
 				joinColumns = @JoinColumn(name = "ROLE_CODE"),
 				inverseJoinColumns = @JoinColumn(name = "AUTHOR_CODE")
 			  )
-	private AuthInfo authInfo;*/
+	private AuthInfo authInfo;
 	
 	public RoleInfo(String roleCode) {
 		this.roleCode = roleCode;
