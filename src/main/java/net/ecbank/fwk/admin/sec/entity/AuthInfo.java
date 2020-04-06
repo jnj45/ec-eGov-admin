@@ -46,11 +46,10 @@ public class AuthInfo {
 	@Column(name="AUTHOR_CREAT_DE", columnDefinition ="char")
 	private String createDate;
 	
-<<<<<<< HEAD:src/main/java/net/ecbank/fwk/admin/sys/entity/AuthInfo.java
 	@JsonIgnore
 	@OneToMany(mappedBy="authInfo",fetch=FetchType.EAGER)
 	private List<RoleInfo> roleList = new ArrayList<RoleInfo>();
-=======
+
 	@Transient
 	private String regYn;
 	
@@ -61,7 +60,6 @@ public class AuthInfo {
 	@JsonIgnore
 	@OneToMany(mappedBy="authInfo",fetch=FetchType.LAZY)
 	private List<UserAuthRel> userAuthList = new ArrayList<UserAuthRel>();
->>>>>>> 339070ac68e9264eb831c3fcce21377ad4e7044c:src/main/java/net/ecbank/fwk/admin/sec/entity/AuthInfo.java
 	
 	public AuthInfo(String authCode) {
 		this.authCode = authCode;
