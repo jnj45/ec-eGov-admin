@@ -46,9 +46,9 @@ public class AuthInfo {
 	@Column(name="AUTHOR_CREAT_DE", columnDefinition ="char")
 	private String createDate;
 	
-	@JsonIgnore
+	/*@JsonIgnore
 	@OneToMany(mappedBy="authInfo",fetch=FetchType.EAGER)
-	private List<RoleInfo> roleList = new ArrayList<RoleInfo>();
+	private List<RoleInfo> roleList = new ArrayList<RoleInfo>();*/
 
 	@Transient
 	private String regYn;
