@@ -8,7 +8,7 @@
 <th:block layout:fragment="pageCustomCss">
 
 </th:block>
-<title>코드 관리</title>
+<title>권한 관리</title>
 </head>
 <th:block layout:fragment="pageCustomScript">
 <script type="text/javascript">
@@ -17,38 +17,34 @@
 	
 	$(document).ready(function() {
 		$("#btnSearch").click(function(e) {
-			searchCodeGroupList();
+			searchAuthInfoList();
 	    });
 		
 		//===== 그룹코드 =====
-		$("#btnSaveCodeGroup").click(function(e) {
-			saveCodeGroup();
+		$("#btnSaveAuthInfo").click(function(e) {
+			saveAuthInfo();
 	    });
 		
-		$("#btnAddCodeGroup").click(function(e) {
-			addCodeGroupGridRow();
+		$("#btnAddAuthInfo").click(function(e) {
+			addAuthInfoGridRow();
 	    });
 		
-		$("#btnDeleteCodeGroup").click(function(e) {
-			delelteCodeGroup();
+		$("#btnDeleteAuthInfo").click(function(e) {
+			delelteAuthInfo();
 	    });
 		
 		
 		//===== 상세코드 =====
-		$("#btnSaveCodeDetail").click(function(e) {
-			saveCodeDetail();
+		$("#btnSaveAuthRelation").click(function(e) {
+			saveAuthRelation();
 	    });
 		
-		$("#btnAddCodeDetail").click(function(e) {
-			addCodeDetailGridRow();
+		$("#btnReflectRuntime").click(function(e) {
+			reflectRuntime();
 	    });
 		
-		$("#btnDeleteCodeDetail").click(function(e) {
-			delelteCodeDetail();
-	    });
 		
 		init();
-		
 		
 		$(window).resize(function() {
 			$("#grid1").setGridWidth($(this).width());
@@ -60,10 +56,10 @@
 	function init(){
 		setGrid1();
 		setGrid2();
-		searchCodeGroupList();
+		searchAuthInfoList();
 	}
 	
-	function delelteCodeGroup(){
+	function delelteAuthInfo(){
 		
 		 var rows = $('#grid1').getGridParam("selarrrow").reverse();
 		 if(rows.length < 1) {
@@ -85,13 +81,13 @@
 				
 			 params.deleteList = delList;
 			 
-			 ajaxJsonCall('/sys/deleteCodeGroup',  params, function(data){
+			 ajaxJsonCall('/sec/deleteAuthInfo',  params, function(data){
 			    	
 			    	//alert(JSON.stringify(data));
 			    	
 			    	if(data.response.responseCd == "S"){
 			    		alert(data.response.responseMsg);
-			    		searchCodeGroupList();
+			    		searchAuthInfoList();
 			    	}else{
 			    		alert(data.response.responseErrMsg);
 			    	}
@@ -103,45 +99,7 @@
 		
 	}
 	
-	function delelteCodeDetail(){
-		
-		 var rows = $('#grid2').getGridParam("selarrrow").reverse();
-		 if(rows.length < 1) {
-			 alert("삭제할 코드를 선택하세요.");
-		 	 return;
-		 } 
-		 	
-		 if(confirm("삭제하시겠습니까?")){
-			 var delList = new Array();
-			 
-			 for(var i=0;i<rows.length;i++){
-				 var rowVal = $('#grid2').getRowData(rows[i]);
-				 delList.push(rowVal);
-			 }
-			 
-			 //alert(JSON.stringify(delList));
-			 
-			 var params = new Object();
-				
-			 params.deleteList = delList;
-			 
-			 ajaxJsonCall('/sys/deleteCodeDetail',  params, function(data){
-			    	
-			    	if(data.response.responseCd == "S"){
-			    		alert(data.response.responseMsg);
-			    		searchCodeDetailList($("#selCodeGroup").val());
-			    	}else{
-			    		alert(data.response.responseErrMsg);
-			    	}
-			    	
-			    });
-			 
-		 } 
-		 
-		
-	}
-	
-	function addCodeGroupGridRow(){
+	function addAuthInfoGridRow(){
 		
 		var rowCnt = $("#grid1").getGridParam("reccount");
 		
@@ -152,16 +110,16 @@
 		//$("#"+(rowCnt+1)).setColProp('codeGrp',{editable:true}); 
 	}
 	
-	function addCodeDetailGridRow(){
+	function addInfoDetailGridRow(){
 		
-		if($("#selCodeGroup").val() != ""){
+		if($("#selAuthInfo").val() != ""){
 			var rowCnt = $("#grid2").getGridParam("reccount");
 			
-			$("#grid2").addRowData(rowCnt+1,{"codeGroupCd":$("#selCodeGroup").val()}, 'last');
+			$("#grid2").addRowData(rowCnt+1,{"codeGroupCd":$("#selAuthInfo").val()}, 'last');
 		}
 	}
 	
-	function saveCodeGroup(){
+	function saveAuthInfo(){
 		var updateList = $("#grid1").getChangedCells('all');
 		
 		if(updateList.length > 0){
@@ -171,13 +129,13 @@
 			params.saveList = updateList;
 			
 			if(confirm("저장하시겠습니까?")){
-			    ajaxJsonCall('/sys/saveCodeGroup',  params, function(data){
+			    ajaxJsonCall('/sec/saveAuthInfo',  params, function(data){
 			    	
 			    	//alert(JSON.stringify(data));
 			    	
 			    	if(data.response.responseCd == "S"){
 			    		alert(data.response.responseMsg);
-			    		searchCodeGroupList();
+			    		searchAuthInfoList();
 			    	}else{
 			    		alert(data.response.responseErrMsg);
 			    	}
@@ -190,20 +148,21 @@
 		}
 	}
 	
-	function saveCodeDetail(){
+	function saveAuthRelation(){
 		var updateList = $("#grid2").getChangedCells('all');
 		
 		if(updateList.length > 0){
 			var params = new Object();
 			
+			params.authCode = $("#selAuthCode").val();
 			params.saveList = updateList;
 			
 			if(confirm("저장하시겠습니까?")){
-			    ajaxJsonCall('/sys/saveCodeDetail',  params, function(data){
+			    ajaxJsonCall('/sec/saveAuthRelation',  params, function(data){
 			    	
 			    	if(data.response.responseCd == "S"){
 			    		alert(data.response.responseMsg);
-			    		searchCodeDetailList($("#selCodeGroup").val());
+			    		searchAuthRolelList($("#selAuthCode").val());
 			    	}else{
 			    		alert(data.response.responseErrMsg);
 			    	}
@@ -220,21 +179,16 @@
 		
     	$("#grid1").jqGrid({
     		datatype: "local",
-    		height: 300,
+    		height: 250,
     		rowNum: 10000,
     		rowList: [10000],
-    	   	colNames:['코드그룹','코드그룹명', '설명', '사용여부', 'orgCodeGrp'],
+    	   	colNames:['권한코드','권한명', '설명', '등록일', 'orgAuthCode'],
     	   	colModel:[
-    	   		{name:'modCodeGrp',index:'modCodeGrp', width:150, align:"center",	editable:false, editrules:{required:true}},
-    	   		{name:'codeGrpNm',index:'codeGrpNm', width:150,	editable:false, editrules:{required:true}},
-    	   		{name:'codeGrpDesc',index:'codeGrpDesc', width:300, align:"left",	editable:false},		
-    	   		{name:"useYn", index:"useYn", width:50, align:"center" ,	sortable:false,	editable:true, editrules:{required:true},
-					edittype:"checkbox",
-					formatter: "checkbox",
-					formatoptions: {disabled : true},
-					editoptions: { value: "Y:N"}
-				 },
-				 {name:'codeGrp',index:'codeGrp', width:150, align:"center",	editable:false, hidden:true}
+    	   		{name:'modAuthCode',index:'modAuthCode', width:150, align:"center",	editable:false, editrules:{required:true}},
+    	   		{name:'authNm',index:'authNm', width:150,	editable:false, editrules:{required:true}},
+    	   		{name:'authDesc',index:'authDesc', width:300, align:"left",	editable:false},		
+    	   		{name:'createDate',index:'createDate', width:80, align:"center",	editable:false},
+    	   		{name:'authCode',index:'authCode', width:150, align:"center",	editable:false, hidden:true}
     	   	],
     	   	pager: "",
     	   	viewrecords: true,
@@ -244,67 +198,59 @@
     	    cellsubmit: 'clientArray',
     	    multiselect: true,
     	    multiboxonly: true,
-    	    beforeCellSelect: function(rowId,e){
+    	    beforeSelectRow: function(rowId, e){
     	    },
-    	   	onCellSelect: function(rowid,iCol,cellcontent,e){	// row 선택시 발생하는 이벤트	
-				
-    	   		var colModels = $(this).getGridParam('colModel'); 
+    	    onCellSelect: function(rowid,iCol,cellcontent,e){	// cell 선택시 발생하는 이벤트	
+    	    	var colModels = $(this).getGridParam('colModel'); 
 				var colName = colModels[iCol].name;
-    	   		
-				if(colName == "modCodeGrp"){
-					if(rowid != null){
-		    	    	selCodeGroup($(this), rowid);
-	    	    	}
-				}
-				if(colName == "useYn"){
-				}
 				
-    	   	},
-			beforeEditCell: function (rowId,name,val,iRow,iCol){
-				//alert("");
+    	    	if(rowid != null){
+					if(colName == "modAuthCode"){
+						selAuthCode($(this), rowid);			
+					}
+    	   		}
 			},
-			ondblClickRow: function (rowid, iRow, iCol) { 
-				var colModels = $(this).getGridParam('colModel'); 
-				var colName = colModels[iCol].name;
+			beforeEditCell: function (rowId,name,val,iRow,iCol){
 				
-				if(colName != "useYn"){
-					$(this).setColProp(colName, { editable: true }); 
-					$(this).editCell(iRow, iCol, true);
-				}
 			},
 			afterEditCell: function (id,name,val,iRow,iCol){
-				
 				$("#"+id+"_"+name).blur(function(){
 			        $("#grid1").jqGrid("saveCell",iRow,iCol);
 			    });
 				
-				if(name != "useYn"){
-					$(this).setColProp(name, { editable: false });
-				}
+				$(this).setColProp(name, { editable: false });
 				return true;
 		  	},
 		  	afterSaveCell : function(rowid,name,val,iRow,iCol) {
 		  		$("#grid1").setRowData(rowid,false,{background: '#F5BCA9'});
 		  		//$("#"+rowid).css("background", "#F5BCA9");
-		  	}
+		  	},
+		  	ondblClickRow: function (rowid, iRow, iCol) { 
+				var colModels = $(this).getGridParam('colModel'); 
+				var colName = colModels[iCol].name;
+				if(colName != "createDate"){
+					$(this).setColProp(colName, { editable: true }); 
+					$(this).editCell(iRow, iCol, true);
+				}
+			}
     	});
 	}
 	
-	function selCodeGroup(grid, rowId) {
+	function selAuthCode(grid, rowId) {
 		 var row = grid.getRowData(rowId);	
-		 var codeGrp = row.codeGrp;
+		 var authCode = row.authCode;
 		 
-		 $("#selCodeGroup").val(codeGrp);
+		 $("#selAuthCode").val(authCode);
 		 
-		 searchCodeDetailList(codeGrp);
+		 searchAuthRolelList(authCode);
 		 	
 	};
 	
 	//코드 그룹 목록 조회
-	function searchCodeGroupList(){
+	function searchAuthInfoList(){
 		var params = fnGetParams();
 
-	    ajaxJsonCall('/sys/codeGrpList',  params, fnSuccess);
+	    ajaxJsonCall('/sec/authInfoList',  params, fnSuccess);
 	}
 	
 	function fnSuccess(data){
@@ -316,13 +262,13 @@
 		
 	}
 	
-    function searchCodeDetailList(codeGrp){
+    function searchAuthRolelList(authCode){
     	
     	var params = new Object();
     	
-    	params.codeGrp = codeGrp;
+    	params.authCode = authCode;
 
-	    ajaxJsonCall('/sys/codeDetailList',  params, fnSuccess2);
+	    ajaxJsonCall('/sec/authRoleList',  params, fnSuccess2);
     	
     }
     
@@ -343,19 +289,31 @@
     		height: 250,
     		rowNum: 10000,
     		rowList: [10000],
-    	   	colNames:['코드그룹', '코드', '코드명', '설명', '사용여부','orgCode'],
+    		colNames:['롤 코드','롤 명','패턴', '타입', 'Sort', '설명', '등록일','등록여부'],
     	   	colModel:[
-    	   		{name:'codeGroupCd',index:'codeGroupCd', width:150, align:"center"},
-    	   		{name:'modCode',index:'modCode', width:150, align:"center",	editable:false, editrules:{required:true}},
-    	   		{name:'codeNm',index:'codeNm', width:150, align:"left",	editable:false, editrules:{required:true}},
-    	   		{name:'codeDesc',index:'codeDesc', width:300, align:"left",	editable:false},
-    	   		{name:"useYn", index:"useYn", width:50, align:"center" ,	sortable:false,	editable:true, editrules:{required:true},
+    	   		{name:'roleCode',index:'roleCode', width:80, align:"center",	editable:false, editrules:{required:true}},
+    	   		{name:'roleNm',index:'roleNm', width:120,	editable:false, editrules:{required:true}},
+    	   		{name:'rolePattern',index:'rolePattern', width:250,	editable:false, editrules:{required:true}},
+    	   		{name:"roleType", index:"roleType", width:60, align:"center" ,	sortable:false,	editable:false, editrules:{required:true},
+					edittype:"select",
+					formatter: "select",
+					editoptions:{
+						value:{
+							"url":"URL",
+							"pointcut":"POINTCUT",
+							"method":"METHOD"
+						}
+					}					
+				 },
+    	   		{name:'roleSort',index:'roleSort', width:60, align:"center",	editable:false},		
+				{name:'roleDesc',index:'roleDesc', width:200, align:"left",	editable:false},
+				{name:'createDate',index:'createDate', width:50, align:"center",	editable:false},
+				{name:"roleRegYn", index:"roleRegYn", width:50, align:"center" ,	sortable:false,	editable:true, editrules:{required:true},
 					edittype:"checkbox",
 					formatter: "checkbox",
 					formatoptions: {disabled : true},
 					editoptions: { value: "Y:N"}
-				 },
-				 {name:'code',index:'code', width:150, align:"center",	editable:false, hidden:true}
+				}
     	   	],
     	   	pager: "",
     	   	viewrecords: true,
@@ -363,7 +321,7 @@
     	   	rownumbers: true,
     	   	cellEdit: true,
     	    cellsubmit: 'clientArray',
-    	    multiselect: true,
+    	    multiselect: false,
     	    multiboxonly: true,
     	    beforeSelectRow: function(rowId, e){
     	    	
@@ -378,27 +336,31 @@
 				$("#"+id+"_"+name).blur(function(){
 			        $("#grid2").jqGrid("saveCell",iRow,iCol);
 			    });
-				
-				if(name != "useYn"){
-					$(this).setColProp(name, { editable: false });
-				}
 				return true;
 		  	},
 		  	afterSaveCell : function(rowid,name,val,iRow,iCol) {
 		  		$("#grid2").setRowData(rowid,false,{background: '#F5BCA9'});
 		  		//$("#"+rowid).css("background", "#F5BCA9");
-		  	},
-		  	ondblClickRow: function (rowid, iRow, iCol) { 
-				var colModels = $(this).getGridParam('colModel'); 
-				var colName = colModels[iCol].name;
-				
-				if(colName != "useYn"){
-					$(this).setColProp(colName, { editable: true }); 
-					$(this).editCell(iRow, iCol, true);
-				}
-			}
+		  	}
     	});
 		
+	}
+	
+	function reflectRuntime(){
+		
+		var params = new Object();
+		
+		if(confirm("반영하시겠습니까?")){
+		    ajaxJsonCall('/sec/reflectRuntime',  params, function(data){
+		    	
+		    	if(data.response.responseCd == "S"){
+		    		alert(data.response.responseMsg);
+		    	}else{
+		    		alert(data.response.responseErrMsg);
+		    	}
+		    	
+		    });
+		}
 	}
 	
 	function reload(){
@@ -408,15 +370,15 @@
 </th:block>
 <body>
 <th:block layout:fragment="content">
-<input type="hidden" id="selCodeGroup" name="selCodeGroup" value="" />
+<input type="hidden" id="selAuthCode" name="selAuthCode" value="" />
 
 <div class="tit-area">
-	<h3>코드관리</h3>
+	<h3>권한관리</h3>
 	<ul class="location-area">
 		<li><a href="#none" class="home">Home</a></li>
 		<li><a href="#none">시스템관리</a></li>
-		<li><a href="#none">코드관리</a></li>
-		<li><strong>공통코드관리</strong></li>
+		<li><a href="#none">권한관리</a></li>
+		<li><strong>권한관리</strong></li>
 	</ul>
 </div>
 
@@ -431,12 +393,12 @@
 			</colgroup>
 			<tbody>
 				<tr>
-					<th><span>그룹코드</span></th>
+					<th><span>권한코드</span></th>
 					<td>
-						<input type="text" id="codeGrp" name="codeGroup" value="" >
+						<input type="text" id="authCode" name="authCode" value="" >
 					</td>
-					<th><span>그룹코드명</span></th>
-					<td><input type="text" id="codeGrpNm" name="codeGroupNm" value="" ></td>
+					<th><span>권한명</span></th>
+					<td><input type="text" id="authNm" name="authNm" value="" ></td>
 				</tr>
 			</tbody>
 		</table>	
@@ -448,11 +410,11 @@
 <div class="layout-box">
 	<div class="layout">
 		<div class="sub-tit">
-			<h4>그룹코드</h4>
+			<h4>권한</h4>
 			<div class="icon-area">
-				<button type="button" id="btnAddCodeGroup" class="i-btn"><em class="icon01"></em>그룹추가</button>
-				<button type="button" id="btnDeleteCodeGroup" class="i-btn"><em class="icon02"></em>삭제</button>
-				<button type="button" id="btnSaveCodeGroup" class="i-btn"><em class="icon03"></em>저장</button>
+				<button type="button" id="btnAddAuthInfo" class="i-btn"><em class="icon01"></em>권한추가</button>
+				<button type="button" id="btnDeleteAuthInfo" class="i-btn"><em class="icon02"></em>삭제</button>
+				<button type="button" id="btnSaveAuthInfo" class="i-btn"><em class="icon03"></em>저장</button>
 			</div>
 		</div>
 		<div class="jqGridArea">	 
@@ -461,11 +423,10 @@
 		
 		<div class="layout">
 			<div class="sub-tit">
-				<h4>상세코드</h4>
+				<h4>롤정보</h4>
 				<div class="icon-area">
-					<button type="button" id="btnAddCodeDetail" class="i-btn"><em class="icon01"></em>상세추가</button>
-					<button type="button" id="btnDeleteCodeDetail" class="i-btn"><em class="icon02"></em>삭제</button>
-					<button type="button" id="btnSaveCodeDetail" class="i-btn"><em class="icon03"></em>저장</button>
+					<button type="button" id="btnSaveAuthRelation" class="i-btn"><em class="icon03"></em>저장</button>
+					<button type="button" id="btnReflectRuntime" class="i-btn">Runtime 반영</button>
 				</div>
 			</div>
 			<div class="jqGridArea">	 
