@@ -26,6 +26,11 @@ public class AuthManageService {
 	@Autowired
 	private UserAuthRelRepository userAuthRelRepository;
 	
+	public List<AuthInfo> searchAuthInfoAllList(){
+		
+		return authInfoRep.findAll();
+	}
+	
 	public List<AuthInfo> searchAuthInfoList(AuthInfoDto authInfoDto){
 		
 		return authInfoRepImpl.searchAuthInfoList(authInfoDto);

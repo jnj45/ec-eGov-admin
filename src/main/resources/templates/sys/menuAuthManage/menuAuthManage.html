@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+  layout:decorator="layout/defaultLayout">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<th:block layout:fragment="pageCustomCss">
+
+</th:block>
+<title>롤관리</title>
+</head>
+<th:block layout:fragment="pageCustomScript">
+<script type="text/javascript">
+	
+	$(document).ready(function() {
+		
+		
+		$("#btnSaveMenuAuthRel").click(function(e) {
+			saveMenuAuthRel();
+	    });
+		
+		$("#authCode").change(function() {
+			$("#treeGrid").GridUnload();
+			setTreeGrid();
+	    });
+		
+		init();
+		
+		$(window).resize(function() {
+			$("#treeGrid").setGridWidth($(".layout-left").width());
+		});
+		
+	});
+		
+	function init(){
+		setTreeGrid();
+	}
+	
+	function setTreeGrid(){
+		
+		var cnt = 0;
+		
+		$("#treeGrid").jqGrid({
+			url : "/sys/searchMenuAuthTreeList",
+    		datatype: "json",
+    		postData:{
+    			"authCode":$("#authCode").val()
+    		},
+    		mtype:"POST",
+            colNames: ["메뉴번호","메뉴명","newYn","programFileNm","url",""],
+            colModel: [
+                {name:'menuNo', index:'menuNo', width:1, hidden:true, key:true},
+                {name:'menuNm', index:'menuNm',width:80 , hidden:false, sortable:false,editable:false},
+                {name:'newYn', index:'newYn', hidden:true, sortable:false},
+                {name:'programFileNm', index:'programFileNm', hidden:true, sortable:false},
+                {name:'url', index:'url', hidden:true, sortable:false},
+                {name:'regYn', index:'regYn', width:20, hidden:false,align:"center",editable:true,
+                	edittype:"checkbox",
+					formatter: "checkbox",
+					formatoptions: {disabled : true},
+					editoptions: { value: "Y:N"}	
+                }
+                
+            ],
+            treeGridModel: 'adjacency',
+            height: '500',
+            width: '550',
+            pager: "",
+            treeGrid: true,
+            ExpandColumn: 'menuNm',
+            ExpandColClick: false,
+            cellEdit: true,
+            cellsubmit: 'clientArray',
+            treeIcons: {plus:'ui-icon-folder-collapsed',minus:'ui-icon-folder-open',leaf:'ui-icon-blank'},
+            caption: "메뉴 관리",
+            tree_root_level: 1,
+            jsonReader: {
+            	id:"menuNo",
+            	repeatitems : false
+            },
+            treeReader: {
+                level_field:        "lvl",
+                parent_id_field:    "upperMenuNo",
+                leaf_field: "leaf",
+                expanded_field:"expanded"
+            },
+            beforeRequest: function() {
+            	if(cnt==1){
+            		return false;
+            	}
+            	cnt = 1
+            },
+			onCellSelect: function(rowid,iCol,cellcontent,e){	// row 선택시 발생하는 이벤트	
+				
+    	   		var colModels = $(this).getGridParam('colModel'); 
+				var colName = colModels[iCol].name;
+    	   		
+				if(colName == "menuNm"){
+					if(rowid != null){
+						
+						var treedata = $("#treeGrid").jqGrid('getRowData', rowid);
+		            	selMenuInfo(treedata.menuNo);	
+						
+	    	    	}
+				}
+				
+    	   	},
+            onSelectRow: function (rowid) {
+            	$("#selRowId").val(rowid);
+            	var treedata = $("#treeGrid").jqGrid('getRowData', rowid);
+            	//alert(JSON.stringify(treedata));
+            	if(treedata.menuNo != null && treedata.menuNo != ""){
+	            	selMenuInfo(treedata.menuNo);	
+            	}else{
+            		$("#menuNo").val("");
+        	    	$("#modMenuNo").val(treedata.menuNo);
+        	    	$("#menuNm").val(treedata.menuNm);
+        	    	$("#upperMenuNo").val(treedata.upperMenuNo);
+        	    	$("#url").val(treedata.url);
+        	    	$("#menuDesc").val("");
+        	    	$("#menuOrder").val("");
+        	    	$("#programFileNm").val(treedata.programFileNm);
+					if(treedata.lvl == "1" || treedata.lvl == "2"){
+						$("#programFileNm").prop("readonly",true);
+						$("#url").prop("readonly",true);
+        	    	}else{
+        	    		$("#programFileNm").prop("readonly",false);
+        	    		$("#url").prop("readonly",false);
+        	    	}
+        	    	$("#relateImagePath").val("");
+        	    	$("#relateImageNm").val("");
+            	}
+            },
+			afterEditCell: function (id,name,val,iRow,iCol){
+				
+				$("#"+id+"_"+name).blur(function(){
+			        $("#treeGrid").jqGrid("saveCell",iRow,iCol);
+			    });
+				
+				return true;
+		  	},
+            afterSaveCell : function(rowid,name,val,iRow,iCol) {
+		  		$("#treeGrid").setRowData(rowid,false,{background: '#F5BCA9'});
+		  		//$("#"+rowid).css("background", "#F5BCA9");
+		  	},
+            loadComplete: function() {
+            	$(".ui-jqgrid tr.jqgrow>td").css("border-bottom-style","none");
+            	//$('.tree-leaf', $(this)).css('width', '0px');
+            	
+            }
+        });
+		
+	}
+	
+	function selMenuInfo(menuNo){
+		
+		var params = new Object();
+		
+		params.menuNo = menuNo;
+		
+	    ajaxJsonCall('/sys/searchMenuInfo',  params, function(data){
+	    	$("#menuNo").val(data.menuNo);
+	    	$("#modMenuNo").val(data.menuNo);
+	    	$("#menuNm").val(data.menuNm);
+	    	$("#upperMenuNo").val(data.upperMenuNo);
+	    	$("#url").val(data.url);
+	    	$("#menuDesc").val(data.menuDesc);
+	    	$("#menuOrder").val(data.menuOrder);
+	    	$("#programFileNm").val(data.programFileNm);
+	    	$("#relateImagePath").val(data.relateImagePath);
+	    	$("#relateImageNm").val(data.relateImageNm);
+	    });
+		
+	}
+	
+	function saveMenuAuthRel(){
+		
+		var updateList = $("#treeGrid").getChangedCells('all');
+		
+		if(updateList.length > 0){
+			var params = new Object();
+			
+			params.saveList = updateList;
+			params.authCode = $("#authCode").val();
+			
+			if(confirm("저장하시겠습니까?")){
+			    ajaxJsonCall('/sys/saveMenuAuthRel',  params, function(data){
+			    	
+			    	if(data.response.responseCd == "S"){
+			    		alert(data.response.responseMsg);
+			    		$("#treeGrid").GridUnload();
+						setTreeGrid();
+			    	}else{
+			    		alert(data.response.responseErrMsg);
+			    	}
+			    	
+			    });
+			}
+			
+		}else{
+			alert("변경사항이 존재하지 않습니다.");
+		}
+		
+	}
+	
+	function reload(){
+		
+		window.location.href = '/sys/menuAuthManage';
+		
+	}
+	
+</script>
+</th:block>
+<body>
+<th:block layout:fragment="content">
+<div class="tit-area">
+	<h3>메뉴 생성관리</h3>
+	<ul class="location-area">
+		<li><a href="#none" class="home">Home</a></li>
+		<li><a href="#none">시스템관리</a></li>
+		<li><a href="#none">메뉴생성관리</a></li>
+		<li><strong>메뉴생성관리</strong></li>
+	</ul>
+</div>
+<input type="hidden" id="selRowId" name="selRowId" value="" />
+<div class="layout-box">
+	<div class="layout-left">
+		<div class="sub-tit">
+			<h4>메뉴 목록</h4>
+			<div class="icon-area">
+				<button type="button" id="btnSaveMenuAuthRel" class="i-btn"><em class="icon03"></em>저장</button>
+			</div>
+		</div>
+		<div class="jqGridArea">
+			<select id="authCode" name=authCode class="wp100">
+				<th:block th:each="optList : ${authList}" >
+					<option th:value="${optList.authCode}" >
+					[[${optList.authCode}]]
+					</option>
+				</th:block>	
+			</select>	 
+			<table id="treeGrid"></table>
+		</div>
+	</div>
+	<div class="layout-right">
+		<div class="sub-tit">
+			<h4>메뉴 정보</h4>
+			<div class="icon-area">
+				<!-- <button type="button" id="btnDeleteMenuInfo" class="i-btn"><em class="icon02"></em>삭제</button>
+				<button type="button" id="btnSaveMenuInfo" class="i-btn"><em class="icon03"></em>저장</button> -->
+			</div>
+		</div>
+		<table class="tbl-style02">
+			<colgroup>
+				<col style="width:15%">
+				<col style="width:10%">
+				<col style="width:15%">
+				<col>
+			</colgroup>
+			<tbody>
+				<tr>
+					<th>상위메뉴ID</th>
+					<td colspan="3" >
+						<input type="text" class="wp100" id="upperMenuNo" name="upperMenuNo" value="" readonly="readonly" style="background-color: #D8D8D8;">
+					</td>
+				</tr>
+				<tr>
+					<th>메뉴ID</th>
+					<td colspan="3">
+					<input type="text" id="modMenuNo" class="wp100" name="modMenuNo" value="" readonly="readonly" style="background-color: #D8D8D8;">
+					<input type="hidden" id="menuNo" name="menuNo" value="">
+					</td>
+				</tr>
+				<tr>
+					<th>정렬순서</th>
+					<td colspan="3"><input type="text" class="wp100" id="menuOrder" name="menuOrder" value="" readonly="readonly" style="background-color: #D8D8D8;"></td>
+				</tr>
+				<tr>	
+					<th>메뉴명</th>
+					<td colspan="3"><input type="text" class="wp100" id="menuNm" name="menuNm" value="" readonly="readonly" style="background-color: #D8D8D8;"></td>
+				</tr>
+				<tr>
+					<th>프로그램명</th> 
+					<td colspan="3"><input type="text" class="wp100" id="programFileNm" name="programFileNm" value="" readonly="readonly" style="background-color: #D8D8D8;"></td>
+				</tr>
+				<tr>
+					<th>연결URL</th>
+					<td colspan="3"><input type="text" class="wp100" id="url" name="url" value="" readonly="readonly" style="background-color: #D8D8D8;"></td>
+				</tr>
+				<tr>
+					<th>이미지 경로</th>
+					<td colspan="3"><input type="text" class="wp100" id="relateImagePath" name="relateImagePath" value="" readonly="readonly" style="background-color: #D8D8D8;"></td>
+				</tr>
+				<tr>
+					<th>이미지 이름</th>
+					<td colspan="3"><input type="text" class="wp100" id="relateImageNm" name="relateImageNm" value="" readonly="readonly" style="background-color: #D8D8D8;"></td>
+				</tr>
+				<tr>
+					<th>메뉴 설명</th>
+					<td colspan="3">
+						<textarea class="tbl-txtarea" id="menuDesc" readonly="readonly" style="background-color: #D8D8D8;"></textarea>	
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+</th:block>
+</body>
+</html>

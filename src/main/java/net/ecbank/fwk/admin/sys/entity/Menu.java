@@ -1,16 +1,22 @@
 package net.ecbank.fwk.admin.sys.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.ColumnResult;
 import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.NamedNativeQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -18,6 +24,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import net.ecbank.fwk.admin.sec.entity.UserAuthRel;
 import net.ecbank.fwk.admin.sys.dto.MenuDto;
 import net.ecbank.fwk.admin.sys.dto.MenuTreeDto;
 
@@ -102,6 +109,10 @@ public class Menu {
 	
 	@Transient
 	private int lvl;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="menuInfo",fetch=FetchType.LAZY)
+	private List<MenuAuthRel> menuAuthList = new ArrayList<MenuAuthRel>();
 	
 	public Menu(long menuNo) {
 		this.menuNo = menuNo;

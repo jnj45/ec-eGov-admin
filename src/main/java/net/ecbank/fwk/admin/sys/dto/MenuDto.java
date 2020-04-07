@@ -1,5 +1,7 @@
 package net.ecbank.fwk.admin.sys.dto;
 
+import java.util.List;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.ecbank.fwk.admin.cmm.dto.CommonDto;
@@ -19,5 +21,11 @@ public class MenuDto extends CommonDto {
 	private String relateImageNm;
 	private String url;
 	private String newYn;
+	private String regYn;
+	private String authCode;
+	
+	private List<MenuDto> saveList;
+	
+	private List<MenuDto> deleteList;
 	
 }

@@ -21,6 +21,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import net.ecbank.fwk.admin.sec.dto.RoleInfoDto;
+import net.ecbank.fwk.admin.sys.entity.MenuAuthRel;
 import net.ecbank.fwk.admin.sec.dto.AuthInfoDto;
 
 @EqualsAndHashCode(callSuper=false)
@@ -60,6 +61,10 @@ public class AuthInfo {
 	@JsonIgnore
 	@OneToMany(mappedBy="authInfo",fetch=FetchType.LAZY)
 	private List<UserAuthRel> userAuthList = new ArrayList<UserAuthRel>();
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="authInfo",fetch=FetchType.LAZY)
+	private List<MenuAuthRel> menuAuthList = new ArrayList<MenuAuthRel>();
 	
 	public AuthInfo(String authCode) {
 		this.authCode = authCode;
