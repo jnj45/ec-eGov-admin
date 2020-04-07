@@ -60,6 +60,28 @@ public class MenuManageRestController {
 		return menuDto;
 	}
 	
+	@PostMapping("/deleteMenuInfo")
+	public MenuDto deleteMenuInfo(@RequestBody MenuDto menuDto) {
+		
+		Response res = new Response();
+		
+		try {
+			
+			menuManageService.deleteMenuInfo(menuDto);
+			
+			res.setResponseCd("S");
+			res.setResponseMsg("처리가 완료되었습니다.");
+		}catch (Exception e) {
+			e.printStackTrace();
+			res.setResponseCd("E");
+			res.setResponseErrMsg(e.getMessage());
+		}
+		
+		menuDto.setResponse(res);
+		
+		return menuDto;
+	}
+	
 	private List<MenuDto> convertToDtoList(List<Menu> menuList) {
 	    return menuList.stream().map(this::convertToDto).collect(Collectors.toList());
 	}

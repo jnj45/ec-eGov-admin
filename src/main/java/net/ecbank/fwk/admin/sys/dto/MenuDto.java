@@ -18,5 +18,6 @@ public class MenuDto extends CommonDto {
 	private String relateImagePath;
 	private String relateImageNm;
 	private String url;
+	private String newYn;
 	
 }

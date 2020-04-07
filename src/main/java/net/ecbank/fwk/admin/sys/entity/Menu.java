@@ -29,7 +29,7 @@ import net.ecbank.fwk.admin.sys.dto.MenuTreeDto;
 //@ToString(exclude = {"codeClass", "codeDetails"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
-@SqlResultSetMapping(
+/*@SqlResultSetMapping(
 					name = "TreeMapping",
 					classes = @ConstructorResult(
 							targetClass = MenuTreeDto.class,
@@ -69,7 +69,7 @@ import net.ecbank.fwk.admin.sys.dto.MenuTreeDto;
 							"        ,RELATE_IMAGE_NM\r\n" + 
 							"    FROM  COMTNMENUINFO)\r\n" + 
 							"START WITH MENU_NO = 0 \r\n" + 
-							"CONNECT BY PRIOR MENU_NO = UPPER_MENU_NO",resultSetMapping="TreeMapping")
+							"CONNECT BY PRIOR MENU_NO = UPPER_MENU_NO",resultSetMapping="TreeMapping")*/
 public class Menu {
 	
 	@Column(name="MENU_NM")
@@ -97,6 +97,9 @@ public class Menu {
 	@Column(name="RELATE_IMAGE_NM")
 	private String relateImageNm;
 	
+	@Column(name="URL")
+	private String url;
+	
 	@Transient
 	private int lvl;
 	
@@ -105,6 +108,15 @@ public class Menu {
 	}
 	
 	public Menu(MenuDto menuDto) {
+		this.menuNo = menuDto.getModMenuNo();
+		this.menuNm = menuDto.getMenuNm();
+		this.upperMenuNo = menuDto.getUpperMenuNo();
+		this.menuOrder = menuDto.getMenuOrder();
+		this.menuDesc = menuDto.getMenuDesc();
+		this.relateImageNm = menuDto.getRelateImageNm();
+		this.relateImagePath = menuDto.getRelateImagePath();
+		this.url = menuDto.getUrl();
+		this.programFileNm = menuDto.getProgramFileNm();
 		
 	}
 	

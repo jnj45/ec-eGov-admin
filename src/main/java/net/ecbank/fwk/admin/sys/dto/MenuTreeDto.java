@@ -1,7 +1,5 @@
 package net.ecbank.fwk.admin.sys.dto;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
@@ -18,10 +16,38 @@ public class MenuTreeDto{
 	private int lvl;
 	private boolean expanded;
 	private boolean leaf;
-	private boolean loaded;
+	private boolean loaded = true;
+	private String newYn;
 	
 	public MenuTreeDto() {
 		
+	}
+	
+	public String getNewYn() {
+		this.newYn = "N";
+		return this.newYn;
+	}
+	
+	public boolean isExpanded() {
+		
+		if(this.lvl == 3) {
+		  this.expanded = false;
+		}else {
+		  this.expanded = true;
+		}
+		
+		return this.expanded;
+	}
+	
+	public boolean isLeaf() {
+		
+		if(this.lvl == 3) {
+		  this.leaf = true;
+		}else {
+		  this.leaf = false;
+		}
+		
+		return this.leaf;
 	}
 	
 	public MenuTreeDto(String menuNm, String programFileNm,

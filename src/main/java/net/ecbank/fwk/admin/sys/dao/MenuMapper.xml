@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="net.ecbank.fwk.admin.sys.dao.MenuMapper">
+    
+    
+    <resultMap type="net.ecbank.fwk.admin.sys.dto.MenuTreeDto" id="menuTreeDto" autoMapping="true" />
+
+    <select id="selectMenuTreeList" resultMap="menuTreeDto">
+        <![CDATA[
+            SELECT 
+		        MENU_NM AS menuNm,   
+		        PROGRM_FILE_NM AS programFileNm,  
+		        MENU_NO AS menuNo,   
+		        UPPER_MENU_NO AS upperMenuNo, 
+		        MENU_ORDR AS menuOrder, 
+		        MENU_DC AS menuDesc, 
+		        RELATE_IMAGE_PATH AS relateImagePath, 
+		        RELATE_IMAGE_NM AS relateImageNm, 
+		        LEVEL AS lvl   
+			FROM   
+			    (SELECT  
+			         MENU_NM  
+			        ,PROGRM_FILE_NM  
+			        ,MENU_NO  
+			        ,CASE WHEN UPPER_MENU_NO = MENU_NO THEN 1 ELSE UPPER_MENU_NO END AS UPPER_MENU_NO  
+			        ,MENU_ORDR  
+			        ,MENU_DC  
+			        ,RELATE_IMAGE_PATH  
+			        ,RELATE_IMAGE_NM  
+			    FROM  COMTNMENUINFO)  
+			START WITH MENU_NO = 0   
+			CONNECT BY PRIOR MENU_NO = UPPER_MENU_NO
+         ]]>
+    </select>
+    
+</mapper>

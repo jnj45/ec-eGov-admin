@@ -28,8 +28,8 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
 			"    FROM  COMTNMENUINFO)\r\n" + 
 			"START WITH MENU_NO = 0 \r\n" + 
 			"CONNECT BY PRIOR MENU_NO = UPPER_MENU_NO",nativeQuery=true)*/
-	@Query(nativeQuery = true)
-	List<MenuTreeDto> searchMenuListByTree();
+	/*@Query(nativeQuery = true)
+	List<MenuTreeDto> searchMenuListByTree();*/
 	
 	Menu findOneByMenuNo(Long menuNo);
 	

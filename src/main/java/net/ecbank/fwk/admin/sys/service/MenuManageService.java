@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.ecbank.fwk.admin.sys.dao.MenuMapper;
 import net.ecbank.fwk.admin.sys.dto.MenuDto;
 import net.ecbank.fwk.admin.sys.dto.MenuTreeDto;
 import net.ecbank.fwk.admin.sys.entity.Menu;
@@ -16,10 +17,12 @@ public class MenuManageService {
 	@Autowired
 	private MenuRepository menuRep;
 	
+	@Autowired
+	private MenuMapper menuMapper;
 	
 	public List<MenuTreeDto> searchMenuListByTree(){
 		
-		List list = menuRep.searchMenuListByTree();
+		List<MenuTreeDto> list = menuMapper.selectMenuTreeList();
 				
 		return list;
 	}
@@ -30,18 +33,26 @@ public class MenuManageService {
 	
 	public void saveMenuInfo(MenuDto menuDto) {
 		
-		Menu program = new Menu(menuDto);
+		Menu menu = new Menu(menuDto);
 		
 		if(menuDto.getModMenuNo() == menuDto.getMenuNo()) {
-			menuRep.save(program);
+			menuRep.save(menu);
 		}else {
 			if(menuDto.getModMenuNo() == 0 ) {
-				menuRep.save(program);
+				menuRep.save(menu);
 			}else {
-				menuRep.save(program);
+				menuRep.save(menu);
 				menuRep.delete(new Menu(menuDto.getMenuNo()));
 			}
 		}
+		
+	}
+	
+	public void deleteMenuInfo(MenuDto menuDto) {
+		
+		Menu menu = new Menu(menuDto.getModMenuNo());
+		
+		menuRep.delete(menu);
 		
 	}
 	
