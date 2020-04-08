@@ -36,8 +36,10 @@ public class LogExplorerRestController {
 		
 		Response res = new Response();
 		
+		dto.setToLine(dto.getFromLine()+100);
+		
 		try {
-			String logContents = logExplorerService.getLogString(dto.getFullPath());
+			String logContents = logExplorerService.getLogString(dto.getFullPath(),dto.getFromLine(),dto.getToLine());
 			
 			dto.setLogContents(logContents);
 			

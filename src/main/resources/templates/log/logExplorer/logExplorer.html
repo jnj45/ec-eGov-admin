@@ -15,20 +15,19 @@
 	
 	$(document).ready(function() {
 		
-		
-		$("#btnSaveMenuInfo").click(function(e) {
-			btnSaveMenuInfo();
-	    });
-		
-		$("#btnAddMenu").click(function(e) {
-			addMenu();
-	    });
-		
-		$("#btnDeleteMenuInfo").click(function(e) {
-			deleteMenuInfo();
-	    });
-		
 		init();
+		
+		$('#logDiv').scroll(function(){
+		    //alert("로그 끝");
+		    
+		    var scrollT = $(this).scrollTop(); //스크롤바의 상단위치
+	        var scrollH = $(this).height(); //스크롤바를 갖는 div의 높이
+    	    var contentH = $('#logView').height(); //문서 전체 내용을 갖는 div의 높이
+        	if(scrollT + scrollH +1 >= contentH) { // 스크롤바가 아래 쪽에 위치할 때
+        		appendLog();
+        	}
+		    
+		});
 		
 		$(window).resize(function() {
 			$("#treeGrid").setGridWidth($(".layout-left").width());
@@ -102,10 +101,52 @@
 		var params = new Object();
 		
 		params.fullPath = path;
+		params.fromLine = 0;
 		
 	    ajaxJsonCall('/log/getLogView',  params, function(data){
 	    	
 	    	if(data.response.responseCd == "S"){
+	    		$("#logView").append(data.logContents);
+	    		$("#lastLine").val(data.toLine+1);
+	    	}else{
+	    		alert(data.response.responseErrMsg);
+	    	}
+	    });
+		
+	}
+	
+	function selFile(path){
+		
+		var params = new Object();
+		
+		params.fullPath = path;
+		params.fromLine = 0;
+		
+	    ajaxJsonCall('/log/getLogView',  params, function(data){
+	    	
+	    	if(data.response.responseCd == "S"){
+	    		$("#currFilePath").val(data.fullPath);
+	    		$("#lastLine").val(data.toLine+1);
+	    		$("#logView").append(data.logContents);
+	    	}else{
+	    		alert(data.response.responseErrMsg);
+	    	}
+	    });
+		
+	}
+	
+	function appendLog(){
+		
+		var params = new Object();
+		
+		params.fullPath = $("#currFilePath").val();
+		params.fromLine = $("#lastLine").val();;
+		
+	    ajaxJsonCall('/log/getLogView',  params, function(data){
+	    	
+	    	if(data.response.responseCd == "S"){
+	    		$("#currFilePath").val(data.fullPath);
+	    		$("#lastLine").val(data.toLine+1);
 	    		$("#logView").append(data.logContents);
 	    	}else{
 	    		alert(data.response.responseErrMsg);
@@ -127,8 +168,9 @@
 		<li><strong>로그관리</strong></li>
 	</ul>
 </div>
-<input type="hidden" id="selRowId" name="selRowId" value="" />
-<div class="layout-box">
+<input type="hidden" id="currFilePath" name="currFilePath" value="" />
+<input type="hidden" id="lastLine" name="lastLine" value="" />
+<div class="layout-box" id="allContents">
 	<div class="layout-left">
 		<div class="sub-tit">
 			<h4>로그 탐색기</h4>
@@ -150,8 +192,9 @@
 		<table class="tbl-style02">
 			<tr>
 				<td style="">
-					<div id="logView" style="height:600px;overflow:auto;">
-					
+					<div id="logDiv" style="height:550px;overflow:auto;">
+    					<div id="logView" style="white-space: pre-wrap;">
+    					</div>
 					</div>
 				</td>
 			</tr>

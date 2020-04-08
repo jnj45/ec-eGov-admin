@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.LineNumberReader;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +35,7 @@ public class LogExplorerService {
 		
 	}
 	
-	public String getLogString(String logPath) throws Exception{
+	public String getLogString(String logPath,long from, long to) throws Exception{
 		
 		String logContents = "";
 		
@@ -47,17 +49,51 @@ public class LogExplorerService {
             FileReader filereader = new FileReader(logFile);
             //입력 버퍼 생성
             BufferedReader bufReader = new BufferedReader(filereader);
+            
             String line = "";
             while((line = bufReader.readLine()) != null){
-            	if(lineNum > 100) {
+            	if(lineNum > to) {
             		break;
+            	}else {
+            		if(lineNum > from) {
+            			log.append(line).append("\n");
+            		}
             	}
-            	log.append(line);
-            	log.append("\n");
             	lineNum++;
             }
             bufReader.close();
             logContents = log.toString();
+        }catch (FileNotFoundException e) {
+        	e.printStackTrace();
+        	throw new Exception(e);
+        }catch(IOException e){
+        	e.printStackTrace();
+        	throw new Exception(e);
+        }
+		
+		return logContents;
+		
+	}
+	
+	public String getLogString2(String logPath) throws Exception{
+		
+		String logContents = "";
+		
+		StringBuffer log = new StringBuffer("");
+		
+		try{
+			File logFile = new File(logPath);
+            
+			RandomAccessFile raf = new RandomAccessFile(logFile, "rw");
+			
+			String line = null;
+			raf.seek(1);
+			while((line = raf.readLine())!=null) {
+				log.append(line).append("\n");
+			}
+			
+			raf.close();
+			
         }catch (FileNotFoundException e) {
         	e.printStackTrace();
         	throw new Exception(e);

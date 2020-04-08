@@ -17,6 +17,8 @@ public class LogExplorerDto extends CommonDto {
 	private boolean leaf;
 	private boolean loaded = true;
 	
+	private long fromLine;
+	private long toLine;
 	private String logContents;
 	
 	public LogExplorerDto() {
