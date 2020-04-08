@@ -36,6 +36,7 @@ public class LogExplorerRestController {
 		
 		Response res = new Response();
 		
+		System.out.println("From Line : " + dto.getFromLine());
 		dto.setToLine(dto.getFromLine()+100);
 		
 		try {

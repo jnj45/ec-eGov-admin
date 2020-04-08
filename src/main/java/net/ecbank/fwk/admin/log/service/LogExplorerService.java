@@ -55,7 +55,9 @@ public class LogExplorerService {
             	if(lineNum > to) {
             		break;
             	}else {
-            		if(lineNum > from) {
+            		if(lineNum >= from) {
+            			//로그 라인 보여주기
+            			//log.append("<font color=\"red\">").append(lineNum).append(">></font>");
             			log.append(line).append("\n");
             		}
             	}
