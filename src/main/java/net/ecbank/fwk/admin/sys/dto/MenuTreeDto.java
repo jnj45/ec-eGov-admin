@@ -18,6 +18,8 @@ public class MenuTreeDto{
 	private boolean leaf;
 	private boolean loaded = true;
 	private String newYn;
+	private String regYn;
+	private String authCode;
 	
 	public MenuTreeDto() {
 		

@@ -11,4 +11,6 @@ public interface MenuMapper {
 	
 	public List<MenuTreeDto> selectMenuTreeList();
 	
+	public List<MenuTreeDto> selectMenuAuthTreeList(String authCode);
+	
 }

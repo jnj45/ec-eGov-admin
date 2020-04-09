@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+  layout:decorator="layout/defaultLayout">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<th:block layout:fragment="pageCustomCss">
+
+</th:block>
+<title>로그관리</title>
+</head>
+<th:block layout:fragment="pageCustomScript">
+<script type="text/javascript">
+	
+	$(document).ready(function() {
+		
+		init();
+		
+		$("#searchLogView").click(function(e) {
+			searchLogView();
+	    });
+		
+		
+		$('#logDiv').scroll(function(){
+		    //alert("로그 끝");
+		    
+		    var scrollT = $(this).scrollTop(); //스크롤바의 상단위치
+	        var scrollH = $(this).height(); //스크롤바를 갖는 div의 높이
+    	    var contentH = $('#logView').height(); //문서 전체 내용을 갖는 div의 높이
+        	if(scrollT + scrollH +1 >= contentH) { // 스크롤바가 아래 쪽에 위치할 때
+        		appendLog();
+        	}
+		    
+		});
+		
+		$(window).resize(function() {
+			$("#treeGrid").setGridWidth($(".layout-left").width());
+		});
+		
+	});
+		
+	function init(){
+		setTreeGrid();
+	}
+	
+	function setTreeGrid(){
+		
+		var cnt = 0;
+		
+		$("#treeGrid").jqGrid({
+			url : "/log/getLogPathList",
+    		datatype: "json",
+    		mtype:"POST",
+            colNames: ["경로","Name","fYn"],
+            colModel: [
+                {name:'fullPath', index:'fullPath', width:1, hidden:true, key:true},
+                {name:'name', index:'name', hidden:false, sortable:false},
+                {name:'folderYn', index:'folderYn', hidden:true, sortable:false}
+            ],
+            treeGridModel: 'adjacency',
+            height: '500',
+            width: '550',
+            pager: "",
+            treeGrid: true,
+            ExpandColumn: 'name',
+            ExpandColClick: false,
+            treeIcons: {plus:'ui-icon-folder-collapsed',minus:'ui-icon-folder-open',leaf:'ui-icon-blank'},
+            caption: "탐색기",
+            tree_root_level: 1,
+            jsonReader: {
+            	id:"fullPath",
+            	repeatitems : false
+            },
+            treeReader: {
+                level_field:        "lvl",
+                parent_id_field:    "parentPath",
+                leaf_field: "leaf",
+                expanded_field:"expanded"
+            },
+            beforeRequest: function() {
+            	if(cnt==1){
+            		return false;
+            	}
+            	cnt = 1
+            },
+            onSelectRow: function (rowid) {
+            	$("#selRowId").val(rowid);
+            	var treedata = $("#treeGrid").jqGrid('getRowData', rowid);
+            	//alert(JSON.stringify(treedata));
+	            if(treedata.folderYn == "N"){
+	            	$("#logView").html("");
+	            	selFile(treedata.fullPath);
+	            }
+            },
+            loadComplete: function() {
+            	$(".ui-jqgrid tr.jqgrow>td").css("border-bottom-style","none");
+            	//$('.tree-leaf', $(this)).css('width', '0px');
+            }
+        });
+		
+	}
+	
+	function selFile(path){
+		
+		var params = new Object();
+		
+		params.fullPath = path;
+		params.fromLine = 0;
+		
+	    ajaxJsonCall('/log/getLogView',  params, function(data){
+	    	
+	    	if(data.response.responseCd == "S"){
+	    		$("#logView").append(data.logContents);
+	    		$("#lastLine").val(data.toLine+1);
+	    	}else{
+	    		alert(data.response.responseErrMsg);
+	    	}
+	    });
+		
+	}
+	
+	function selFile(path){
+		
+		var params = new Object();
+		
+		params.fullPath = path;
+		params.fromLine = 1;
+		
+	    ajaxJsonCall('/log/getLogView',  params, function(data){
+	    	
+	    	if(data.response.responseCd == "S"){
+	    		$("#currFilePath").val(data.fullPath);
+	    		$("#lastLine").val(data.toLine+1);
+	    		$("#logView").append(data.logContents);
+	    	}else{
+	    		alert(data.response.responseErrMsg);
+	    	}
+	    });
+		
+	}
+	
+	function appendLog(){
+		
+		var params = new Object();
+		
+		params.fullPath = $("#currFilePath").val();
+		params.fromLine = $("#lastLine").val();;
+		
+	    ajaxJsonCall('/log/getLogView',  params, function(data){
+	    	
+	    	if(data.response.responseCd == "S"){
+	    		$("#currFilePath").val(data.fullPath);
+	    		$("#lastLine").val(data.toLine+1);
+	    		$("#logView").append(data.logContents);
+	    	}else{
+	    		alert(data.response.responseErrMsg);
+	    	}
+	    });
+		
+	}
+	
+	function searchLogView(){
+		
+		var searchCond = $("#searchCond").val();
+		
+		var params = new Object();
+		
+		params.fullPath = $("#currFilePath").val();
+		
+		if(searchCond == "L"){
+			params.fromLine = $("#searchValue").val();
+		}else{
+			params.searchText = $("#searchValue").val()
+		}
+		
+	    ajaxJsonCall('/log/getLogView',  params, function(data){
+	    	
+	    	if(data.response.responseCd == "S"){
+	    		$("#logView").html("");
+	    		$("#currFilePath").val(data.fullPath);
+	    		$("#lastLine").val(data.toLine+1);
+	    		$("#logView").append(data.logContents);
+	    	}else{
+	    		alert(data.response.responseErrMsg);
+	    	}
+	    });
+		
+	}
+	
+</script>
+</th:block>
+<body>
+<th:block layout:fragment="content">
+<div class="tit-area">
+	<h3>로그관리</h3>
+	<ul class="location-area">
+		<li><a href="#none" class="home">Home</a></li>
+		<li><a href="#none">로그관리</a></li>
+		<li><a href="#none">로그관리</a></li>
+		<li><strong>로그관리</strong></li>
+	</ul>
+</div>
+<input type="hidden" id="currFilePath" name="currFilePath" value="" />
+<input type="hidden" id="lastLine" name="lastLine" value="" />
+<div class="layout-box" id="allContents">
+	<div class="layout-left">
+		<div class="sub-tit">
+			<h4>로그 탐색기</h4>
+			<div class="icon-area">
+			</div>
+		</div>
+		<div class="jqGridArea">	 
+			<table id="treeGrid"></table>
+		</div>
+	</div>
+	<div class="layout-right">
+		<div class="sub-tit">
+			<h4>로그 상세</h4>
+			<div class="icon-area">
+				<select id="searchCond">
+					<option value="L">라인</option>
+					<option value="T">검색어</option>
+				</select>
+				<input type="text" id="searchValue" value="">
+				<button type="button" id="searchLogView" class="i-btn">검색</button>
+				<!-- <button type="button" id="btnDeleteMenuInfo" class="i-btn"><em class="icon02"></em>삭제</button>
+				<button type="button" id="btnSaveMenuInfo" class="i-btn"><em class="icon03"></em>저장</button> -->
+			</div>
+		</div>
+		<table class="tbl-style02">
+			<tr>
+				<td style="">
+					<div id="logDiv" style="height:550px;overflow:auto;">
+    					<div id="logView" style="white-space: pre-wrap;">
+    					</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+</th:block>
+</body>
+</html>
