@@ -20,6 +20,9 @@ import net.ecbank.fwk.admin.log.dto.LogExplorerDto;
 @Service
 public class LogExplorerService {
 	
+	@Autowired
+	private Environment environment;
+	
 	public List<LogExplorerDto> getLogPathList(String rootPath){
 		
 		List<LogExplorerDto> pathList = new ArrayList<LogExplorerDto>();
@@ -35,29 +38,98 @@ public class LogExplorerService {
 		
 	}
 	
-	public String getLogString(String logPath,long from, long to) throws Exception{
+	public LogExplorerDto getLogString(LogExplorerDto dto) throws Exception{
+		
+		List<Long> searchLineList = null;
+		
+		if(!dto.isSearchNext()) {
+			//System.out.println("최초");
+			dto.setSearchTextSize(1000);
+			dto.setSearchTextFromLine(1);
+			dto.setSearchTextToLine(10000);
+		}
+		
+		if(dto.isSearchTextYn()) {
+			
+			//System.out.println(dto.getSearchTextSize()+"||||"+dto.getNextSeq());
+			
+			if(dto.getSearchTextSize() == dto.getNextSeq()+1) {
+				//System.out.println("다음");
+				dto.setSearchTextFromLine(dto.getSearchTextFromLine()+10000);
+				dto.setSearchTextToLine(dto.getSearchTextToLine()+10000);
+				dto.setNextSeq(0);
+			}
+			
+			
+			searchLineList = getSearchTextLogLine(dto);
+			dto.setSearchTextSize(searchLineList.size());
+			
+			setSearchTextLineList(searchLineList, dto);
+			
+			if(dto.isSearchNext()) {
+				//System.out.println("다음.........");
+				if(searchLineList.size() == 0) {
+					//System.out.println("사이즈가 0");
+					dto.setSearchTextFromLine(1);
+					dto.setSearchTextToLine(10000);
+					
+					searchLineList = getSearchTextLogLine(dto);
+					dto.setSearchTextSize(searchLineList.size());
+					
+					setSearchTextLineList(searchLineList, dto);
+					
+				}
+				
+				if(searchLineList.size() == 1) {
+					//System.out.println("사이즈가 1");
+					dto.setNextSeq(0);
+				}
+			}
+			
+			if(searchLineList.size() == 0) {
+				throw new Exception("검색된 내용이 없습니다.");
+			}
+			
+			//System.out.println("최종 리스트 사이즈 :" + searchLineList.size());
+			if(!dto.isLogAddYn()) {
+				if(dto.isSearchNext()) {
+					//System.out.println("다음 SEQ : "+dto.getNextSeq());
+					dto.setFromLine(searchLineList.get(dto.getNextSeq()));
+				}else {
+					dto.setFromLine(searchLineList.get(0));
+				}
+			}
+		}
 		
 		String logContents = "";
 		
 		StringBuffer log = new StringBuffer("");
 		
-		int lineNum = 1;
+		long lineNum = 1;
 		
 		try{
-			File logFile = new File(logPath);
+			File logFile = new File(dto.getFullPath());
             //입력 스트림 생성
             FileReader filereader = new FileReader(logFile);
             //입력 버퍼 생성
             BufferedReader bufReader = new BufferedReader(filereader);
             
             String line = "";
+            dto.setToLine(dto.getFromLine() + Integer.parseInt(environment.getProperty("ecbank.fwk.admin.log.explr.add.line.cnt")));
             while((line = bufReader.readLine()) != null){
-            	if(lineNum > to) {
+            	if(lineNum > dto.getToLine()) {
             		break;
             	}else {
-            		if(lineNum >= from) {
+            		if(lineNum >= dto.getFromLine()) {
             			//로그 라인 보여주기
-            			//log.append("<font color=\"red\">").append(lineNum).append(">></font>");
+            			if(dto.getViewLineNumYn().equals("Y")) {
+            				log.append("<font color=\""+environment.getProperty("ecbank.fwk.admin.log.explr.line.num.col")+"\">").append(lineNum).append(">>></font>");
+            			}
+            			
+            			if(dto.isSearchTextYn()) {
+            				line = line.replaceAll(dto.getSearchText(), "<font color=\""+environment.getProperty("ecbank.fwk.admin.log.explr.srch.txt.col")+"\">"+dto.getSearchText()+"</font>");
+            			}
+            			
             			log.append(line).append("\n");
             		}
             	}
@@ -65,6 +137,19 @@ public class LogExplorerService {
             }
             bufReader.close();
             logContents = log.toString();
+            dto.setLogContents(logContents);
+            
+            if(dto.isSearchTextYn()) {
+            	if(!dto.isLogAddYn()) {
+			        if(dto.isSearchNext()) {
+						//dto.setNextLine(searchLineList.get(dto.getNextSeq()+1));
+						dto.setNextSeq((int) (dto.getNextSeq() + 1));
+					}else {
+						//dto.setNextLine(searchLineList.get(1));
+						dto.setNextSeq(1);
+					}
+            	}
+            }
         }catch (FileNotFoundException e) {
         	e.printStackTrace();
         	throw new Exception(e);
@@ -73,7 +158,49 @@ public class LogExplorerService {
         	throw new Exception(e);
         }
 		
-		return logContents;
+		return dto;
+		
+	}
+	
+	public List<Long> getSearchTextLogLine(LogExplorerDto dto) throws Exception{
+		
+		List<Long> lineNumList = new ArrayList<Long>();
+		
+		long lineNum = 1;
+		
+		try{
+			File logFile = new File(dto.getFullPath());
+            //입력 스트림 생성
+            FileReader filereader = new FileReader(logFile);
+            //입력 버퍼 생성
+            BufferedReader bufReader = new BufferedReader(filereader);
+            //System.out.println("textfrom : " +dto.getSearchTextFromLine()+ " :: textTo : "+dto.getSearchTextToLine());
+            String line = "";
+            while((line = bufReader.readLine()) != null){
+            	if(lineNum > dto.getSearchTextToLine()) {
+            		break;
+            	}else {
+            		if(lineNum >= dto.getSearchTextFromLine()) {
+	            		if(line.contains(dto.getSearchText())) {
+	                		lineNumList.add(lineNum);
+	                	}
+            		}
+            	}
+            	lineNum++;
+            }
+            
+            dto.setLastLineNum(lineNum-1);
+            
+            bufReader.close();
+        }catch (FileNotFoundException e) {
+        	e.printStackTrace();
+        	throw new Exception(e);
+        }catch(IOException e){
+        	e.printStackTrace();
+        	throw new Exception(e);
+        }
+		
+		return lineNumList;
 		
 	}
 	
@@ -128,6 +255,24 @@ public class LogExplorerService {
 			}
 			
 		}
+		
+	}
+	
+	public LogExplorerDto setSearchTextLineList(List searchLineList,LogExplorerDto dto) throws Exception {
+		
+		//System.out.println(dto.getLastLineNum()+"||||dddd| "+dto.getSearchTextToLine());
+		if(dto.getLastLineNum() >= dto.getSearchTextToLine()) {
+			if(searchLineList.size() == 0) {
+				//System.out.println(": "+dto.getSearchTextFromLine()+" :" + dto.getSearchTextToLine());
+				dto.setSearchTextFromLine(dto.getSearchTextFromLine()+10000);
+				dto.setSearchTextToLine(dto.getSearchTextToLine()+10000);
+				dto.setNextSeq(0);
+				searchLineList = getSearchTextLogLine(dto);
+				dto.setSearchTextSize(searchLineList.size());
+				dto = setSearchTextLineList(searchLineList, dto);
+			}
+		}
+		return dto;
 		
 	}
 	

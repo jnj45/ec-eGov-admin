@@ -20,6 +20,18 @@ public class LogExplorerDto extends CommonDto {
 	private long fromLine;
 	private long toLine;
 	private String logContents;
+	private String viewLineNumYn;
+	private String searchText;
+	private long currentLine;
+	private long nextLine;
+	private long searchTextFromLine;
+	private long searchTextToLine;
+	private int searchTextSize;
+	private int nextSeq;
+	private boolean searchNext;
+	private boolean searchTextYn;
+	private boolean logAddYn;
+	private long lastLineNum;
 	
 	public LogExplorerDto() {
 		

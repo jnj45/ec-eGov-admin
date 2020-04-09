@@ -21,6 +21,11 @@
 			searchLogView();
 	    });
 		
+		$("#btnDownLog").click(function(e) {
+			downloadLog();
+	    });
+		
+		
 		
 		$('#logDiv').scroll(function(){
 		    //alert("로그 끝");
@@ -42,6 +47,24 @@
 		
 	function init(){
 		setTreeGrid();
+	}
+	
+	function downloadLog(){
+		
+		if($("#currFilePath").val() != ""){
+			
+			$("#fullPath").val($("#currFilePath").val());
+			
+			var fm = document.getElementById("fm");
+			
+			fm.action ="/log/downloadlogFile";
+			fm.target = "downFrame";
+			fm.submit();
+			
+		}else{
+			alert("다운로드 받을 파일을 선택하시기 바랍니다.");
+		}
+		
 	}
 	
 	function setTreeGrid(){
@@ -103,29 +126,21 @@
 	
 	function selFile(path){
 		
-		var params = new Object();
-		
-		params.fullPath = path;
-		params.fromLine = 0;
-		
-	    ajaxJsonCall('/log/getLogView',  params, function(data){
-	    	
-	    	if(data.response.responseCd == "S"){
-	    		$("#logView").append(data.logContents);
-	    		$("#lastLine").val(data.toLine+1);
-	    	}else{
-	    		alert(data.response.responseErrMsg);
-	    	}
-	    });
-		
-	}
-	
-	function selFile(path){
+		$("#beforeSearchText").val("");
+		$("#searchValue").val("");
 		
 		var params = new Object();
 		
 		params.fullPath = path;
 		params.fromLine = 1;
+		params.searchTextYn = false;
+		params.logAddYn = false;
+		
+		if($("#viewLineNumYn").is(":checked")){
+			params.viewLineNumYn = "Y";
+		}else{
+			params.viewLineNumYn = "N";
+		}
 		
 	    ajaxJsonCall('/log/getLogView',  params, function(data){
 	    	
@@ -142,10 +157,35 @@
 	
 	function appendLog(){
 		
+		var searchCond = $("#searchCond").val();
+		
 		var params = new Object();
 		
 		params.fullPath = $("#currFilePath").val();
-		params.fromLine = $("#lastLine").val();;
+		params.fromLine = $("#lastLine").val();
+		params.logAddYn = true;
+		if($("#viewLineNumYn").is(":checked")){
+			params.viewLineNumYn = "Y";
+		}else{
+			params.viewLineNumYn = "N";
+		}
+		
+		if(searchCond == "L"){
+			params.searchTextYn = false;
+		}else{
+			if($("#beforeSearchText").val() != $("#searchValue").val()){
+				params.searchNext = false;
+			}else{
+				params.searchNext = true;
+			}
+			
+			params.searchTextYn = true;
+			params.searchText = $("#searchValue").val();
+			params.nextLine = $("#nextLine").val();
+			params.nextSeq = $("#nextSeq").val();
+			
+			$("#beforeSearchText").val($("#searchValue").val());
+		}
 		
 	    ajaxJsonCall('/log/getLogView',  params, function(data){
 	    	
@@ -167,11 +207,34 @@
 		var params = new Object();
 		
 		params.fullPath = $("#currFilePath").val();
+		params.logAddYn = false;
+		
+		if($("#viewLineNumYn").is(":checked")){
+			params.viewLineNumYn = "Y";
+		}else{
+			params.viewLineNumYn = "N";
+		}
 		
 		if(searchCond == "L"){
 			params.fromLine = $("#searchValue").val();
+			params.searchTextYn = false;
 		}else{
-			params.searchText = $("#searchValue").val()
+			if($("#beforeSearchText").val() != $("#searchValue").val()){
+				params.searchNext = false;
+			}else{
+				params.searchNext = true;
+			}
+			
+			params.searchTextYn = true;
+			params.searchText = $("#searchValue").val();
+			params.nextLine = $("#nextLine").val();
+			params.nextSeq = $("#nextSeq").val();
+			
+			params.searchTextSize = $("#searchTextSize").val();
+			params.searchTextFromLine = $("#searchTextFromLine").val();
+			params.searchTextToLine = $("#searchTextToLine").val();
+			
+			$("#beforeSearchText").val($("#searchValue").val());
 		}
 		
 	    ajaxJsonCall('/log/getLogView',  params, function(data){
@@ -181,8 +244,15 @@
 	    		$("#currFilePath").val(data.fullPath);
 	    		$("#lastLine").val(data.toLine+1);
 	    		$("#logView").append(data.logContents);
+	    		$("#nextLine").val(data.nextLine);
+	    		$("#nextSeq").val(data.nextSeq);
+	    		
+	    		$("#searchTextSize").val(data.searchTextSize);
+	    		$("#searchTextFromLine").val(data.searchTextFromLine);
+	    		$("#searchTextToLine").val(data.searchTextToLine);
 	    	}else{
 	    		alert(data.response.responseErrMsg);
+	    		$("#beforeSearchText").val("");
 	    	}
 	    });
 		
@@ -192,6 +262,9 @@
 </th:block>
 <body>
 <th:block layout:fragment="content">
+<form id="fm" method="post">
+<input type="text" id="fullPath" name="fullPath" value="" />
+</form>
 <div class="tit-area">
 	<h3>로그관리</h3>
 	<ul class="location-area">
@@ -203,11 +276,18 @@
 </div>
 <input type="hidden" id="currFilePath" name="currFilePath" value="" />
 <input type="hidden" id="lastLine" name="lastLine" value="" />
+<input type="hidden" id="nextLine" name="nextLine" value="" />
+<input type="hidden" id="nextSeq" name="nextSeq" value="" />
+<input type="hidden" id="beforeSearchText" name="beforeSearchText" value="" />
+<input type="hidden" id="searchTextSize" name="searchTextSize" value="" />
+<input type="hidden" id="searchTextFromLine" name="searchTextFromLine" value="" />
+<input type="hidden" id="searchTextToLine" name="searchTextToLine" value="" />
 <div class="layout-box" id="allContents">
 	<div class="layout-left">
 		<div class="sub-tit">
 			<h4>로그 탐색기</h4>
 			<div class="icon-area">
+				<button type="button" id="btnDownLog" class="i-btn">다운로드</button>
 			</div>
 		</div>
 		<div class="jqGridArea">	 
@@ -218,6 +298,8 @@
 		<div class="sub-tit">
 			<h4>로그 상세</h4>
 			<div class="icon-area">
+				<label for="viewLineNumYn">라인 넘버 보기</label>
+				<input type="checkbox" id="viewLineNumYn" name="viewLineNumYn" value="Y" />
 				<select id="searchCond">
 					<option value="L">라인</option>
 					<option value="T">검색어</option>
@@ -240,6 +322,7 @@
 		</table>
 	</div>
 </div>
+<iframe style="display: none" name="downFrame" id="downFrame"></iframe>
 </th:block>
 </body>
 </html>
