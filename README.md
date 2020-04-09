@@ -26,6 +26,9 @@ Spring boot, Spring Data JPA, Thymeleaf 기반.
         
       5. 콘솔 로그인 기능
         - spring security login 처리. (EA_USER 테이블에)
+          
+      6. 콘솔 관리 기능(net.ecbank.fwk.admin.console 패키지)
+        - 콘솔 사용자 관리
         
     * MyBatis적용
         - jpa 동시사용 트랜잭션 test 및 예제.
