@@ -21,9 +21,11 @@ Spring boot, Spring Data JPA, Thymeleaf 기반.
         - 코드그룹-코드관리, 메뉴관리, 권한별 메뉴관리, 프로그램 관리
       3. 로그조회(net.ecbank.fwk.admin.log 패키지)
         - 시스템 로그 조회
-      4. 시스템 통계
-        - 로그인,아웃 통계
-        - 프로그램 사용통계
+        - 접속로그(로그인,로그아웃) 조히
+      4. 시스템 통계(net.ecbank.fwk.admin.sts 패키지)
+        
+      5. 콘솔 로그인 기능
+        - spring security login 처리. (EA_USER 테이블에)
         
     * MyBatis적용
         - jpa 동시사용 트랜잭션 test 및 예제.
