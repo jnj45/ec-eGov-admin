@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
   xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
-  layout:decorator="layout/defaultLayout">
+  layout:decorator="layout/defaultLayout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -201,7 +201,12 @@
 		<li><strong>사용자관리</strong></li>
 	</ul>
 </div>
-
+<!-- <div sec:authorize="isAuthenticated()">
+  Name: <span sec:authentication="name">SomeName</span><br />
+  Principal: <span sec:authentication="principal">PrincipalString</span><br />
+  HasRole(USER): <span sec:authorize="hasRole('ROLE_USER')">YES</span><br />
+  HasRole(ADMIN): <span sec:authorize="hasRole('ROLE_ADMIN')">YES</span>
+</div> -->
 <div class="tbl-search-wrap">
 	<div class="tbl-search-area">
 		<table class="tbl-search">

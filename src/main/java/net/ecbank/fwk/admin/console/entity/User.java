@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -67,13 +69,15 @@ public class User extends BaseEntity{
 	
 	public User(UserDto dto) {
 		
+		BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder(10);
+		
 		this.userId = dto.getModUserId();
 		this.userNm = dto.getUserNm();
 		this.deptNm = dto.getDeptNm();
 		this.mobile = dto.getMobile();
 		this.email = dto.getEmail();
 		this.tel = dto.getTel();
-		this.password = dto.getPassword();
+		this.password = bcryptPasswordEncoder.encode(dto.getPassword());
 		this.pwdFailCnt = dto.getPwdFailCnt();
 		this.lastPwdChgDt = dto.getLastPwdChgDt();
 		this.lastLoginDt = dto.getLastLoginDt();

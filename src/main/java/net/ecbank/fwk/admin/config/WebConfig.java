@@ -2,8 +2,10 @@ package net.ecbank.fwk.admin.config;
 
 import java.time.Duration;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.CacheControl;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -24,6 +26,16 @@ public class WebConfig implements WebMvcConfigurer{
 	 ● ResourceHttpRequestHandler가 처리함.
 		○ WebMvcConfigurer의 addRersourceHandlers로 커스터마이징 할 수 있음
 	 */
+	
+	@Value("${spring.webservice.intro}")
+    private String introPage;
+     
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        // 루트 (/) 로 접근 시 introPage로 이동하는 매핑 추가
+        registry.addRedirectViewController("/", introPage);
+    }
+	
 	@Override
 	public void addResourceHandlers(org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry registry) {
 		// 정적 리소스 디렉토리 추가
