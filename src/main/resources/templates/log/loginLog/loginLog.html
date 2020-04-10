@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+  layout:decorator="layout/defaultLayout">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<th:block layout:fragment="pageCustomCss">
+
+</th:block>
+<title>접속로그</title>
+</head>
+<th:block layout:fragment="pageCustomScript">
+<script type="text/javascript">
+	
+	var lastid;
+	
+	$(document).ready(function() {
+		$("#btnSearch").click(function(e) {
+			searchProgramList();
+	    });
+		
+		init();
+		
+		$(window).resize(function() {
+			$("#grid1").setGridWidth($(this).width());
+		});
+		
+	});
+		
+	function init(){
+		setGrid1();
+		//searchProgramList();
+	}
+	
+	//코드 그룹 그리드 설정
+	function setGrid1(){
+		
+    	$("#grid1").jqGrid({
+    		url:"/log/searchLoginLogList",
+    		datatype: "json",
+    		mtype:"POST",
+    		jsonReader:{
+    			root:"content",
+    			page:"page",
+    			records:"totalElements",
+    			total:"totalPages"
+    		},
+    		postData:{
+    			conectId : $("#conectId").val(),
+    			conectIp : $("#conectIp").val(),
+    			conectMthd : $("#conectMthd").val(),
+    			errorOccrrncAt : $("#errorOccrrncAt").val()
+    		},
+    		height: 500,
+    		rowNum: 20,
+    		rowList: [10,20,30,50,100],
+    	   	colNames:['로그ID','접속ID','접속IP','접속방식','성공여부', '에러코드','접속일시'],
+    	   	colModel:[
+    	   		{name:'logId',index:'logId', width:80, align:"left",	editable:false, editrules:{required:true}},
+    	   		{name:'conectId',index:'conectId', width:80, align:"left",	editable:false, editrules:{required:true}},
+    	   		{name:'conectIp',index:'conectIp', width:120,	editable:false, editrules:{required:true}},
+    	   		{name:'conectMthd',index:'conectMthd', width:100,	editable:false, editrules:{required:true},
+    	   			edittype:"select",
+					formatter: "select",
+					editoptions: { value: "I:로그인;O:로그아웃"}	
+    	   		},
+    	   		{name:'errorOccrrncAt',index:'errorOccrrncAt', width:80, align:"left",	editable:false,
+    	   			edittype:"select",
+					formatter: "select",
+					editoptions: { value: "Y:실패;N:성공"}	
+    	   		},		
+				{name:'errorCode',index:'errorCode', width:150, align:"left",	editable:false},
+				{name:'createDate',index:'createDate', width:200, align:"center",	editable:false}
+    	   	],
+    	   	pager: "#gridPager",
+    	   	pgButtons:true,
+    	   	pginput:true,
+    	   	viewrecords: true,
+    	   	autowidth:true,
+    	   	rownumbers: true,
+    	   	onPagine : function (pgButton){
+    	   		var gridPage = $("#grid1").getGridParam("page");
+    	   		var totalPage = $("#grid1").getGridParam("total");
+    	   	}
+    	});
+	}
+	
+	//코드 그룹 목록 조회
+	function searchProgramList(){
+		var params = fnGetParams();
+		
+		$("#grid1").jqGrid('clearGridData');
+		$("#grid1").setGridParam(
+			{postData:{
+    			conectId : $("#conectId").val(),
+    			conectIp : $("#conectIp").val(),
+    			conectMthd : $("#conectMthd").val(),
+    			errorOccrrncAt : $("#errorOccrrncAt").val(),
+    			page : 0
+    		}}
+		).trigger("reloadGrid");
+	}
+	
+</script>
+</th:block>
+<body>
+<th:block layout:fragment="content">
+<div class="tit-area">
+	<h3>접속로그</h3>
+	<ul class="location-area">
+		<li><a href="#none" class="home">Home</a></li>
+		<li><a href="#none">로그관리</a></li>
+		<li><a href="#none">접속로그</a></li>
+		<li><strong>접속로그</strong></li>
+	</ul>
+</div>
+<input type="hidden" id="pageSize" name="pageSize" value="2" />
+<input type="hidden" id="page" name="page" value="0" />
+<div class="tbl-search-wrap">
+	<div class="tbl-search-area">
+		<table class="tbl-search">
+			<colgroup>
+				<col style="width:105px">
+				<col>
+				<col style="width:105px">
+				<col>
+				<col style="width:105px">
+				<col>
+				<col style="width:105px">
+				<col>
+			</colgroup>
+			<tbody>
+				<tr>
+					<th><span>접속 ID</span></th>
+					<td>
+						<input type="text" id="conectId" name="conectId" value="" >
+					</td>
+					<th><span>접속 IP</span></th>
+					<td><input type="text" id="conectIp" name="conectIp" value="" ></td>
+					<th><span>접속 방식</span></th>
+					<td>
+						<select id="conectMthd" name="conectMthd">
+							<option value="" >전체</option>
+							<option value="I" >로그인</option>
+							<option value="O" >로그아웃</option>
+						</select>
+					</td>
+					<th><span>성공여부</span></th>
+					<td>
+						<select id="errorOccrrncAt" name="errorOccrrncAt">
+							<option value="" >전체</option>
+							<option value="N" >성공</option>
+							<option value="Y" >실패</option>
+						</select>
+					</td>
+				</tr>
+			</tbody>
+		</table>	
+	</div>
+	<div class="tbl-search-btn">
+		<button type="button" id="btnSearch" class="btn-search">조회</button>
+	</div>
+</div>
+<div class="layout-box">
+	<div class="layout">
+		<div class="sub-tit">
+			<h4>로그인 이력</h4>
+			<div class="icon-area">
+				<!-- <button type="button" id="btnAddProgram" class="i-btn"><em class="icon01"></em>추가</button>
+				<button type="button" id="btnDeleteProgram" class="i-btn"><em class="icon02"></em>삭제</button>
+				<button type="button" id="btnSaveProgram" class="i-btn"><em class="icon03"></em>저장</button> -->
+			</div>
+		</div>
+		<div class="jqGridArea">	 
+			<table id="grid1"></table>
+			<div id="gridPager" style="width: 100%"></div>
+		</div>
+	</div>
+</div>
+</th:block>
+</body>
+</html>
