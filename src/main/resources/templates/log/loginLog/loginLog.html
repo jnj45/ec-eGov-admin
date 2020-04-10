@@ -17,7 +17,7 @@
 	
 	$(document).ready(function() {
 		$("#btnSearch").click(function(e) {
-			searchProgramList();
+			searchLoginLogList();
 	    });
 		
 		init();
@@ -87,7 +87,7 @@
 	}
 	
 	//코드 그룹 목록 조회
-	function searchProgramList(){
+	function searchLoginLogList(){
 		var params = fnGetParams();
 		
 		$("#grid1").jqGrid('clearGridData');
@@ -165,7 +165,7 @@
 <div class="layout-box">
 	<div class="layout">
 		<div class="sub-tit">
-			<h4>로그인 이력</h4>
+			<h4>접속 이력</h4>
 			<div class="icon-area">
 				<!-- <button type="button" id="btnAddProgram" class="i-btn"><em class="icon01"></em>추가</button>
 				<button type="button" id="btnDeleteProgram" class="i-btn"><em class="icon02"></em>삭제</button>
