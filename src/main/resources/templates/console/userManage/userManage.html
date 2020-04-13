@@ -129,8 +129,13 @@
     	   		{name:'userNm',index:'userNm', width:100, align:"left",	editable:false, editrules:{required:true}},
     	   		{name:'deptNm',index:'deptNm', width:150,	editable:false, editrules:{required:true}},
     	   		{name:'email',index:'email', width:200, align:"left",	editable:false},		
-				{name:'password',index:'password', width:200, align:"left",	editable:false},
-				{name:'useYn',index:'useYn', width:50, align:"center",	editable:false},
+				{name:'password',index:'password', width:200, align:"left",	editable:false, editrules:{required:true}},
+				{name:'useYn',index:'useYn', width:50, align:"center",	editable:true, editrules:{required:true},
+					edittype:"checkbox",
+					formatter: "checkbox",
+					formatoptions: {disabled : true},
+					editoptions: { value: "Y:N"}	
+				},
 				{name:'userId',index:'userId', width:100, align:"left",	editable:false,hidden:true}
     	   	],
     	   	pager: "",
@@ -151,8 +156,9 @@
 				$("#"+id+"_"+name).blur(function(){
 			        $("#grid1").jqGrid("saveCell",iRow,iCol);
 			    });
-				
-				$(this).setColProp(name, { editable: false });
+				if(name != "useYn"){
+					$(this).setColProp(name, { editable: false });
+				}
 				return true;
 		  	},
 		  	afterSaveCell : function(rowid,name,val,iRow,iCol) {
@@ -161,7 +167,7 @@
 		  	ondblClickRow: function (rowid, iRow, iCol) { 
 				var colModels = $(this).getGridParam('colModel'); 
 				var colName = colModels[iCol].name;
-				if(colName != "createDate"){
+				if(colName != "useYn"){
 					$(this).setColProp(colName, { editable: true }); 
 					$(this).editCell(iRow, iCol, true);
 				}

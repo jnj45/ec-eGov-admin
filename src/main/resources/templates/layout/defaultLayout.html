@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title layout:title-pattern="$CONTENT_TITLE"></title>
     <th:block th:replace="fragments/main/common_header"></th:block>
@@ -15,66 +15,20 @@
 						<a href="#none">운영 관리 시스템</a>
 					</h1>
 					<ul class="top-menu">
-						<li><a href="#none" class="user"><strong>운영자</strong>님 환영합니다.</a></li>
-						<li><a href="/logout" class="loginout">로그인아웃</a></li>
+						<li>
+							<span sec:authorize="isAuthenticated()">
+							<a href="#none" class="user"><strong><span sec:authentication="name"></span></strong>님 환영합니다.</a>
+							</span>
+						</li>
+						<li>
+							<span sec:authorize="isAuthenticated()">
+								<a href="/logout" class="loginout">로그아웃</a>
+							</span>
+						</li>
 					</ul>
 				</div>
 				<nav class="gnb-area"style="border-bottom: 1px solid">
 					<ul class="gnb">
-						<!-- <li>
-							<a href="#none">구매요청</a>
-							<ul class="gnb-sub">
-								<li><a href="#none">자재</a></li>
-								<li><a href="#none">외주</a></li>
-							</ul>
-						</li>
-						<li>
-							<a href="#none">구매진행</a>
-							<ul class="gnb-sub">
-								<li><a href="#none">요약정보</a></li>
-								<li><a href="#none">OPS 전송</a></li>
-								<li><a href="#none">자재</a></li>
-								<li><a href="#none">외주</a></li>
-								<li><a href="#none">견적의뢰</a></li>
-							</ul>
-						</li>
-						<li>
-							<a href="#none">업체선정</a>
-							<ul class="gnb-sub">
-								<li><a href="#none">업체 선정</a></li>
-								<li><a href="#none">업체선정 결과</a></li>
-								<li><a href="#none">오프라인 견적</a></li>
-							</ul>
-						</li>
-						<li>
-							<a href="#none">구매오더</a>
-							<ul class="gnb-sub">
-								<li><a href="#none">구매오더 대기</a></li>
-								<li><a href="#none">구매오더 결과</a></li>
-							</ul>
-						</li>
-						<li>
-							<a href="#none">전자계약</a>
-							<ul class="gnb-sub">
-								<li><a href="#none">전자계약생성</a></li>
-								<li><a href="#none">전자계약진행</a></li>
-								<li><a href="#none">전자계약완료</a></li>
-								<li><a href="#none">서면계약관리</a></li>
-							</ul>
-						</li>
-						<li>
-							<a href="#none">협력업체관리</a>
-							<ul class="gnb-sub">
-								<li><a href="#none">신규등록업체 관리</a></li>
-								<li><a href="#none">업체정보 관리</a></li>
-							</ul>
-						</li>
-						<li>
-							<a href="#none">레포트</a>
-							<ul class="gnb-sub">
-								<li><a href="#none">레포트</a></li>
-							</ul>
-						</li>-->
 						<li>
 							<a href="#none">로그관리</a>
 							<ul class="gnb-sub">
@@ -93,11 +47,6 @@
 								<li><a href="/sec/authManage">권한관리</a></li>
 								<li><a href="/sec/userAuthManage">사용자 권한관리</a></li>
 								<li><a href="/sec/loginPolicyManage">로그인 정책관리</a></li>
-								<!-- <li><a href="#none">팝업관리</a></li>
-								<li><a href="#none">게시판 관리</a></li>
-								<li><a href="#none">권한관리</a></li>
-								<li><a href="#none">정보관리</a></li>
-								<li><a href="#none">Sample</a></li> -->
 							</ul>
 						</li>
 						<li>
@@ -106,12 +55,6 @@
 								<li><a href="/console/userManage">사용자 관리</a></li>
 							</ul>
 						</li>
-						<!-- <li>
-							<a href="#none">커뮤니티</a>
-							<ul class="gnb-sub">
-								<li><a href="#none">게시판</a></li>
-							</ul>
-						</li> -->
 					</ul>
 				</nav>
 			</div>

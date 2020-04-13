@@ -81,6 +81,7 @@ public class User extends BaseEntity{
 		this.pwdFailCnt = dto.getPwdFailCnt();
 		this.lastPwdChgDt = dto.getLastPwdChgDt();
 		this.lastLoginDt = dto.getLastLoginDt();
+		this.useYn = dto.getUseYn();
 		
 	}
 	

@@ -27,10 +27,13 @@ public class UserService implements UserDetailsService {
 		
 		System.out.println("=================login Id : " + userId);
 		
-		net.ecbank.fwk.admin.console.entity.User user = userRep.findOneByUserId(userId);
+		net.ecbank.fwk.admin.console.entity.User user = userRep.findOneByUserIdAndUseYn(userId,"Y");
 		
 		List<GrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+		
+		if(user != null) {
+			authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+		}
 		
 		return new User(user.getUserId(), user.getPassword(), authorities);
 	}

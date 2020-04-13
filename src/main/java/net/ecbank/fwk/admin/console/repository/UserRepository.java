@@ -10,6 +10,6 @@ public interface UserRepository extends JpaRepository<User, String> {
 	
 	List<User> findByUserIdContainingAndUserNmContaining(String userId, String userNm);
 	
-	User findOneByUserId(String userId);
+	User findOneByUserIdAndUseYn(String userId,String useYn);
 	
 }

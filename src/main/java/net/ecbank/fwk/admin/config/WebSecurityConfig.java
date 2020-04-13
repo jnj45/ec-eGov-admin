@@ -90,7 +90,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception
     {
         // static 디렉터리의 하위 파일 목록은 인증 무시 ( = 항상통과 )
-        web.ignoring().antMatchers("/static/css/**", "/static/js/**", "/static/img/**", "/lib/**");
+        web.ignoring().antMatchers("/static/css/**", "/static/js/**", "/static/img/**", "/static/images/**", "/static/fonts/**");
     }
 	
 	@Override

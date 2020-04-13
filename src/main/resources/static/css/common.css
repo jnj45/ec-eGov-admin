@@ -160,11 +160,11 @@ html,body{
 	background:url('../images/common/icon_triangle.png') no-repeat 50%;
 }
 .gnb-sub > li > a{
-	display:block; /* 수정*/
+	display:block; 
 	position:relative;
 	font-size:13px;
 	color:#888;
-	line-height:25px; /* 수정*/
+	line-height:25px;
 }
 .gnb-sub > li > a:before{
 	content:"";
@@ -174,7 +174,7 @@ html,body{
 	left:0; /* 수정*/
 	width:12px;
 	height:14px;
-	background:url('../images/common/icon_gnbmenu.png') no-repeat 50%;
+	/* background:url('../images/common/icon_gnbmenu.png') no-repeat 50%; */
 }
 .gnb-sub > li > a:hover{
 	color:#326cb8;
