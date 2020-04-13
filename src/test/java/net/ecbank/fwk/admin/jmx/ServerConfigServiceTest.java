@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import net.ecbank.fwk.admin.console.jmx.ServerConfigService;
+
 @SpringBootTest
 class ServerConfigServiceTest {
 	

@@ -19,7 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import net.ecbank.fwk.admin.entity.BaseEntity;
+import net.ecbank.fwk.admin.common.entity.BaseEntity;
 
 //@Data
 @Getter @Setter

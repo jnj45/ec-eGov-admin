@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.CollectionUtils;
 
-import net.ecbank.fwk.admin.jmx.ServerConfigMBean;
+import net.ecbank.fwk.admin.console.jmx.ServerConfigMBean;
 
 
 @SpringBootTest

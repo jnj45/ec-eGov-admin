@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.ecbank.fwk.admin.cmm.dto.Response;
+import net.ecbank.fwk.admin.common.dto.Response;
 import net.ecbank.fwk.admin.console.dto.UserDto;
 import net.ecbank.fwk.admin.console.entity.User;
 import net.ecbank.fwk.admin.console.service.UserManageService;

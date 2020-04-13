@@ -1,13 +1,16 @@
-package net.ecbank.fwk.admin.console.entity;
+package net.ecbank.fwk.admin.manage.user.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -18,16 +21,16 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import net.ecbank.fwk.admin.common.entity.BaseEntity;
-import net.ecbank.fwk.admin.console.dto.UserDto;
 
-@Data
 @EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name="EA_USER")
+@Data
+@Table(name="EF_VENDOR_USER")
+//@ToString(exclude = {"codeClass", "codeDetails"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
-@JsonIgnoreProperties({"hibernateLazyInitializer"})
-public class User extends BaseEntity{
+@JsonIgnoreProperties({"hibernateLazyInitializer"}) 
+public class VendorUser extends BaseEntity {
 	
 	@Id
 	@Column(name="USER_ID")
@@ -35,6 +38,10 @@ public class User extends BaseEntity{
 	
 	@Column(name="USER_NM")
 	private String userNm;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="VENDOR_CD")
+	private Vendor vendor;
 	
 	@Column(name="DEPT_NM")
 	private String deptNm;
@@ -47,6 +54,18 @@ public class User extends BaseEntity{
 	
 	@Column(name="TEL")
 	private String tel;
+	
+	@Column(name="FAX")
+	private String fax;
+	
+	@Column(name="JOB")
+	private String job;
+	
+	@Column(name="DUTY")
+	private String duty;
+	
+	@Column(name="ADM_USER_YN")
+	private String admUserYn;
 	
 	@Column(name="PASSWORD")
 	private String password;
@@ -63,26 +82,14 @@ public class User extends BaseEntity{
 	@Column(name="USE_YN")
 	private String useYn;
 	
-	public User(String userId) {
-		this.userId = userId;
-	}
+	@Column(name="STATUS")
+	private String status;
+
+	@Transient
+	private String Organization;
 	
-	public User(UserDto dto) {
-		
-		BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder(10);
-		
-		this.userId = dto.getModUserId();
-		this.userNm = dto.getUserNm();
-		this.deptNm = dto.getDeptNm();
-		this.mobile = dto.getMobile();
-		this.email = dto.getEmail();
-		this.tel = dto.getTel();
-		this.password = bcryptPasswordEncoder.encode(dto.getPassword());
-		this.pwdFailCnt = dto.getPwdFailCnt();
-		this.lastPwdChgDt = dto.getLastPwdChgDt();
-		this.lastLoginDt = dto.getLastLoginDt();
-		this.useYn = dto.getUseYn();
-		
+	public String getOrganization() {
+		return this.vendor.getVendorNm();
 	}
 	
 }

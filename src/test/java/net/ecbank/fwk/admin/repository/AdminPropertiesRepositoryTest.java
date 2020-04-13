@@ -10,7 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import net.ecbank.fwk.admin.entity.AdminProperties;
+import net.ecbank.fwk.admin.common.entity.AdminProperties;
+import net.ecbank.fwk.admin.console.repository.AdminPropertiesRepository;
 
 @SpringBootTest
 @Transactional
