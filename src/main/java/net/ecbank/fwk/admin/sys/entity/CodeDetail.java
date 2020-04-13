@@ -54,6 +54,22 @@ public class CodeDetail extends BaseEntity {
 	@Column(name="USE_AT", columnDefinition ="char")
 	private String useYn;
 	
+	//추가 컬럼
+	@Column(name="SORT") 
+	private int sort;
+	
+	@Column(name="CODE_ENG_NM")
+	private String codeEngNm;
+	
+	@Column(name="ATTR1")
+	private String attr1;
+	
+	@Column(name="ATTR2")
+	private String attr2;
+	
+	@Column(name="ATTR3")
+	private String attr3;
+	
 	@Transient
 	private String codeGroupCd;
 	
@@ -68,13 +84,18 @@ public class CodeDetail extends BaseEntity {
 		return this.getCode();
 	}
 	
-	public CodeDetail(String codeGrp, String code, String codeNm,String codeDesc, String useYn) {
+	public CodeDetail(String codeGrp, String code, String codeNm,String codeDesc, String useYn,String codeEngNm,int sort,String attr1,String attr2,String attr3) {
 		this.codeGrp = new CodeGroup();
 		this.codeGrp.setCodeGrp(codeGrp);
 		this.code = code;
 		this.codeNm = codeNm;
 		this.codeDesc = codeDesc;
 		this.useYn = useYn;
+		this.codeEngNm = codeEngNm;
+		this.sort = sort;
+		this.attr1 = attr1;
+		this.attr2 = attr2;
+		this.attr3 = attr3;
 	}
 	
 	public CodeDetail(String codeGrp, String code) {

@@ -86,7 +86,12 @@ public class CodeManageService {
 														nCodeDtl.getCode(),
 														nCodeDtl.getCodeNm(),
 														nCodeDtl.getCodeDesc(),
-														nCodeDtl.getUseYn()
+														nCodeDtl.getUseYn(),
+														nCodeDtl.getCodeEngNm(),
+														nCodeDtl.getSort(),
+														nCodeDtl.getAttr1(),
+														nCodeDtl.getAttr2(),
+														nCodeDtl.getAttr3()
 														);
 						codeDetailRep.save(cDtl);
 					}
@@ -125,7 +130,12 @@ public class CodeManageService {
 										codeDtlDto.getModCode(), 
 										codeDtlDto.getCodeNm(),
 										codeDtlDto.getCodeDesc(),
-										codeDtlDto.getUseYn()
+										codeDtlDto.getUseYn(),
+										codeDtlDto.getCodeEngNm(),
+										codeDtlDto.getSort(),
+										codeDtlDto.getAttr1(),
+										codeDtlDto.getAttr2(),
+										codeDtlDto.getAttr3()
 										);
 			
 			if(codeDtlDto.getCode().equals(codeDtlDto.getModCode())) {

@@ -22,6 +22,16 @@ public class CodeDetailDto extends CommonDto {
 	
 	private String useYn;
 	
+	private int sort;
+	
+	private String codeEngNm;
+	
+	private String attr1;
+	
+	private String attr2;
+	
+	private String attr3;
+	
 	private List<CodeDetailDto> saveList;
 	
 	private List<CodeDetailDto> deleteList;
