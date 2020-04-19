@@ -50,12 +50,24 @@ class EcEGovAdminApplicationTests {
 		List<String> readLines = FileUtils.readLines(tableFile, "UTF-8");
 		
 		for (String tableName : readLines) {
+			if ("COMTECOPSEQ".equals(tableName)) {
+				continue;
+			}
 			boolean isExist = false;
 			//System.out.println(tableName);
 			Iterator<File> queryFile = FileUtils.iterateFiles(new File("D:\\Dev\\eGovFrameDev-3.9.0-64bit\\workspace\\ec-eGov\\src\\main\\resources\\egovframework\\mapper\\com"), new String[]{"xml"}, true);
+			Iterator<File> queryFile2 = FileUtils.iterateFiles(new File("D:\\Dev\\eGovFrameDev-3.9.0-64bit\\workspace\\ec-eGov\\src\\main\\resources\\egovframework\\spring\\com"), new String[]{"xml"}, true);
 			
 			while (queryFile.hasNext() && !isExist) {
 				File file = (File) queryFile.next();
+				String query = FileUtils.readFileToString(file, "UTF-8");
+				if (StringUtils.containsIgnoreCase(query, tableName)) {
+					isExist = true;
+					//System.out.println(tableName);
+				}
+			}
+			while (queryFile2.hasNext() && !isExist) {
+				File file = (File) queryFile2.next();
 				String query = FileUtils.readFileToString(file, "UTF-8");
 				if (StringUtils.containsIgnoreCase(query, tableName)) {
 					isExist = true;
