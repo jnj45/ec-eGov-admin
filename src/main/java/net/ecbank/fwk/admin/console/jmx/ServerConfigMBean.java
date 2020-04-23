@@ -11,4 +11,6 @@ public interface ServerConfigMBean {
 	 * spring security의 rolea and url 권한맵핑설정을 reaload하는 mbean 메소드
 	 */
 	public void reloadRolesAndUrlMapping();
+	
+	public void realodProperties();
 }

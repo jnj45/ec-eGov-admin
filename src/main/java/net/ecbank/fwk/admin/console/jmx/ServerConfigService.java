@@ -34,6 +34,24 @@ public class ServerConfigService {
 	AdminPropertiesService adminPropertiesService;
 	
 	public void reloadRolesAndUrlMapping() throws Exception{
+		try {
+			jmxCall("reloadRolesAndUrlMapping");
+		}catch (Exception e) {
+			log.error("어플리케이션 서버 URL접근제한정보 갱신 오류", e);
+		}
+	
+	}
+	
+	public void reloadProperties() throws Exception{
+		try {
+			jmxCall("reloadProperties");
+		}catch (Exception e) {
+			log.error("어플리케이션 DB프로퍼티 정보 갱신 오류", e);
+		}
+	}
+	
+	private void jmxCall(String method) throws Exception{
+		
 		List<AdminProperties> findProperties = adminPropertiesService.findProperties(JMX_URL_PROP_KEY);
 		
 		for (AdminProperties adminProperties : findProperties) {
@@ -45,12 +63,18 @@ public class ServerConfigService {
 				ObjectName mbeanName = new ObjectName(JMX_MBEAN_NAME);
 				ServerConfigMBean mBeanProxy = JMX.newMBeanProxy(mbsc, mbeanName, ServerConfigMBean.class, true);
 				
-				mBeanProxy.reloadRolesAndUrlMapping();
+				if(method.equals("reloadProperties")) {
+					mBeanProxy.realodProperties();
+				}
+				
+				if(method.equals("reloadRolesAndUrlMapping")) {
+					mBeanProxy.reloadRolesAndUrlMapping();
+				}
 				
 			}catch(Exception e) {
-				log.error("어플리케이션 서버 URL접근제한정보 갱신 오류", e);
 				throw e;
 			}
 		}
+		
 	}
 }
