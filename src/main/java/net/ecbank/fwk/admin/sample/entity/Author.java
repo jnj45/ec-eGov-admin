@@ -35,7 +35,7 @@ public class Author extends BaseEntity {
 	@Column(name="AUTHOR_ID")
 	private Long id;
 	
-	private String name;
+	private String authorNm;
 	
 	
 	@OneToMany(mappedBy="author", fetch=FetchType.LAZY)
@@ -43,7 +43,7 @@ public class Author extends BaseEntity {
 	
 	public Author(String name) {
 		super();
-		this.name = name;
+		this.authorNm = name;
 	}
 
 	public void addBook(Book book) {

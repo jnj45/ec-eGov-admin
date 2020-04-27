@@ -87,7 +87,7 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
 	}
 	
 	private BooleanExpression authorNameLike(String authorName) {
-		return hasText(authorName) ? author.name.contains(authorName) : null;
+		return hasText(authorName) ? author.authorNm.contains(authorName) : null;
 	}
 	
 	private BooleanExpression totalPageLoe(Long totalPage) {

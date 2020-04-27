@@ -27,15 +27,19 @@ import lombok.NoArgsConstructor;
 public class AdminProperties extends BaseEntity {
 	
 	@Id @GeneratedValue(strategy=GenerationType.TABLE, generator="AdminProperties_ID_GENERATOR")
+	@Column(name="PROP_ID")
 	private Long propId;
 	
-	@Column
+	@Column(name="PROP_KEY")
 	private String propKey;
-	@Column
+	
+	@Column(name="PROP_VAL")
 	private String propVal;
-	@Column
+	
+	@Column(name="PROP_DESC")
 	private String propDesc;
-	@Column
+	
+	@Column(name="USE_YN")
 	private String useYn;
 	
 	public AdminProperties(String propKey, String propVal, String propDesc) {
