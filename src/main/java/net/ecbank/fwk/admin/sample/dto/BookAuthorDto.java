@@ -31,7 +31,7 @@ public class BookAuthorDto {
 		this.bookTitle = book.getTitle();
 		this.totalPage = book.getTotalPage();
 		this.authorId = book.getAuthor().getId();
-		this.authorName = book.getAuthor().getName();
+//		this.authorName = book.getAuthor().getName();
 	}
 	
 	@QueryProjection
@@ -40,7 +40,7 @@ public class BookAuthorDto {
 		this.bookTitle = book.getTitle();
 		this.totalPage = book.getTotalPage();
 		this.authorId = author.getId();
-		this.authorName = author.getName();
+//		this.authorName = author.getName();
 	}
 		
 }
