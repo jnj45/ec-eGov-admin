@@ -1,12 +1,11 @@
 package net.ecbank.fwk.admin.manage.sec.entity;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -19,33 +18,43 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import net.ecbank.fwk.admin.common.entity.BaseEntity;
 
 @EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Data
-@Table(name="COMTNEMPLYRSCRTYESTBS")
+@Table(name="EF_USER_AUTH")
 //@ToString(exclude = {"codeClass", "codeDetails"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
-@IdClass(UserAuthRelKey.class)
 @JsonIgnoreProperties({"hibernateLazyInitializer"}) 
-public class UserAuthRel {
+public class UserAuthRel extends BaseEntity {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="SEQ")
+	private Long seq;
+	
 	@Column(name="SCRTY_DTRMN_TRGET_ID")
 	private String userId;
 	
-	@Id
+	@Column(name="CO_CD", columnDefinition ="char")
+	private String coCd;
+	
 	@Column(name="MBER_TY_CODE", columnDefinition ="char")
 	private String userType;
 	
-	@Id
+	@Column(name="USE_YN",columnDefinition="char")
+	private String useYn;
+	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="AUTHOR_CODE")
 	private AuthInfo authInfo;
 	
-	public UserAuthRel(String userId, String userType, String authCode) {
+	public UserAuthRel(String userId, String userType, String authCode, Long seq,String coCd) {
 		
+		this.coCd = coCd;
+		this.seq = seq;
 		this.userId = userId;
 		this.userType = userType;
 		

@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name="COMTNAUTHORROLERELATE")
+@Table(name="EF_AUTH_ROLE")
 @IdClass(AuthRoleRelKey.class)
 //@ToString(exclude = {"authInfo"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)

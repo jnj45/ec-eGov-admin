@@ -1,38 +1,16 @@
 package net.ecbank.fwk.admin.manage.user.entity;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import net.ecbank.fwk.admin.common.entity.BaseEntity;
-
-@EqualsAndHashCode(callSuper=false)
+/*@EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Data
 @Table(name="EF_VENDOR_USER")
 //@ToString(exclude = {"codeClass", "codeDetails"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
-@JsonIgnoreProperties({"hibernateLazyInitializer"}) 
-public class VendorUser extends BaseEntity {
+@JsonIgnoreProperties({"hibernateLazyInitializer"}) */
+public class VendorUser{
 	
-	@Id
+	/*@Id
 	@Column(name="USER_ID")
 	private String userId;
 	
@@ -90,6 +68,6 @@ public class VendorUser extends BaseEntity {
 	
 	public String getOrganization() {
 		return this.vendor.getVendorNm();
-	}
+	}*/
 	
 }

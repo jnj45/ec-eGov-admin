@@ -25,7 +25,7 @@ import net.ecbank.fwk.admin.common.entity.BaseEntity;
 @EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name="COMTCCMMNDETAILCODE")
+@Table(name="EF_CODE")
 @IdClass(CodeDetailKey.class)
 @ToString(exclude = {"codeGrp"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
@@ -45,29 +45,29 @@ public class CodeDetail extends BaseEntity {
 	@Column(name="CODE")
 	private String code;
 	
-	@Column(name="CODE_NM")
+	@Column(name="CODE_NM", columnDefinition ="nvarchar")
 	private String codeNm;
 	
-	@Column(name="CODE_DC")
+	@Column(name="CODE_DC", columnDefinition ="nvarchar")
 	private String codeDesc;
 	
 	@Column(name="USE_AT", columnDefinition ="char")
 	private String useYn;
 	
 	//추가 컬럼
-	@Column(name="SORT") 
+	@Column(name="SORT", columnDefinition ="bigint") 
 	private int sort;
 	
-	@Column(name="CODE_ENG_NM")
+	@Column(name="CODE_ENG_NM", columnDefinition ="nvarchar")
 	private String codeEngNm;
 	
-	@Column(name="ATTR1")
+	@Column(name="ATTR1", columnDefinition ="nvarchar")
 	private String attr1;
 	
-	@Column(name="ATTR2")
+	@Column(name="ATTR2", columnDefinition ="nvarchar")
 	private String attr2;
 	
-	@Column(name="ATTR3")
+	@Column(name="ATTR3", columnDefinition ="nvarchar")
 	private String attr3;
 	
 	@Transient

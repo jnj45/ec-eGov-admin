@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+  layout:decorator="layout/defaultLayout">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<th:block layout:fragment="pageCustomCss">
+
+</th:block>
+<title>부서 권한 관리</title>
+<style>
+
+.ui-jqgrid .ui-jqgrid-btable { cursor : pointer; }
+
+</style>
+</head>
+<th:block layout:fragment="pageCustomScript">
+<script type="text/javascript">
+	
+	var lastid;
+	
+	$(document).ready(function() {
+		
+		$("#coCd").change(function() {
+			$("#treeGrid").GridUnload();
+			setTreeGrid();
+	    });
+		
+		$("#btnGridFolderOpen").click(function(e) {
+			folderAllOpen();
+	    });
+		
+		$("#btnSaveDeptAuth").click(function(e) {
+			saveDeptAuthRelation();
+	    });
+		
+		$("#btnGridFolderClose").click(function(e) {
+			folderAllClose();
+	    });
+		
+		init();
+		
+		$(window).resize(function() {
+			$("#treeGrid").setGridWidth($(this).width());
+			$("#grid2").setGridWidth($(this).width());
+		});
+		
+	});
+		
+	function init(){
+		setTreeGrid();
+		setGrid2();
+		//searchUserList();
+	}
+	
+	function folderAllOpen(){
+		
+		$(".treeclick","table#treeGrid").each(function() {
+
+			if($(this).hasClass("tree-plus")) {
+
+				$(this).trigger("click");
+
+			}
+
+		});
+		
+	}
+	
+	function folderAllClose(){
+		$(".treeclick","table#treeGrid").each(function() {
+
+			if($(this).hasClass("tree-minus")) {
+
+				$(this).trigger("click");
+
+			}
+
+		});
+	}
+	
+	function setTreeGrid(){
+		
+		var cnt = 0;
+		
+		$("#treeGrid").jqGrid({
+			url : "/sec/searchDeptAuthTreeList",
+    		datatype: "json",
+    		ajaxGridOptions: { contentType: "application/json; charset=UTF-8" },
+    		postData:{
+    			"coCd":$("#coCd").val()
+    		},
+    		mtype:"POST",
+            colNames: ["부서번호","coCd","부서명"],
+            colModel: [
+                {name:'deptCd', index:'deptCd', width:1, hidden:true, key:true},
+                {name:'coCd', index:'coCd', width:1, hidden:true},
+                {name:'deptNm', index:'menuNm',width:80 , hidden:false, sortable:false,editable:false}
+            ],
+            treeGridModel: 'adjacency',
+            height: '500',
+            width: '550',
+            pager: "",
+            treeGrid: true,
+            ExpandColumn: 'deptNm',
+            ExpandColClick: false,
+            cellEdit: true,
+            cellsubmit: 'clientArray',
+            treeIcons: {plus:'ui-icon-folder-collapsed',minus:'ui-icon-folder-open',leaf:'ui-icon-blank'},
+            caption: "부서 정보",
+            tree_root_level: 1,
+            jsonReader: {
+            	id:"deptCd",
+            	repeatitems : false
+            },
+            treeReader: {
+                level_field:        "lvl",
+                parent_id_field:    "upperDeptCd",
+                leaf_field: "leaf",
+                expanded_field:"expanded"
+            },
+            beforeRequest: function() {
+            	if(cnt==1){
+            		return false;
+            	}
+            	cnt = 1
+            },
+			onCellSelect: function(rowid,iCol,cellcontent,e){	// row 선택시 발생하는 이벤트	
+				
+    	   		var colModels = $(this).getGridParam('colModel'); 
+				var colName = colModels[iCol].name;
+    	   		
+				if(colName == "deptNm"){
+					if(rowid != null){
+						
+						var treedata = $("#treeGrid").jqGrid('getRowData', rowid);
+						
+						$("#selCoCd").val(treedata.coCd);
+						$("#selDeptCd").val(treedata.deptCd);
+						$("#textDeptNm").text("["+treedata.deptNm+"]");
+						
+		            	searchDeptAuthList(treedata.deptCd, treedata.coCd);
+	    	    	}
+				}
+				
+    	   	},
+            onSelectRow: function (rowid,event) {
+            	
+            },
+			afterEditCell: function (id,name,val,iRow,iCol){
+				
+				$("#"+id+"_"+name).blur(function(){
+			        $("#treeGrid").jqGrid("saveCell",iRow,iCol);
+			    });
+				
+				return true;
+		  	},
+            afterSaveCell : function(rowid,name,val,iRow,iCol) {
+		  		$("#treeGrid").setRowData(rowid,false,{background: '#F5BCA9'});
+		  		//$("#"+rowid).css("background", "#F5BCA9");
+		  	},
+            loadComplete: function() {
+            	$(".ui-jqgrid tr.jqgrow>td").css("border-bottom-style","none");
+            	//$('.tree-leaf', $(this)).css('width', '0px');
+            	folderAllClose();
+            },
+            beforeSelectRow : function( id, event) {
+            	if($(event.target).is(":checkbox")) {
+                    if($(event.target).is(":checked")) {
+                    	$("#treeGrid").setCell(id,"regYn","Y");
+                    	
+                    	if($("#treeGrid").getCell(id,"orgRegYn") == "" || $("#treeGrid").getCell(id,"orgRegYn") == "N"){
+                    		$("#treeGrid").setRowData(id,false,{background: '#F5BCA9'});
+                    	}else{
+                    		$("#treeGrid").setRowData(id,false,{background: 'white'});
+                    	}
+                    	
+                    } else {
+                    	$("#treeGrid").setCell(id,"regYn","N");
+                    	
+                    	if($("#treeGrid").getCell(id,"orgRegYn") == "Y"){
+                    		$("#treeGrid").setRowData(id,false,{background: '#F5BCA9'});
+                    	}else{
+                    		$("#treeGrid").setRowData(id,false,{background: 'white'});
+                    	}
+                    }
+                    
+                }
+           },
+	   	   	serializeGridData: function(postData) {
+			    return JSON.stringify(postData);
+			}
+        });
+		
+	}
+	
+	
+	function saveDeptAuthRelation(){
+		var allList = $("#grid2").getRowData();
+				
+		var changeList = new Array();
+		
+		var orgRoleList = new Array();
+		var changeRoleList = new Array();
+		
+		for(var i=0;i<allList.length;i++){
+			
+			var row = allList[i];
+			
+			var regYn = "";
+			var orgRegYn = "";
+			
+			if(row.regYn == "" || row.regYn == "N"){
+				regYn = "N";
+			}else{
+				regYn = "Y";
+				changeRoleList.push(row.authCode);
+			}
+			
+			if(row.orgRegYn == "" || row.orgRegYn == "N"){
+				orgRegYn = "N";
+			}else{
+				orgRegYn = "Y";
+				orgRoleList.push(row.authCode);
+			}
+			
+			if(regYn != orgRegYn){
+				changeList.push(row);
+			}
+			
+		}
+		
+		var updateList = changeList;//$("#grid2").getChangedCells('all');
+		
+		if(updateList.length > 0){
+			var params = new Object();
+			
+			params.deptCd = $("#selDeptCd").val();
+			params.coCd = $("#selCoCd").val();
+			params.saveList = updateList;
+			params.orgRoleList = orgRoleList;
+			params.changeRoleList = changeRoleList;
+			
+			if(confirm("저장하시겠습니까?")){
+			    ajaxJsonCall('/sec/saveDeptAuthRelation',  params, function(data){
+			    	
+			    	if(data.response.responseCd == "S"){
+			    		alert(data.response.responseMsg);
+			    		searchDeptAuthList($("#selDeptCd").val(), $("#selCoCd").val());
+			    	}else{
+			    		alert(data.response.responseErrMsg);
+			    	}
+			    	
+			    });
+			}
+			
+		}else{
+			alert("변경사항이 존재하지 않습니다.");
+		}
+	}
+	//코드 그룹 그리드 설정
+	
+    function searchDeptAuthList(deptCd, coCd){
+    	
+    	var params = new Object();
+    	
+    	params.deptCd = deptCd;
+    	params.coCd = coCd;
+
+	    ajaxJsonCall('/sec/deptAuthList',  params, fnSuccess2);
+    	
+    }
+    
+	function fnSuccess2(data){
+		
+		$("#grid2").clearGridData();
+
+		for(var i=0;i<=data.length;i++){
+            $("#grid2").jqGrid('addRowData',i+1,data[i]);
+    	}
+		
+	}
+	
+	function setGrid2(){
+		
+		$("#grid2").jqGrid({
+			datatype: "local",
+    		height: 500,
+    		rowNum: 10000,
+    		rowList: [10000],
+    	   	colNames:['등록여부','권한코드','권한명', '설명', '등록일','seq','orgRegYn'],
+    	   	colModel:[
+    	   		{name:"regYn", index:"regYn", width:50, align:"center" ,	sortable:false,	editable:false, editrules:{required:true},
+					edittype:"checkbox",
+					formatter: "checkbox",
+					formatoptions: {disabled : false},
+					editoptions: { value: "Y:N"}
+				},
+    	   		{name:'authCode',index:'authCode', width:200, align:"center",	editable:false, editrules:{required:true}},
+    	   		{name:'authNm',index:'authNm', width:200,	editable:false, editrules:{required:true}},
+    	   		{name:'authDesc',index:'authDesc', width:300, align:"left",	editable:false},		
+    	   		{name:'createDate',index:'createDate', width:80, align:"center",	editable:false},
+    	   		{name:'seq',index:'seq', width:80, align:"center",	editable:false,hidden:true},
+    	   		{name:'orgRegYn',index:'orgRegYn', width:80, align:"center",	editable:false,hidden:true}
+    	   	],
+    	   	pager: "",
+    	   	viewrecords: true,
+    	   	autowidth:true,
+    	   	rownumbers: true,
+    	   	cellEdit: true,
+    	    cellsubmit: 'clientArray',
+    	    multiselect: false,
+    	    multiboxonly: true,
+    	    onCellSelect: function(rowid,iCol,cellcontent,e){	// cell 선택시 발생하는 이벤트	
+    	    	var colModels = $(this).getGridParam('colModel'); 
+				var colName = colModels[iCol].name;
+				
+    	    	if(rowid != null){
+					if(colName == "modAuthCode"){
+						selAuthCode($(this), rowid);			
+					}
+    	   		}
+			},
+			beforeEditCell: function (rowId,name,val,iRow,iCol){
+				
+			},
+			afterEditCell: function (id,name,val,iRow,iCol){
+				$("#"+id+"_"+name).blur(function(){
+			        $("#grid2").jqGrid("saveCell",iRow,iCol);
+			    });
+				
+				return true;
+		  	},
+		  	afterSaveCell : function(rowid,name,val,iRow,iCol) {
+		  		$("#grid2").setRowData(rowid,false,{background: '#F5BCA9'});
+		  		//$("#"+rowid).css("background", "#F5BCA9");
+		  	},
+		  	ondblClickRow: function (rowid, iRow, iCol) { 
+			},
+			beforeSelectRow : function( id, event) {
+                if($(event.target).is(":checkbox")) {
+                    if($(event.target).is(":checked")) {
+                    	$("#grid2").setCell(id,"regYn","Y");
+                    	
+                    	if($("#grid2").getCell(id,"orgRegYn") == "" || $("#grid2").getCell(id,"orgRegYn") == "N"){
+                    		$("#grid2").setRowData(id,false,{background: '#F5BCA9'});
+                    	}else{
+                    		$("#grid2").setRowData(id,false,{background: 'white'});
+                    	}
+                    	
+                    } else {
+                    	$("#grid2").setCell(id,"regYn","N");
+                    	
+                    	if($("#grid2").getCell(id,"orgRegYn") == "Y"){
+                    		$("#grid2").setRowData(id,false,{background: '#F5BCA9'});
+                    	}else{
+                    		$("#grid2").setRowData(id,false,{background: 'white'});
+                    	}
+                    }
+                    
+                }
+                
+           }
+    	});
+		
+	}
+	
+	function reload(){
+		
+	}
+</script>
+</th:block>
+<body>
+<th:block layout:fragment="content">
+
+<input type="hidden" id="selDeptCd" name="selDeptCd" value="" />
+<input type="hidden" id="selCoCd" name="selCoCd" value="" />
+<div class="tit-area">
+	<h3>부서 권한관리</h3>
+	<ul class="location-area">
+		<li><a href="#none" class="home">Home</a></li>
+		<li><a href="#none">시스템관리</a></li>
+		<li><a href="#none">부서 권한관리</a></li>
+		<li><strong>부서 권한관리</strong></li>
+	</ul>
+</div>
+<div class="layout-box">
+	<div class="layout-left" style="width:30%;">
+		<div class="sub-tit">
+			<h4>부서 목록</h4>
+			<div class="icon-area">
+				<button type="button" id="btnGridFolderOpen" class="i-btn">전체열기</button>
+				<button type="button" id="btnGridFolderClose" class="i-btn">전체닫기</button>
+			</div>
+		</div>
+		<div class="jqGridArea">
+			<select id="coCd" name="coCd" class="wp100">
+				<option value="1000">SK 케미칼</option>
+				<option value="4000">SK 사이언스</option>
+			</select>	 
+			<table id="treeGrid"></table>
+		</div>
+	</div>	
+	<div class="layout-right"  style="width:70%;">
+		<div class="sub-tit">
+			<h4>권한 정보 <span id="textDeptNm"></span></h4>
+			<div class="icon-area">
+				<button type="button" id="btnSaveDeptAuth" class="i-btn"><em class="icon03"></em>저장</button>
+			</div>
+		</div>
+		<div class="jqGridArea">	 
+			<table id="grid2"></table>
+		</div>	
+	</div>	
+</div>
+</th:block>
+</body>
+</html>

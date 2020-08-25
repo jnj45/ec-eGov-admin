@@ -4,14 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
-import javax.persistence.ColumnResult;
-import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.NamedNativeQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -24,15 +20,13 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import net.ecbank.fwk.admin.manage.sec.entity.UserAuthRel;
 import net.ecbank.fwk.admin.manage.sys.dto.MenuDto;
-import net.ecbank.fwk.admin.manage.sys.dto.MenuTreeDto;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name="COMTNMENUINFO")
+@Table(name="EF_MENU")
 //@ToString(exclude = {"codeClass", "codeDetails"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
@@ -74,7 +68,7 @@ import net.ecbank.fwk.admin.manage.sys.dto.MenuTreeDto;
 							"        ,MENU_DC\r\n" + 
 							"        ,RELATE_IMAGE_PATH\r\n" + 
 							"        ,RELATE_IMAGE_NM\r\n" + 
-							"    FROM  COMTNMENUINFO)\r\n" + 
+							"    FROM  EF_MENU)\r\n" + 
 							"START WITH MENU_NO = 0 \r\n" + 
 							"CONNECT BY PRIOR MENU_NO = UPPER_MENU_NO",resultSetMapping="TreeMapping")*/
 public class Menu {
@@ -82,15 +76,18 @@ public class Menu {
 	@Column(name="MENU_NM")
 	private String menuNm;
 	
+	@Column(name="MENU_EN_NM")
+	private String menuEnNm;
+	
 	@Column(name="PROGRM_FILE_NM")
 	private String programFileNm;
 	
 	@Id
 	@Column(name="MENU_NO")
-	private long menuNo;
+	private String menuNo;
 	
 	@Column(name="UPPER_MENU_NO")
-	private long upperMenuNo;
+	private String upperMenuNo;
 	
 	@Column(name="MENU_ORDR")
 	private int menuOrder;
@@ -107,6 +104,12 @@ public class Menu {
 	@Column(name="URL")
 	private String url;
 	
+	@Column(name="USE_YN", columnDefinition="char")
+	private String useYn;
+	
+	@Column(name="VIEW_CO_CD",columnDefinition="char")
+	private String viewCoCd;
+	
 	@Transient
 	private int lvl;
 	
@@ -114,13 +117,14 @@ public class Menu {
 	@OneToMany(mappedBy="menuInfo",fetch=FetchType.LAZY)
 	private List<MenuAuthRel> menuAuthList = new ArrayList<MenuAuthRel>();
 	
-	public Menu(long menuNo) {
+	public Menu(String menuNo) {
 		this.menuNo = menuNo;
 	}
 	
 	public Menu(MenuDto menuDto) {
 		this.menuNo = menuDto.getModMenuNo();
 		this.menuNm = menuDto.getMenuNm();
+		this.menuEnNm = menuDto.getMenuEnNm();
 		this.upperMenuNo = menuDto.getUpperMenuNo();
 		this.menuOrder = menuDto.getMenuOrder();
 		this.menuDesc = menuDto.getMenuDesc();
@@ -128,7 +132,8 @@ public class Menu {
 		this.relateImagePath = menuDto.getRelateImagePath();
 		this.url = menuDto.getUrl();
 		this.programFileNm = menuDto.getProgramFileNm();
-		
+		this.useYn = menuDto.getUseYn();
+		this.viewCoCd = menuDto.getViewCoCd();
 	}
 	
 }

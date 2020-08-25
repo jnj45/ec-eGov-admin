@@ -25,12 +25,12 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
 			"        ,MENU_DC\r\n" + 
 			"        ,RELATE_IMAGE_PATH\r\n" + 
 			"        ,RELATE_IMAGE_NM\r\n" + 
-			"    FROM  COMTNMENUINFO)\r\n" + 
+			"    FROM  EF_MENU)\r\n" + 
 			"START WITH MENU_NO = 0 \r\n" + 
 			"CONNECT BY PRIOR MENU_NO = UPPER_MENU_NO",nativeQuery=true)*/
 	/*@Query(nativeQuery = true)
 	List<MenuTreeDto> searchMenuListByTree();*/
 	
-	Menu findOneByMenuNo(Long menuNo);
+	Menu findOneByMenuNo(String menuNo);
 	
 }

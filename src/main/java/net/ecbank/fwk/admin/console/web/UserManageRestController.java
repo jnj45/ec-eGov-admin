@@ -25,6 +25,8 @@ public class UserManageRestController {
 	@PostMapping("/userList")
 	public List<UserDto> codeGrpList(@RequestBody UserDto userDto) {
 		
+		System.out.println(userDto);
+		
 		List<User> list = userManageService.searchUserList(userDto);
 		
 		return convertToDtoList(list);

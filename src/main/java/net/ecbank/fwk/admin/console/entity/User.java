@@ -60,7 +60,7 @@ public class User extends BaseEntity{
 	@Column(name="LAST_LOGIN_DT")
 	private LocalDateTime lastLoginDt;
 	
-	@Column(name="USE_YN")
+	@Column(name="USE_YN", columnDefinition="char")
 	private String useYn;
 	
 	public User(String userId) {

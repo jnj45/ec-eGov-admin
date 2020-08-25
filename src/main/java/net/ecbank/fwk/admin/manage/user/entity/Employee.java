@@ -1,34 +1,10 @@
 package net.ecbank.fwk.admin.manage.user.entity;
 
-import java.time.LocalDateTime;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import net.ecbank.fwk.admin.common.entity.BaseEntity;
 
-@EqualsAndHashCode(callSuper=false)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
-@Data
-@Table(name="EF_EMP")
-//@ToString(exclude = {"codeClass", "codeDetails"})
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
-@JsonIgnoreProperties({"hibernateLazyInitializer"}) 
 public class Employee extends BaseEntity {
 	
-	@Id
+	/*@Id
 	@Column(name="EMP_NO")
 	private String empNo;
 	
@@ -105,6 +81,6 @@ public class Employee extends BaseEntity {
 	
 	public Employee(String empNo) {
 		this.empNo = empNo;
-	}
+	}*/
 	
 }

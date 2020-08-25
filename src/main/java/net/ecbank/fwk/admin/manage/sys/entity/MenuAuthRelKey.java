@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class MenuAuthRelKey implements Serializable {
 	
-	private long menuInfo;
+	private String menuInfo;
 	private String authInfo;
 	
 }

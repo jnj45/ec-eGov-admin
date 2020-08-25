@@ -29,6 +29,14 @@
 	});
 		
 	function init(){
+		
+		if ($("#accessDateBgn").val()==''){
+			$("#accessDateBgn").val(firstDayByMonth(getToDay("-")));
+		}
+		if ($("#accessDateEnd").val()==''){
+			$("#accessDateEnd").val(getToDay("-"));
+		}
+		
 		setGrid1();
 		//searchProgramList();
 	}
@@ -39,6 +47,7 @@
     	$("#grid1").jqGrid({
     		url:"/log/searchLoginLogList",
     		datatype: "json",
+    		ajaxGridOptions: { contentType: "application/json; charset=UTF-8" },
     		mtype:"POST",
     		jsonReader:{
     			root:"content",
@@ -50,12 +59,15 @@
     			conectId : $("#conectId").val(),
     			conectIp : $("#conectIp").val(),
     			conectMthd : $("#conectMthd").val(),
-    			errorOccrrncAt : $("#errorOccrrncAt").val()
+    			errorOccrrncAt : $("#errorOccrrncAt").val(),
+    			coCode : $("#coCode").val(),
+    			accessDateBgn : $("#accessDateBgn").val(),
+    			accessDateEnd : $("#accessDateEnd").val()
     		},
-    		height: 500,
+    		height: 450,
     		rowNum: 20,
     		rowList: [10,20,30,50,100],
-    	   	colNames:['로그ID','접속ID','접속IP','접속방식','성공여부', '에러코드','접속일시'],
+    	   	colNames:['로그ID','접속ID','접속IP','접속방식','성공여부', '에러코드','접속일시','회사코드'],
     	   	colModel:[
     	   		{name:'logId',index:'logId', width:80, align:"left",	editable:false, editrules:{required:true}},
     	   		{name:'conectId',index:'conectId', width:80, align:"left",	editable:false, editrules:{required:true}},
@@ -71,7 +83,8 @@
 					editoptions: { value: "Y:실패;N:성공"}	
     	   		},		
 				{name:'errorCode',index:'errorCode', width:150, align:"left",	editable:false},
-				{name:'createDate',index:'createDate', width:200, align:"center",	editable:false}
+				{name:'formatterCreateDate',index:'formatterCreateDate', width:200, align:"center",	editable:false},
+				{name:'coCode',index:'coCode', width:100, align:"center",	editable:false}
     	   	],
     	   	pager: "#gridPager",
     	   	pgButtons:true,
@@ -82,7 +95,10 @@
     	   	onPagine : function (pgButton){
     	   		var gridPage = $("#grid1").getGridParam("page");
     	   		var totalPage = $("#grid1").getGridParam("total");
-    	   	}
+    	   	},
+    	   	serializeGridData: function(postData) {
+			    return JSON.stringify(postData);
+			}
     	});
 	}
 	
@@ -97,6 +113,9 @@
     			conectIp : $("#conectIp").val(),
     			conectMthd : $("#conectMthd").val(),
     			errorOccrrncAt : $("#errorOccrrncAt").val(),
+    			coCode : $("#coCode").val(),
+    			accessDateBgn : $("#accessDateBgn").val(),
+    			accessDateEnd : $("#accessDateEnd").val(),
     			page : 0
     		}}
 		).trigger("reloadGrid");
@@ -121,13 +140,11 @@
 	<div class="tbl-search-area">
 		<table class="tbl-search">
 			<colgroup>
-				<col style="width:105px">
+				<col style="width:100px">
 				<col>
-				<col style="width:105px">
+				<col style="width:100px">
 				<col>
-				<col style="width:105px">
-				<col>
-				<col style="width:105px">
+				<col style="width:100px">
 				<col>
 			</colgroup>
 			<tbody>
@@ -146,6 +163,22 @@
 							<option value="O" >로그아웃</option>
 						</select>
 					</td>
+				</tr>
+				<tr>
+					<th><span>회사코드</span></th>
+					<td>
+						<select id="coCode" name="coCode">
+							<option value="" >전체</option>
+							<option value="1000" >SK케미칼</option>
+							<option value="4000" >SK바이오사이언스</option>
+						</select>
+					</td>
+					<th><span>접속일</span></th>
+					<td>
+						<span class="date-area"><input id="accessDateBgn" name="accessDateBgn" class="date-inpt" size="10"/></span>
+						<em>~</em>
+						<span class="date-area"><input id="accessDateEnd" name="accessDateEnd" class="date-inpt" size="10"/></span>
+					</td>
 					<th><span>성공여부</span></th>
 					<td>
 						<select id="errorOccrrncAt" name="errorOccrrncAt">
@@ -153,8 +186,7 @@
 							<option value="N" >성공</option>
 							<option value="Y" >실패</option>
 						</select>
-					</td>
-				</tr>
+					</td>				</tr>
 			</tbody>
 		</table>	
 	</div>

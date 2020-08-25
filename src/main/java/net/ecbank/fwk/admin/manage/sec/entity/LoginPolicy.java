@@ -24,7 +24,7 @@ import net.ecbank.fwk.admin.manage.sec.dto.LoginPolicyDto;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Data
-@Table(name="COMTNLOGINPOLICY")
+@Table(name="EF_LOGIN_POLICY")
 //@ToString(exclude = {"codeClass", "codeDetails"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @JsonIgnoreProperties({"hibernateLazyInitializer"}) 

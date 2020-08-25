@@ -23,7 +23,7 @@ import net.ecbank.fwk.admin.manage.sec.entity.AuthInfo;
 @EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name="COMTNMENUCREATDTLS")
+@Table(name="EF_AUTH_MENU")
 //@ToString(exclude = {"codeClass", "codeDetails"})
 @IdClass(MenuAuthRelKey.class)
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
@@ -43,7 +43,7 @@ public class MenuAuthRel {
 	@Column(name="MAPNG_CREAT_ID")
 	private String mappingCreateId;
 	
-	public MenuAuthRel(long menuNo,String authCode, String mappingCreateId) {
+	public MenuAuthRel(String menuNo,String authCode, String mappingCreateId) {
 		
 		this.menuInfo = new Menu(menuNo);
 		this.authInfo = new AuthInfo(authCode);

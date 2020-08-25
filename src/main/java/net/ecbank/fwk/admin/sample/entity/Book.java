@@ -29,15 +29,17 @@ import net.ecbank.fwk.admin.common.entity.BaseEntity;
 @NoArgsConstructor
 @Entity
 @Table(name="Z_BOOK") //샘플 테이블 'Z_' prefix
-@TableGenerator(name="Z_BOOK_SEQ_GENERATOR", table="COMTECOPSEQ", pkColumnValue="Z_BOOK_ID", pkColumnName="TABLE_NAME", valueColumnName="NEXT_ID", allocationSize=1)
+@TableGenerator(name="Z_BOOK_SEQ_GENERATOR", table="EF_DOC_NO_SEQ", pkColumnValue="Z_BOOK_ID", pkColumnName="TABLE_NAME", valueColumnName="NEXT_ID", allocationSize=1)
 public class Book extends BaseEntity {
 	
 	@Id @GeneratedValue(strategy=GenerationType.TABLE, generator="Z_BOOK_SEQ_GENERATOR")
 	@Column(name="BOOK_ID")
 	private Long id;
 	
+	@Column(name="TITLE")
 	private String title;
 	
+	@Column(name="TOTAL_PAGE")
 	private Long totalPage;
 	
 	@ManyToOne(fetch=FetchType.LAZY)

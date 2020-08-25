@@ -21,10 +21,22 @@
 			searchLogView();
 	    });
 		
+		$("#btnGridFolderOpen").click(function(e) {
+			folderAllOpen();
+	    });
+		
+		$("#btnGridFolderClose").click(function(e) {
+			folderAllClose();
+	    });
+		
 		$("#btnDownLog").click(function(e) {
 			downloadLog();
 	    });
 		
+		$("#instanceId").change(function() {
+			$("#treeGrid").GridUnload();
+			setTreeGrid();
+	    });
 		
 		
 		$('#logDiv').scroll(function(){
@@ -67,6 +79,32 @@
 		
 	}
 	
+	function folderAllOpen(){
+		
+		$(".treeclick","table#treeGrid").each(function() {
+
+			if($(this).hasClass("tree-plus")) {
+
+				$(this).trigger("click");
+
+			}
+
+		});
+		
+	}
+	
+	function folderAllClose(){
+		$(".treeclick","table#treeGrid").each(function() {
+
+			if($(this).hasClass("tree-minus")) {
+
+				$(this).trigger("click");
+
+			}
+
+		});
+	}
+	
 	function setTreeGrid(){
 		
 		var cnt = 0;
@@ -74,6 +112,10 @@
 		$("#treeGrid").jqGrid({
 			url : "/log/getLogPathList",
     		datatype: "json",
+    		ajaxGridOptions: { contentType: "application/json; charset=UTF-8" },
+    		postData:{
+    			"instanceId":$("#instanceId").val()
+    		},
     		mtype:"POST",
             colNames: ["경로","Name","fYn"],
             colModel: [
@@ -119,7 +161,11 @@
             loadComplete: function() {
             	$(".ui-jqgrid tr.jqgrow>td").css("border-bottom-style","none");
             	//$('.tree-leaf', $(this)).css('width', '0px');
-            }
+            	folderAllClose();
+            },
+    	   	serializeGridData: function(postData) {
+			    return JSON.stringify(postData);
+			}
         });
 		
 	}
@@ -147,7 +193,7 @@
 	    	if(data.response.responseCd == "S"){
 	    		$("#currFilePath").val(data.fullPath);
 	    		$("#lastLine").val(data.toLine+1);
-	    		$("#logView").append(data.logContents);
+	    		$("#logView").append(escapeHtml(data.logContents));
 	    	}else{
 	    		alert(data.response.responseErrMsg);
 	    	}
@@ -192,7 +238,7 @@
 	    	if(data.response.responseCd == "S"){
 	    		$("#currFilePath").val(data.fullPath);
 	    		$("#lastLine").val(data.toLine+1);
-	    		$("#logView").append(data.logContents);
+	    		$("#logView").append(escapeHtml(data.logContents));
 	    	}else{
 	    		alert(data.response.responseErrMsg);
 	    	}
@@ -258,6 +304,15 @@
 		
 	}
 	
+	var entityMap = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '/': '&#x2F;', '`': '&#x60;', '=': '&#x3D;' }; 
+	function escapeHtml (string) { 
+		return String(string).replace(/[&<>"'`=\/]/g ,
+		function (s) { 
+			return entityMap[s]; 
+		}); 
+	}
+
+	
 </script>
 </th:block>
 <body>
@@ -287,10 +342,19 @@
 		<div class="sub-tit">
 			<h4>로그 탐색기</h4>
 			<div class="icon-area">
+				<button type="button" id="btnGridFolderOpen" class="i-btn">전체열기</button>
+				<button type="button" id="btnGridFolderClose" class="i-btn">전체닫기</button>
 				<button type="button" id="btnDownLog" class="i-btn">다운로드</button>
 			</div>
 		</div>
-		<div class="jqGridArea">	 
+		<div class="jqGridArea">
+			<select id="instanceId" name="instanceId" class="wp100">
+				<th:block th:each="optList : ${instanceList}" >
+					<option th:value="${optList}" >
+					[[${optList}]]
+					</option>
+				</th:block>	
+			</select>	 
 			<table id="treeGrid"></table>
 		</div>
 	</div>
@@ -313,7 +377,7 @@
 		<table class="tbl-style02">
 			<tr>
 				<td style="">
-					<div id="logDiv" style="height:550px;overflow:auto;">
+					<div id="logDiv" style="height:580px;overflow:auto;">
     					<div id="logView" style="white-space: pre-wrap;">
     					</div>
 					</div>

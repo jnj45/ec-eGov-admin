@@ -18,7 +18,7 @@ public class LoginLogService {
 	private LoginLogRepository loginLogRep;
 	
 	@Autowired
-	private LoginLogRepositoryImpl loginLogRepImpl;
+	private LoginLogRepositoryImpl loginLogRepImpl; 
 	
 	public Page<LoginLogDto> searchLoginLogList(LoginLogDto loginLogDto){
 		

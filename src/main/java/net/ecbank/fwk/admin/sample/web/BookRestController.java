@@ -3,10 +3,10 @@ package net.ecbank.fwk.admin.sample.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.ecbank.fwk.admin.intface.service.TotalLogApiService;
 import net.ecbank.fwk.admin.sample.dto.BookAuthorDto;
 import net.ecbank.fwk.admin.sample.dto.BookSearchCondition;
 import net.ecbank.fwk.admin.sample.entity.Book;
@@ -18,6 +18,9 @@ public class BookRestController {
 	
 	@Autowired
 	BookService bookService;
+	
+	@Autowired
+	TotalLogApiService totalLogApiService;
 	
 	@RequestMapping("/booksDto")
 	public Page<BookAuthorDto> searchBooksDto(BookSearchCondition cond, Pageable pageable){
@@ -38,4 +41,6 @@ public class BookRestController {
 		Page<Book> result = bookService.searchBooks(cond, pageable);
 		return result;
 	}
+	
+	
 }

@@ -27,7 +27,7 @@ import net.ecbank.fwk.admin.manage.sys.dto.PropertyDto;
 //@ToString(exclude = {"codeClass", "codeDetails"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
-@TableGenerator(name="SystemProperties_ID_GENERATOR", table="COMTECOPSEQ", pkColumnValue="EF_SYS_PROPS_ID", pkColumnName="TABLE_NAME", valueColumnName="NEXT_ID", allocationSize=1)
+@TableGenerator(name="SystemProperties_ID_GENERATOR", table="EF_DOC_NO_SEQ", pkColumnValue="EF_SYS_PROPS_ID", pkColumnName="TABLE_NAME", valueColumnName="NEXT_ID", allocationSize=1)
 public class Property extends BaseEntity {
 	
 	@Id
@@ -44,7 +44,7 @@ public class Property extends BaseEntity {
 	@Column(name="VALUE")
 	private String value;
 	
-	@Column(name="USE_YN")
+	@Column(name="USE_YN",columnDefinition="char")
 	private String useYn;
 	
 	public Property(Long propId) {

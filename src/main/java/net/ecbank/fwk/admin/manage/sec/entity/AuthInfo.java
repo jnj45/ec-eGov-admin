@@ -28,7 +28,7 @@ import net.ecbank.fwk.admin.manage.sys.entity.MenuAuthRel;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Data
-@Table(name="COMTNAUTHORINFO")
+@Table(name="EF_AUTH")
 //@ToString(exclude = {"codeClass", "codeDetails"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @JsonIgnoreProperties({"hibernateLazyInitializer"}) 
@@ -53,6 +53,12 @@ public class AuthInfo {
 
 	@Transient
 	private String regYn;
+	
+	@Transient
+	private String orgRegYn;
+	
+	@Transient
+	private Long seq;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy="authInfo",fetch=FetchType.LAZY)
@@ -84,12 +90,20 @@ public class AuthInfo {
 		this.createDate = authInfoDto.getCreateDate();
 	}
 	
-	public AuthInfo(String authCode, String authNm, String authDesc,String createDate, String regYn) {
+	public AuthInfo(String authCode, String authNm, String authDesc,String createDate, String regYn, long seq) {
 		this.authCode = authCode;
 		this.authNm = authNm;
 		this.authDesc = authDesc;
 		this.createDate = createDate;
-		this.regYn = regYn;
+		
+		if(regYn != null && !regYn.equals("")) {
+			this.regYn = "Y";
+			this.orgRegYn = "Y";
+		} else {
+			this.regYn = "";
+			this.orgRegYn = "";
+		}
+		
+		this.seq = seq;
 	}
-	
 }

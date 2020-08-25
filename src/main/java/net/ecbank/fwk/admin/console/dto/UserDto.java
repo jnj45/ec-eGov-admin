@@ -11,6 +11,7 @@ import net.ecbank.fwk.admin.common.dto.CommonDto;
 @EqualsAndHashCode(callSuper=false)
 public class UserDto extends CommonDto {
 	
+	private String coCd;
 	private String userId;
 	private String modUserId;
 	private String userNm;

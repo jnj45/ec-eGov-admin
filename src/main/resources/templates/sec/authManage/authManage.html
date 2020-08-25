@@ -16,6 +16,13 @@
 	var lastid;
 	
 	$(document).ready(function() {
+		
+		$(".enterEvent").keyup(function(e) {
+	        if (e.keyCode == 13) {
+	        	searchAuthInfoList();
+	        }
+	    });
+		
 		$("#btnSearch").click(function(e) {
 			searchAuthInfoList();
 	    });
@@ -179,15 +186,15 @@
 		
     	$("#grid1").jqGrid({
     		datatype: "local",
-    		height: 250,
+    		height: 500,
     		rowNum: 10000,
     		rowList: [10000],
     	   	colNames:['권한코드','권한명', '설명', '등록일', 'orgAuthCode'],
     	   	colModel:[
-    	   		{name:'modAuthCode',index:'modAuthCode', width:150, align:"center",	editable:false, editrules:{required:true}},
+    	   		{name:'modAuthCode',index:'modAuthCode', width:150, align:"left",	editable:false, editrules:{required:true}},
     	   		{name:'authNm',index:'authNm', width:150,	editable:false, editrules:{required:true}},
-    	   		{name:'authDesc',index:'authDesc', width:300, align:"left",	editable:false},		
-    	   		{name:'createDate',index:'createDate', width:80, align:"center",	editable:false},
+    	   		{name:'authDesc',index:'authDesc', width:200, align:"left",	editable:false},		
+    	   		{name:'createDate',index:'createDate', width:150, align:"center",	editable:false},
     	   		{name:'authCode',index:'authCode', width:150, align:"center",	editable:false, hidden:true}
     	   	],
     	   	pager: "",
@@ -286,7 +293,7 @@
 		
 		$("#grid2").jqGrid({
     		datatype: "local",
-    		height: 250,
+    		height: 500,
     		rowNum: 10000,
     		rowList: [10000],
     		colNames:['롤 코드','롤 명','패턴', '타입', 'Sort', '설명', '등록일','등록여부'],
@@ -395,10 +402,10 @@
 				<tr>
 					<th><span>권한코드</span></th>
 					<td>
-						<input type="text" id="authCode" name="authCode" value="" >
+						<input type="text" id="authCode" name="authCode" value="" class="enterEvent" >
 					</td>
 					<th><span>권한명</span></th>
-					<td><input type="text" id="authNm" name="authNm" value="" ></td>
+					<td><input type="text" id="authNm" name="authNm" value=""  class="enterEvent" ></td>
 				</tr>
 			</tbody>
 		</table>	
@@ -408,7 +415,7 @@
 	</div>
 </div>
 <div class="layout-box">
-	<div class="layout">
+	<div class="layout-left">
 		<div class="sub-tit">
 			<h4>권한</h4>
 			<div class="icon-area">
@@ -420,20 +427,20 @@
 		<div class="jqGridArea">	 
 			<table id="grid1"></table>
 		</div>
-		
-		<div class="layout">
-			<div class="sub-tit">
-				<h4>롤정보</h4>
-				<div class="icon-area">
-					<button type="button" id="btnSaveAuthRelation" class="i-btn"><em class="icon03"></em>저장</button>
-					<button type="button" id="btnReflectRuntime" class="i-btn">Runtime 반영</button>
-				</div>
-			</div>
-			<div class="jqGridArea">	 
-				<table id="grid2"></table>
-			</div>	
-		</div>	
 	</div>
+		
+	<div class="layout-right">
+		<div class="sub-tit">
+			<h4>롤정보</h4>
+			<div class="icon-area">
+				<button type="button" id="btnSaveAuthRelation" class="i-btn"><em class="icon03"></em>저장</button>
+				<button type="button" id="btnReflectRuntime" class="i-btn">Runtime 반영</button>
+			</div>
+		</div>
+		<div class="jqGridArea">	 
+			<table id="grid2"></table>
+		</div>	
+	</div>	
 </div>
 </th:block>
 </body>

@@ -28,13 +28,14 @@ import net.ecbank.fwk.admin.common.entity.BaseEntity;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name="Z_AUTHOR") //샘플 테이블 'Z_' prefix
-@TableGenerator(name="Z_AUTHOR_SEQ_GENERATOR", table="COMTECOPSEQ", pkColumnValue="Z_AUTHOR_ID", pkColumnName="TABLE_NAME", valueColumnName="NEXT_ID", allocationSize=1)
+@TableGenerator(name="Z_AUTHOR_SEQ_GENERATOR", table="EF_DOC_NO_SEQ", pkColumnValue="Z_AUTHOR_ID", pkColumnName="TABLE_NAME", valueColumnName="NEXT_ID", allocationSize=1)
 public class Author extends BaseEntity {
 	
 	@Id @GeneratedValue(strategy=GenerationType.TABLE, generator="Z_AUTHOR_SEQ_GENERATOR")
 	@Column(name="AUTHOR_ID")
 	private Long id;
 	
+	@Column(name="AUTHOR_NM")
 	private String authorNm;
 	
 	

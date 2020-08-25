@@ -11,10 +11,11 @@ import net.ecbank.fwk.admin.common.dto.CommonDto;
 public class MenuDto extends CommonDto {
 	
 	private String menuNm;
+	private String menuEnNm;
 	private String programFileNm;
-	private long menuNo;
-	private long modMenuNo;
-	private long upperMenuNo;
+	private String menuNo;
+	private String modMenuNo;
+	private String upperMenuNo;
 	private int menuOrder;
 	private String menuDesc;
 	private String relateImagePath;
@@ -23,6 +24,8 @@ public class MenuDto extends CommonDto {
 	private String newYn;
 	private String regYn;
 	private String authCode;
+	private String useYn;
+	private String viewCoCd;
 	
 	private List<MenuDto> saveList;
 	

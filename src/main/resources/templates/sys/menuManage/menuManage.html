@@ -24,8 +24,20 @@
 			addMenu();
 	    });
 		
+		$("#btnAddFolder").click(function(e) {
+			addFolder();
+	    });
+		
 		$("#btnDeleteMenuInfo").click(function(e) {
 			deleteMenuInfo();
+	    });
+		
+		$("#btnGridFolderOpen").click(function(e) {
+			folderAllOpen();
+	    });
+		
+		$("#btnGridFolderClose").click(function(e) {
+			folderAllClose();
 	    });
 		
 		init();
@@ -40,6 +52,32 @@
 		setTreeGrid();
 	}
 	
+	function folderAllOpen(){
+		
+		$(".treeclick","table#treeGrid").each(function() {
+
+			if($(this).hasClass("tree-plus")) {
+
+				$(this).trigger("click");
+
+			}
+
+		});
+		
+	}
+	
+	function folderAllClose(){
+		$(".treeclick","table#treeGrid").each(function() {
+
+			if($(this).hasClass("tree-minus")) {
+
+				$(this).trigger("click");
+
+			}
+
+		});
+	}
+	
 	function setTreeGrid(){
 		
 		var cnt = 0;
@@ -48,10 +86,10 @@
 			url : "/sys/searchMenuListByTree",
     		datatype: "json",
     		mtype:"POST",
-            colNames: ["메뉴번호","메뉴명","newYn","programFileNm","url"],
+            colNames: ["메뉴","메뉴번호","newYn","programFileNm","url"],
             colModel: [
-                {name:'menuNo', index:'menuNo', width:1, hidden:true, key:true},
                 {name:'menuNm', index:'menuNm', hidden:false, sortable:false},
+                {name:'menuNo', index:'menuNo', width:1, hidden:true, key:true},
                 {name:'newYn', index:'newYn', hidden:true, sortable:false},
                 {name:'programFileNm', index:'programFileNm', hidden:true, sortable:false},
                 {name:'url', index:'url', hidden:true, sortable:false}
@@ -97,7 +135,7 @@
         	    	$("#menuDesc").val("");
         	    	$("#menuOrder").val("");
         	    	$("#programFileNm").val(treedata.programFileNm);
-					if(treedata.lvl == "1" || treedata.lvl == "2"){
+					if(treedata.url == "dir"){
 						$("#programFileNm").prop("readonly",true);
 						$("#url").prop("readonly",true);
         	    	}else{
@@ -117,6 +155,8 @@
 						$(this).trigger("click");
 					}
 				});
+            	
+            	folderAllClose();
             }
         });
 		
@@ -128,12 +168,17 @@
 		
 		params.menuNo = menuNo;
 		
+		$("#selMenuNo").val(menuNo);
+		
 	    ajaxJsonCall('/sys/searchMenuInfo',  params, function(data){
 	    	$("#menuNo").val(data.menuNo);
 	    	$("#modMenuNo").val(data.menuNo);
 	    	$("#menuNm").val(data.menuNm);
+	    	$("#menuEnNm").val(data.menuEnNm);
 	    	$("#upperMenuNo").val(data.upperMenuNo);
 	    	$("#url").val(data.url);
+	    	$("#useYn").val(data.useYn);
+	    	$("#viewCoCd").val(data.viewCoCd);
 	    	$("#menuDesc").val(data.menuDesc);
 	    	$("#menuOrder").val(data.menuOrder);
 	    	$("#programFileNm").val(data.programFileNm);
@@ -154,6 +199,7 @@
 			    	
 			    	if(data.response.responseCd == "S"){
 			    		alert(data.response.responseMsg);
+			    		//selMenuInfo($("#selMenuNo").val());
 			    		reload();
 			    	}else{
 			    		alert(data.response.responseErrMsg);
@@ -196,13 +242,8 @@
 		var upperMenuNo = treedata.upperMenuNo;
 		
 		if(lvl == "1"){
-			treedata.menuNm = "신규 폴더";
-			treedata.upperMenuNo = menuNo;
-			treedata.programFileNm = "dir";
-			treedata.url = "dir";
-			treedata.menuNo = "";
-			treedata.newYn = "Y";
-			$("#treeGrid").jqGrid ('addChildNode', "", menuNo, treedata);
+			alert("최상위 노드에틑 메뉴를 추가하실수 없습니다.");
+			return false;
 		}
 		
 		if(lvl == "2"){
@@ -217,13 +258,38 @@
 		
 		if(lvl == "3"){
 			treedata.menuNm = "신규메뉴";
+			treedata.leaf = "true";
 			treedata.menuNo = "";
 			treedata.newYn = "Y";
 			treedata.programFileNm = "";
 			treedata.url = "";
-			$("#treeGrid").jqGrid ('addChildNode', "", upperMenuNo, treedata);
+			$("#treeGrid").jqGrid ('addChildNode', "", menuNo, treedata);
 		}
 		
+		
+	}
+	
+	function addFolder(){
+		
+		var treedata = $("#treeGrid").jqGrid('getRowData', $("#selRowId").val());
+		
+		var isLeaf = treedata.leaf;
+		var lvl = treedata.lvl;
+		var menuNo = treedata.menuNo;
+		var upperMenuNo = treedata.upperMenuNo;
+		
+		if(isLeaf == "true"){
+			alert("메뉴에는 폴더를 생성하실수 없습니다.");
+			return false;
+		}
+		
+		treedata.menuNm = "신규 폴더";
+		treedata.upperMenuNo = menuNo;
+		treedata.programFileNm = "dir";
+		treedata.url = "dir";
+		treedata.menuNo = "";
+		treedata.newYn = "Y";
+		$("#treeGrid").jqGrid ('addChildNode', "", menuNo, treedata);
 		
 	}
 	
@@ -238,6 +304,12 @@
 		if($("#menuNm").val() == ""){
 			alert("메뉴명을 입력하세요.");
 			$("#menuNm").focus();
+			return false;
+		}
+		
+		if($("#menuEnNm").val() == ""){
+			alert("메뉴 영문명을 입력하세요.");
+			$("#menuEnNm").focus();
 			return false;
 		}
 		
@@ -276,11 +348,15 @@
 	</ul>
 </div>
 <input type="hidden" id="selRowId" name="selRowId" value="" />
+<input type="hidden" id="selMenuNo" name="selMenuNo" value="" />
 <div class="layout-box">
 	<div class="layout-left">
 		<div class="sub-tit">
 			<h4>메뉴 목록</h4>
 			<div class="icon-area">
+				<button type="button" id="btnGridFolderOpen" class="i-btn">전체펼치기</button>
+				<button type="button" id="btnGridFolderClose" class="i-btn">전체접기</button>
+				<button type="button" id="btnAddFolder" class="i-btn"><em class="icon01"></em>폴더추가</button>
 				<button type="button" id="btnAddMenu" class="i-btn"><em class="icon01"></em>메뉴추가</button>
 				<!-- <button type="button" id="btnDeleteProgram" class="i-btn"><em class="icon02"></em>삭제</button>
 				<button type="button" id="btnSaveProgram" class="i-btn"><em class="icon03"></em>저장</button> -->
@@ -327,6 +403,10 @@
 					<th>메뉴명</th>
 					<td colspan="3"><input type="text" class="wp100" id="menuNm" name="menuNm" value=""></td>
 				</tr>
+				<tr>	
+					<th>메뉴 영문명</th>
+					<td colspan="3"><input type="text" class="wp100" id="menuEnNm" name="menuEnNm" value=""></td>
+				</tr>
 				<tr>
 					<th>프로그램명</th> 
 					<td colspan="3"><input type="text" class="wp100" id="programFileNm" name="programFileNm" value=""></td>
@@ -334,6 +414,25 @@
 				<tr>
 					<th>연결URL</th>
 					<td colspan="3"><input type="text" class="wp100" id="url" name="url" value=""></td>
+				</tr>
+				<tr>
+					<th>사용여부</th>
+					<td colspan="3">
+						<select id="useYn" name="useYn">
+							<option value="Y">사용</option>
+							<option value="N">미사용</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>노출 회사</th>
+					<td colspan="3">
+						<select id="viewCoCd" name="viewCoCd">
+							<option value="">전체</option>
+							<option value="1000">SK케미칼</option>
+							<option value="4000">바이오사이언스</option>
+						</select>
+					</td>
 				</tr>
 				<tr>
 					<th>이미지 경로</th>

@@ -29,7 +29,7 @@ import net.ecbank.fwk.admin.common.entity.BaseEntity;
 @EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name="COMTCCMMNCODE")
+@Table(name="EF_CODE_GRP")
 @ToString(exclude = {"codeClass", "codeDetails"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @JsonIgnoreProperties({"hibernateLazyInitializer"}) 
@@ -39,10 +39,10 @@ public class CodeGroup extends BaseEntity {
 	@Column(name="CODE_ID")
 	private String codeGrp;
 	
-	@Column(name="CODE_ID_NM")
+	@Column(name="CODE_ID_NM", columnDefinition ="nvarchar")
 	private String codeGrpNm;
 	
-	@Column(name="CODE_ID_DC")
+	@Column(name="CODE_ID_DC", columnDefinition ="nvarchar")
 	private String codeGrpDesc;
 	
 	@Column(name="USE_AT", columnDefinition ="char")

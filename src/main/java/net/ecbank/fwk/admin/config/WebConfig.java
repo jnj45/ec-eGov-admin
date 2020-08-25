@@ -1,10 +1,9 @@
 package net.ecbank.fwk.admin.config;
 
-import java.time.Duration;
-
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.CacheControl;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -36,6 +35,15 @@ public class WebConfig implements WebMvcConfigurer{
         registry.addRedirectViewController("/", introPage);
     }
 	
+    @Bean
+    public FilterRegistrationBean<SimpleXssFilter> getFilterRegistrationBean2(){
+        FilterRegistrationBean<SimpleXssFilter> registrationBean = new FilterRegistrationBean<SimpleXssFilter>();
+        registrationBean.setFilter(new SimpleXssFilter());
+        registrationBean.setOrder(1);
+        registrationBean.addUrlPatterns("/*","/*/**","/*/*/**");    //filter를 거칠 url patterns
+        return registrationBean;
+    }
+    
 	@Override
 	public void addResourceHandlers(org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry registry) {
 		// 정적 리소스 디렉토리 추가
@@ -48,4 +56,16 @@ public class WebConfig implements WebMvcConfigurer{
 //			.setCacheControl(CacheControl.maxAge(Duration.ofSeconds(20)));
 //		WebMvcConfigurer.super.addResourceHandlers(registry); //이 코드 없어도 됨.
 	}
+	
+	/*@Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(htmlEscapingConverter());
+    }
+
+    private HttpMessageConverter<?> htmlEscapingConverter() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.getFactory().setCharacterEscapes(new HtmlCharacterEscapes());
+
+        return new MappingJackson2HttpMessageConverter(objectMapper);
+    }*/
 }

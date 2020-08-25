@@ -1,37 +1,18 @@
 package net.ecbank.fwk.admin.manage.user.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import net.ecbank.fwk.admin.common.entity.BaseEntity;
 
-@EqualsAndHashCode(callSuper=false)
+/*@EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Data
 @Table(name="EF_VENDOR")
 //@ToString(exclude = {"codeClass", "codeDetails"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
-@JsonIgnoreProperties({"hibernateLazyInitializer"}) 
+@JsonIgnoreProperties({"hibernateLazyInitializer"}) */
 public class Vendor extends BaseEntity {
 	
-	@Id
+	/*@Id
 	@Column(name="VENDOR_CD")
 	private String vendorCd;
 	
@@ -70,6 +51,6 @@ public class Vendor extends BaseEntity {
 	
 	@JsonIgnore
 	@OneToMany(mappedBy="vendor",fetch=FetchType.LAZY)
-	private List<VendorUser> vendorUsers = new ArrayList<VendorUser>();
+	private List<VendorUser> vendorUsers = new ArrayList<VendorUser>();*/
 	
 }

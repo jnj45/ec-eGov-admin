@@ -27,7 +27,15 @@ function searchEntity(){
 	    }
 	);
 }
-
+function sendTotalLogAuth(){
+	//alert($("#searchForm").serialize());
+	$.post( "/sample/sendTotalLogAuth", 
+		$("#searchForm").serialize(), 
+		function(data){
+			$("#result").val(JSON.stringify(data));
+	    }
+	);
+}
 </script>
 </head>
 <body>
@@ -38,6 +46,7 @@ function searchEntity(){
 	저자이름:<input type="text" name="authorName"/><br>
 	<input type="button" value="조회1" onclick="searchDto();"/>
 	<input type="button" value="조회2" onclick="searchEntity();"/>
+	<input type="button" value="테스트" onclick="sendTotalLogAuth();"/>
 </form>
 <br>
 <textarea id="result" rows="10" cols="100"></textarea>

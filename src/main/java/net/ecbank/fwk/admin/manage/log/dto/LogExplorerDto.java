@@ -8,6 +8,8 @@ import net.ecbank.fwk.admin.common.dto.CommonDto;
 @Data
 public class LogExplorerDto extends CommonDto {
 	
+	private String instanceId;
+	
 	private String folderYn;
 	private String name;
 	private String fullPath;

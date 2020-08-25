@@ -25,6 +25,14 @@
 			setTreeGrid();
 	    });
 		
+		$("#btnGridFolderOpen").click(function(e) {
+			folderAllOpen();
+	    });
+		
+		$("#btnGridFolderClose").click(function(e) {
+			folderAllClose();
+	    });
+		
 		init();
 		
 		$(window).resize(function() {
@@ -37,6 +45,32 @@
 		setTreeGrid();
 	}
 	
+	function folderAllOpen(){
+		
+		$(".treeclick","table#treeGrid").each(function() {
+
+			if($(this).hasClass("tree-plus")) {
+
+				$(this).trigger("click");
+
+			}
+
+		});
+		
+	}
+	
+	function folderAllClose(){
+		$(".treeclick","table#treeGrid").each(function() {
+
+			if($(this).hasClass("tree-minus")) {
+
+				$(this).trigger("click");
+
+			}
+
+		});
+	}
+	
 	function setTreeGrid(){
 		
 		var cnt = 0;
@@ -44,24 +78,25 @@
 		$("#treeGrid").jqGrid({
 			url : "/sys/searchMenuAuthTreeList",
     		datatype: "json",
+    		ajaxGridOptions: { contentType: "application/json; charset=UTF-8" },
     		postData:{
     			"authCode":$("#authCode").val()
     		},
     		mtype:"POST",
-            colNames: ["메뉴번호","메뉴명","newYn","programFileNm","url",""],
+            colNames: ["메뉴번호","메뉴","newYn","programFileNm","url","","orgRegYn"],
             colModel: [
                 {name:'menuNo', index:'menuNo', width:1, hidden:true, key:true},
                 {name:'menuNm', index:'menuNm',width:80 , hidden:false, sortable:false,editable:false},
                 {name:'newYn', index:'newYn', hidden:true, sortable:false},
                 {name:'programFileNm', index:'programFileNm', hidden:true, sortable:false},
                 {name:'url', index:'url', hidden:true, sortable:false},
-                {name:'regYn', index:'regYn', width:20, hidden:false,align:"center",editable:true,
+                {name:'regYn', index:'regYn', width:20, hidden:false,align:"center",editable:false,
                 	edittype:"checkbox",
 					formatter: "checkbox",
-					formatoptions: {disabled : true},
+					formatoptions: {disabled : false},
 					editoptions: { value: "Y:N"}	
-                }
-                
+                },
+                {name:'orgRegYn', index:'orgRegYn', hidden:true, sortable:false}
             ],
             treeGridModel: 'adjacency',
             height: '500',
@@ -106,7 +141,7 @@
 				}
 				
     	   	},
-            onSelectRow: function (rowid) {
+            onSelectRow: function (rowid,event) {
             	$("#selRowId").val(rowid);
             	var treedata = $("#treeGrid").jqGrid('getRowData', rowid);
             	//alert(JSON.stringify(treedata));
@@ -121,7 +156,7 @@
         	    	$("#menuDesc").val("");
         	    	$("#menuOrder").val("");
         	    	$("#programFileNm").val(treedata.programFileNm);
-					if(treedata.lvl == "1" || treedata.lvl == "2"){
+					if(treedata.url == "dir"){
 						$("#programFileNm").prop("readonly",true);
 						$("#url").prop("readonly",true);
         	    	}else{
@@ -131,6 +166,7 @@
         	    	$("#relateImagePath").val("");
         	    	$("#relateImageNm").val("");
             	}
+            	
             },
 			afterEditCell: function (id,name,val,iRow,iCol){
 				
@@ -147,8 +183,34 @@
             loadComplete: function() {
             	$(".ui-jqgrid tr.jqgrow>td").css("border-bottom-style","none");
             	//$('.tree-leaf', $(this)).css('width', '0px');
-            	
-            }
+            	folderAllClose();
+            },
+            beforeSelectRow : function( id, event) {
+            	if($(event.target).is(":checkbox")) {
+                    if($(event.target).is(":checked")) {
+                    	$("#treeGrid").setCell(id,"regYn","Y");
+                    	
+                    	if($("#treeGrid").getCell(id,"orgRegYn") == "" || $("#treeGrid").getCell(id,"orgRegYn") == "N"){
+                    		$("#treeGrid").setRowData(id,false,{background: '#F5BCA9'});
+                    	}else{
+                    		$("#treeGrid").setRowData(id,false,{background: 'white'});
+                    	}
+                    	
+                    } else {
+                    	$("#treeGrid").setCell(id,"regYn","N");
+                    	
+                    	if($("#treeGrid").getCell(id,"orgRegYn") == "Y"){
+                    		$("#treeGrid").setRowData(id,false,{background: '#F5BCA9'});
+                    	}else{
+                    		$("#treeGrid").setRowData(id,false,{background: 'white'});
+                    	}
+                    }
+                    
+                }
+           },
+	   	   	serializeGridData: function(postData) {
+			    return JSON.stringify(postData);
+			}
         });
 		
 	}
@@ -163,8 +225,11 @@
 	    	$("#menuNo").val(data.menuNo);
 	    	$("#modMenuNo").val(data.menuNo);
 	    	$("#menuNm").val(data.menuNm);
+	    	$("#menuEnNm").val(data.menuEnNm);
 	    	$("#upperMenuNo").val(data.upperMenuNo);
 	    	$("#url").val(data.url);
+	    	$("#useYn").val(data.useYn);
+	    	$("#viewCoCd").val(data.viewCoCd);
 	    	$("#menuDesc").val(data.menuDesc);
 	    	$("#menuOrder").val(data.menuOrder);
 	    	$("#programFileNm").val(data.programFileNm);
@@ -176,7 +241,43 @@
 	
 	function saveMenuAuthRel(){
 		
-		var updateList = $("#treeGrid").getChangedCells('all');
+		var allList = $("#treeGrid").getRowData();
+		
+		var changeList = new Array();
+		
+		var orgRoleList = new Array();
+		var changeRoleList = new Array();
+		
+		for(var i=0;i<allList.length;i++){
+			
+			var row = allList[i];
+			
+			var regYn = "";
+			var orgRegYn = "";
+			
+			if(row.regYn == "" || row.regYn == "N"){
+				regYn = "N";
+			}else{
+				regYn = "Y";
+				changeRoleList.push(row.authCode);
+			}
+			
+			if(row.orgRegYn == "" || row.orgRegYn == "N"){
+				orgRegYn = "N";
+			}else{
+				orgRegYn = "Y";
+				orgRoleList.push(row.authCode);
+			}
+			
+			if(regYn != orgRegYn){
+				changeList.push(row);
+			}
+			
+		}
+		
+		var updateList = changeList;
+		
+		//var updateList = $("#treeGrid").getChangedCells('all');
 		
 		if(updateList.length > 0){
 			var params = new Object();
@@ -229,15 +330,22 @@
 		<div class="sub-tit">
 			<h4>메뉴 목록</h4>
 			<div class="icon-area">
+				<button type="button" id="btnGridFolderOpen" class="i-btn">전체펼치기</button>
+				<button type="button" id="btnGridFolderClose" class="i-btn">전체접기</button>
 				<button type="button" id="btnSaveMenuAuthRel" class="i-btn"><em class="icon03"></em>저장</button>
 			</div>
 		</div>
 		<div class="jqGridArea">
 			<select id="authCode" name=authCode class="wp100">
 				<th:block th:each="optList : ${authList}" >
+					
+					<th:block th:if="${optList.authCode != 'IS_AUTHENTICATED_ANONYMOUSLY' 
+										and optList.authCode != 'IS_AUTHENTICATED_REMEMBERED' 
+										and optList.authCode != 'IS_AUTHENTICATED_FULLY'}">
 					<option th:value="${optList.authCode}" >
-					[[${optList.authCode}]]
+					[[${optList.authNm}]]  ([[${optList.authCode}]])
 					</option>
+					</th:block>
 				</th:block>	
 			</select>	 
 			<table id="treeGrid"></table>
@@ -280,6 +388,10 @@
 					<th>메뉴명</th>
 					<td colspan="3"><input type="text" class="wp100" id="menuNm" name="menuNm" value="" readonly="readonly" style="background-color: #D8D8D8;"></td>
 				</tr>
+				<tr>	
+					<th>메뉴영문명</th>
+					<td colspan="3"><input type="text" class="wp100" id="menuEnNm" name="menuEnNm" value="" readonly="readonly" style="background-color: #D8D8D8;"></td>
+				</tr>
 				<tr>
 					<th>프로그램명</th> 
 					<td colspan="3"><input type="text" class="wp100" id="programFileNm" name="programFileNm" value="" readonly="readonly" style="background-color: #D8D8D8;"></td>
@@ -287,6 +399,25 @@
 				<tr>
 					<th>연결URL</th>
 					<td colspan="3"><input type="text" class="wp100" id="url" name="url" value="" readonly="readonly" style="background-color: #D8D8D8;"></td>
+				</tr>
+				<tr>
+					<th>사용여부</th>
+					<td colspan="3">
+						<select id="useYn" name="useYn" disabled="disabled" style="background-color: #D8D8D8;">
+							<option value="Y">사용</option>
+							<option value="N">미사용</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>노출 회사</th>
+					<td colspan="3">
+						<select id="viewCoCd" name="viewCoCd" disabled="disabled" style="background-color: #D8D8D8;">
+							<option value="">전체</option>
+							<option value="1000">SK케미칼</option>
+							<option value="4000">바이오사이언스</option>
+						</select>
+					</td>
 				</tr>
 				<tr>
 					<th>이미지 경로</th>

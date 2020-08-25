@@ -23,11 +23,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name="EA_SYS_PROPS")
-@TableGenerator(name="AdminProperties_ID_GENERATOR", table="COMTECOPSEQ", pkColumnValue="EA_SYS_PROPS_ID", pkColumnName="TABLE_NAME", valueColumnName="NEXT_ID", allocationSize=1)
+@TableGenerator(name="AdminProperties_ID_GENERATOR", table="EF_DOC_NO_SEQ", pkColumnValue="EA_SYS_PROPS_ID", pkColumnName="TABLE_NAME", valueColumnName="NEXT_ID", allocationSize=1)
 public class AdminProperties extends BaseEntity {
 	
 	@Id @GeneratedValue(strategy=GenerationType.TABLE, generator="AdminProperties_ID_GENERATOR")
-	@Column(name="PROP_ID")
+	@Column(name="PROP_ID",columnDefinition="bigint")
 	private Long propId;
 	
 	@Column(name="PROP_KEY")
@@ -39,7 +39,7 @@ public class AdminProperties extends BaseEntity {
 	@Column(name="PROP_DESC")
 	private String propDesc;
 	
-	@Column(name="USE_YN")
+	@Column(name="USE_YN" ,columnDefinition="char")
 	private String useYn;
 	
 	public AdminProperties(String propKey, String propVal, String propDesc) {

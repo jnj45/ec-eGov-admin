@@ -1,6 +1,7 @@
 package net.ecbank.fwk.admin.manage.log.dto;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import com.querydsl.core.annotations.QueryProjection;
@@ -19,6 +20,10 @@ public class LoginLogDto extends CommonDto {
 	private String errorOccrrncAt;
 	private String errorCode;
 	private LocalDateTime createDate;
+	private String coCode;
+	private String accessDateBgn;
+	private String accessDateEnd;
+	private String formatterCreateDate;
 	
 	private List<LoginLogDto> searchList;
 	
@@ -36,7 +41,10 @@ public class LoginLogDto extends CommonDto {
 		this.errorOccrrncAt = loginLog.getErrorOccrrncAt();
 		this.errorCode = loginLog.getErrorCode();
 		this.createDate = loginLog.getCreateDate();
+		this.coCode = loginLog.getCoCode();
 		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SSS");
+		this.formatterCreateDate = loginLog.getCreateDate().format(formatter);
 		
 	}
 	

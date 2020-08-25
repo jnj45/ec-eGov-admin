@@ -6,9 +6,10 @@ import lombok.Data;
 public class MenuTreeDto{
 	
 	private String menuNm;
+	private String menuEnNm;
 	private String programFileNm;
-	private long menuNo;
-	private long upperMenuNo;
+	private String menuNo;
+	private String upperMenuNo;
 	private int menuOrder;
 	private String menuDesc;
 	private String relateImagePath;
@@ -19,6 +20,7 @@ public class MenuTreeDto{
 	private boolean loaded = true;
 	private String newYn;
 	private String regYn;
+	private String orgRegYn;
 	private String authCode;
 	
 	public MenuTreeDto() {
@@ -30,34 +32,48 @@ public class MenuTreeDto{
 		return this.newYn;
 	}
 	
+	public String getOrgRegYn() {
+		return this.regYn;
+	}
+	
 	public boolean isExpanded() {
 		
-		if(this.lvl == 3) {
-		  this.expanded = false;
+		if(this.programFileNm != null) {
+			if(!this.programFileNm.equals("dir")) {
+			  this.expanded = false;
+			}else {
+			  this.expanded = true;
+			}
 		}else {
-		  this.expanded = true;
+			this.expanded = false;
 		}
+		
 		
 		return this.expanded;
 	}
 	
 	public boolean isLeaf() {
 		
-		if(this.lvl == 3) {
-		  this.leaf = true;
+		if(this.programFileNm != null) {
+			if(!this.programFileNm.equals("dir")) {
+			  this.leaf = true;
+			}else {
+			  this.leaf = false;
+			}
 		}else {
-		  this.leaf = false;
+			this.leaf = true;
 		}
 		
 		return this.leaf;
 	}
 	
-	public MenuTreeDto(String menuNm, String programFileNm,
-					long menuNo, long upperMenuNo,
+	public MenuTreeDto(String menuNm, String menuEnNm, String programFileNm,
+			String menuNo, String upperMenuNo,
 					int menuOrder, String menuDesc,
 					String relateImagePath, String relateImageNm,
 					int lvl) {
 		  this.menuNm = menuNm;
+		  this.menuEnNm = menuEnNm;
 		  this.programFileNm = programFileNm;
 		  this.menuNo = menuNo;
 		  this.upperMenuNo = upperMenuNo;
@@ -68,12 +84,17 @@ public class MenuTreeDto{
 		  this.lvl = lvl;
 		  this.expanded = false;
 		  
-		  if(lvl == 3) {
+		  if(this.programFileNm != null) {
+			  if(!this.programFileNm.equals("dir")) {
+				  this.leaf = true;
+				  this.expanded = false;
+			  }else {
+				  this.leaf = false;
+				  this.expanded = true;
+			  }
+		  }else {
 			  this.leaf = true;
 			  this.expanded = false;
-		  }else {
-			  this.leaf = false;
-			  this.expanded = true;
 		  }
 		  this.loaded = true;
 	}

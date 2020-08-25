@@ -1,22 +1,11 @@
 package net.ecbank.fwk.admin.manage.sec.repository;
 
-import static net.ecbank.fwk.admin.manage.sec.entity.QLoginPolicy.loginPolicy;
-import static net.ecbank.fwk.admin.manage.sec.entity.QRoleInfo.roleInfo;
-import static net.ecbank.fwk.admin.manage.user.entity.QEmployee.employee;
-import static net.ecbank.fwk.admin.manage.user.entity.QVendorUser.vendorUser;
-import static org.springframework.util.StringUtils.hasText;
-
 import java.util.List;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 import net.ecbank.fwk.admin.manage.sec.dto.LoginPolicyDto;
-import net.ecbank.fwk.admin.manage.sec.dto.QLoginPolicyDto;
-import net.ecbank.fwk.admin.manage.sec.entity.QLoginPolicy;
-import net.ecbank.fwk.admin.manage.user.entity.QEmployee;
-import net.ecbank.fwk.admin.manage.user.entity.QVendorUser;
 
 @RequiredArgsConstructor
 public class LoginPolicyRepositoryImpl {
@@ -25,7 +14,7 @@ public class LoginPolicyRepositoryImpl {
 	
 	public List<LoginPolicyDto> searchEmployeeLoginPolicyList(LoginPolicyDto loginPolicyDto){
 		
-		List<LoginPolicyDto> results = queryFactory.select(new QLoginPolicyDto(employee,loginPolicy))
+		/*List<LoginPolicyDto> results = queryFactory.select(new QLoginPolicyDto(employee,loginPolicy))
 				.from(new QEmployee("employee"))
 				.leftJoin(new QLoginPolicy("loginPolicy"))
 				.on(employee.empNo.eq(loginPolicy.userId))
@@ -33,14 +22,14 @@ public class LoginPolicyRepositoryImpl {
 						empNmLike(loginPolicyDto.getUserNm()),
 						empNoLike(loginPolicyDto.getUserId())
 				)
-				.fetch();
+				.fetch();*/
 		
-		return results;
+		return null;
 	}
 	
 	public List<LoginPolicyDto> searchVendorLoginPolicyList(LoginPolicyDto loginPolicyDto){
 		
-		List<LoginPolicyDto> results = queryFactory.select(new QLoginPolicyDto(vendorUser,loginPolicy))
+		/*List<LoginPolicyDto> results = queryFactory.select(new QLoginPolicyDto(vendorUser,loginPolicy))
 				.from(new QVendorUser("vendorUser"))
 				.leftJoin(new QLoginPolicy("loginPolicy"))
 				.on(vendorUser.userId.eq(loginPolicy.userId))
@@ -48,12 +37,12 @@ public class LoginPolicyRepositoryImpl {
 						venUserNmLike(loginPolicyDto.getUserNm()),
 						venUserIdLike(loginPolicyDto.getUserId())
 				)
-				.fetch(); 
+				.fetch(); */
 		
-		return results;
+		return null;
 	}
 	
-	private BooleanExpression empNmLike(String userNm) {
+	/*private BooleanExpression empNmLike(String userNm) {
 		return hasText(userNm) ? employee.empNm.contains(userNm) : null;
 	}
 	
@@ -67,5 +56,5 @@ public class LoginPolicyRepositoryImpl {
 	
 	private BooleanExpression venUserIdLike(String userId) {
 		return hasText(userId) ? vendorUser.userId.contains(userId) : null;
-	}
+	}*/
 }

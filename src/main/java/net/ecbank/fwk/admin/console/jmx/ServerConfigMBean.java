@@ -13,4 +13,6 @@ public interface ServerConfigMBean {
 	public void reloadRolesAndUrlMapping();
 	
 	public void realodProperties();
+	
+	public void executeBatch(String batchId);
 }

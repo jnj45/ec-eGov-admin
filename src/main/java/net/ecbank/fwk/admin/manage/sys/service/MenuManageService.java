@@ -35,7 +35,7 @@ public class MenuManageService {
 		return list;
 	}
 	
-	public Menu searchMenuInfo(Long menuNo) {
+	public Menu searchMenuInfo(String menuNo) {
 		return menuRep.findOneByMenuNo(menuNo);
 	}
 	
@@ -44,10 +44,10 @@ public class MenuManageService {
 		
 		Menu menu = new Menu(menuDto);
 		
-		if(menuDto.getModMenuNo() == menuDto.getMenuNo()) {
+		if(menuDto.getModMenuNo().equals(menuDto.getMenuNo())) {
 			menuRep.save(menu);
 		}else {
-			if(menuDto.getModMenuNo() == 0 ) {
+			if(menuDto.getModMenuNo().equals("0")) {
 				menuRep.save(menu);
 			}else {
 				menuRep.save(menu);

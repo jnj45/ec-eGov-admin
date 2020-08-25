@@ -11,7 +11,7 @@ html,body{
 	position:relative;
 	min-width:1280px;
 	min-height:100%;
-	padding-bottom:69px;
+	padding-bottom:0px;
 	box-sizing:border-box;
 }
 .container{
@@ -21,7 +21,7 @@ html,body{
 .content{
 	margin-left:240px;
 	margin-right:20px;
-	padding-bottom:140px;
+	padding-bottom:70px;
 	transition:all .2s;
 }
 
@@ -105,6 +105,7 @@ html,body{
 .gnb-area{
 	position:relative;
 	height:42px;
+	background-color: #7c7676
 }
 .gnb{
 	position:absolute;
@@ -127,11 +128,11 @@ html,body{
 	padding:0 29px;
 	line-height:42px;
 	font-size:16px;
-	color:#444;
+	color:#fff;
 	font-weight:bold;
 }
 .gnb > li:hover > a{
-	color:#326cb8;
+	color:#d0d4db;
 }
 .gnb > li:hover .gnb-sub{
 	display:block;
@@ -139,13 +140,13 @@ html,body{
 .gnb-sub{
 	display:none;
 	position:absolute;
-	top:40px;
+	top:43px;
 	left:50%;
 	z-index:50;
 	min-width:140px;
 	margin-left:-70px;
 	background-color:#fff;
-	border:2px solid #326cb8;
+	border:1px solid #d0d4db;
 	text-align:center;
 	padding:15px 5px 15px 5px; /* 수정*/
 	box-sizing:border-box; /* 수정*/
@@ -157,7 +158,7 @@ html,body{
 	left:65px;
 	width:13px;
 	height:9px;
-	background:url('../images/common/icon_triangle.png') no-repeat 50%;
+	/* background:url('../images/common/icon_triangle.png') no-repeat 50%; */
 }
 .gnb-sub > li > a{
 	display:block; 
@@ -339,7 +340,7 @@ html,body{
 	width:4px;
 	height:15px;
 	margin-top:-7px;
-	background-color:#326cb8;
+	background-color:#919aaa;
 }
 
 
@@ -448,7 +449,7 @@ html,body{
 .tbl-style01{
 	width:100%;
 	table-layout:fixed;
-	border-top:2px solid #326cb8;
+	border-top:2px solid #919aaa;
 	border-left-style:hidden;
 }
 .tbl-style01 thead th{
@@ -501,7 +502,7 @@ html,body{
 .tbl-style02{
 	width:100%;
 	table-layout:fixed;
-	border-top:2px solid #326cb8;
+	border-top:2px solid #919aaa;
 	border-right:1px solid #d7d7d7;
 }
 
@@ -659,8 +660,8 @@ html,body{
 	display:inline-block;
 	font-size:16px;
 	color:#3c414c;
-	padding-left:170px;
-	background:url('../images/common/img_ec_txt.png') no-repeat left;
+	padding-left:10px;
+	/* background:url('../images/common/img_ec_txt.png') no-repeat left; */
 }
 .login-inpt{
 	margin-top:40px;
@@ -824,8 +825,8 @@ html,body{
 	cursor:pointer;
 }
 .tab-area li.tab-on{
-	border:1px solid #326cb8;
-	border-top:3px solid #326cb8;
+	border:1px solid #919aaa;
+	border-top:3px solid #919aaa;
 	border-bottom:0;
 	line-height:36px;
 	background-color:#fff;
@@ -1553,7 +1554,7 @@ html,body{
 
 /* jqgrid 그리드 */
 .jqGridArea {
-	border-top:2px solid #326cb8 ;
+	border-top:2px solid #919aaa ;
 	border-right:1px solid #e5e5e5;
 	overflow:hidden;
 }

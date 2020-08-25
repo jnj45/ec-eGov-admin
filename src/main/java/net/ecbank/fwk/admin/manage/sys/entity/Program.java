@@ -19,7 +19,7 @@ import net.ecbank.fwk.admin.manage.sys.dto.ProgramDto;
 @EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name="COMTNPROGRMLIST")
+@Table(name="EF_PROGRM")
 //@ToString(exclude = {"codeClass", "codeDetails"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @JsonIgnoreProperties({"hibernateLazyInitializer"}) 

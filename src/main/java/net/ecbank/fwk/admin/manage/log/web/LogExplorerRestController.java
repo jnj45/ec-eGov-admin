@@ -37,9 +37,31 @@ public class LogExplorerRestController {
 	
 	@PostMapping("/getLogPathList")
 	@ResponseBody
-	public List<LogExplorerDto> getLogPathList(){
+	public List<LogExplorerDto> getLogPathList(@RequestBody LogExplorerDto dto){
 		
-		return logExplorerService.getLogPathList(environment.getProperty("ecbank.fwk.admin.log.explr.path"));
+		String instanceId = dto.getInstanceId();
+		
+		System.out.println("======== " + instanceId);
+		
+		String intanceList =  environment.getProperty("ecbank.fwk.admin.log.ins.id");
+		String pathList =  environment.getProperty("ecbank.fwk.admin.log.explr.path");
+		
+		System.out.println("======== " + intanceList);
+		System.out.println("======== " + pathList);
+		
+		String[] insList = intanceList.split(",");
+		String[] logPathList = pathList.split(",");
+		
+		int insSeq = 0;
+		
+		for(int i=0;i<insList.length;i++) {
+			if(insList[i].equals(instanceId)) {
+				insSeq = i;
+				break;
+			}
+		}
+		
+		return logExplorerService.getLogPathList(logPathList[insSeq]);
 	}
 	
 	@PostMapping("/getLogView")

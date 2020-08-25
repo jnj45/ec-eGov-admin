@@ -3,11 +3,8 @@ package net.ecbank.fwk.admin.manage.log.web;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +25,7 @@ public class LoginLogRestController {
 	
 	@PostMapping("/searchLoginLogList")
 	@ResponseBody
-	public Page<LoginLogDto> searchLoginLogList(@Valid LoginLogDto loginLogDto){
+	public Page<LoginLogDto> searchLoginLogList(@RequestBody LoginLogDto loginLogDto){
 		
 		Page<LoginLogDto> page = loginLogService.searchLoginLogList(loginLogDto);
 		

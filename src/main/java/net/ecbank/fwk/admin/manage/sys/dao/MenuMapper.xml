@@ -4,8 +4,9 @@
     
     
     <resultMap type="net.ecbank.fwk.admin.manage.sys.dto.MenuTreeDto" id="menuTreeDto" autoMapping="true" />
-
-    <select id="selectMenuTreeList" resultMap="menuTreeDto">
+	
+	<!--ORACLE 용 메뉴 트리  -->
+    <!-- <select id="selectMenuTreeList" resultMap="menuTreeDto">
         <![CDATA[
             SELECT 
 		        MENU_NM AS menuNm,   
@@ -27,13 +28,65 @@
 			        ,MENU_DC  
 			        ,RELATE_IMAGE_PATH  
 			        ,RELATE_IMAGE_NM  
-			    FROM  COMTNMENUINFO)  
+			    FROM  EF_MENU)  
 			START WITH MENU_NO = 0   
 			CONNECT BY PRIOR MENU_NO = UPPER_MENU_NO
          ]]>
+    </select> -->
+    
+    <select id="selectMenuTreeList" resultMap="menuTreeDto">
+        <![CDATA[
+            WITH CTE_TABLE(MENU_NM,MENU_EN_NM,PROGRM_FILE_NM,MENU_NO,UPPER_MENU_NO,MENU_ORDR,MENU_DC,RELATE_IMAGE_PATH,RELATE_IMAGE_NM,LVL,SORT) AS
+			( SELECT 
+				 	 MENU_NM
+				 	,MENU_EN_NM  
+			        ,PROGRM_FILE_NM  
+			        ,MENU_NO  
+			        ,CASE WHEN UPPER_MENU_NO = MENU_NO THEN '1' ELSE UPPER_MENU_NO END AS UPPER_MENU_NO  
+			        ,MENU_ORDR  
+			        ,MENU_DC  
+			        ,RELATE_IMAGE_PATH  
+			        ,RELATE_IMAGE_NM
+					,1 AS LVL
+					,CONVERT(NVARCHAR(1000),'/' + CONCAT(right('00000'+CONVERT(NVARCHAR(1000),MENU_ORDR),3),MENU_NO)) AS SORT
+			    FROM  EF_MENU
+				WHERE MENU_NO = 'ROOT'
+				UNION ALL
+				SELECT 
+					 AA.MENU_NM
+					,AA.MENU_EN_NM  
+			        ,AA.PROGRM_FILE_NM  
+			        ,AA.MENU_NO  
+			        ,CASE WHEN AA.UPPER_MENU_NO = AA.MENU_NO THEN '1' ELSE AA.UPPER_MENU_NO END AS UPPER_MENU_NO  
+			        ,AA.MENU_ORDR  
+			        ,AA.MENU_DC  
+			        ,AA.RELATE_IMAGE_PATH  
+			        ,AA.RELATE_IMAGE_NM
+					,BB.LVL + 1 AS LVL
+					,CONVERT(NVARCHAR(1000),BB.SORT + '/' + CONCAT(right('00000'+CONVERT(NVARCHAR(1000),AA.MENU_ORDR),3),AA.MENU_NO)) AS SORT
+				FROM EF_MENU AA INNER JOIN CTE_TABLE BB ON AA.UPPER_MENU_NO = BB.MENU_NO
+				WHERE AA.MENU_NO != 'ROOT'
+				)
+				SELECT 
+					MENU_NM AS menuNm,
+					MENU_EN_NM AS menuEnNm,
+					PROGRM_FILE_NM AS programFileNm,  
+					MENU_NO AS menuNo,   
+					UPPER_MENU_NO AS upperMenuNo, 
+					MENU_ORDR AS menuOrder, 
+					MENU_DC AS menuDesc, 
+					RELATE_IMAGE_PATH AS relateImagePath, 
+					RELATE_IMAGE_NM AS relateImageNm, 
+					LVL AS lvl,
+					SORT
+				 FROM 
+				 	CTE_TABLE
+				 ORDER BY SORT
+         ]]>
     </select>
     
-    <select id="selectMenuAuthTreeList" resultMap="menuTreeDto" parameterType="String">
+    <!--ORACLE용  -->
+    <!-- <select id="selectMenuAuthTreeList" resultMap="menuTreeDto" parameterType="String">
         <![CDATA[
             SELECT 
 		        MENU_NM AS menuNm,   
@@ -57,12 +110,77 @@
 			        ,AA.RELATE_IMAGE_PATH  
 			        ,AA.RELATE_IMAGE_NM
 			        ,CASE WHEN BB.MENU_NO IS NULL THEN 'N' ELSE 'Y' END AS REG_YN  
-			    FROM  COMTNMENUINFO AA 
-			    LEFT OUTER JOIN COMTNMENUCREATDTLS BB 
+			    FROM  EF_MENU AA 
+			    LEFT OUTER JOIN EF_AUTH_MENU BB 
 			    ON AA.MENU_NO = BB.MENU_NO AND BB.AUTHOR_CODE = #{authCode}
 			    )  
 			START WITH MENU_NO = 0   
 			CONNECT BY PRIOR MENU_NO = UPPER_MENU_NO
+         ]]>
+    </select> -->
+    
+    <select id="selectMenuAuthTreeList" resultMap="menuTreeDto" parameterType="String">
+        <![CDATA[
+            WITH CTE_TABLE(MENU_NM,MENU_EN_NM,PROGRM_FILE_NM,MENU_NO,UPPER_MENU_NO,MENU_ORDR,MENU_DC,RELATE_IMAGE_PATH,RELATE_IMAGE_NM,LVL,SORT,USE_YN) AS
+			( SELECT 
+				 	 MENU_NM
+				 	,MENU_EN_NM  
+			        ,PROGRM_FILE_NM  
+			        ,MENU_NO  
+			        ,CASE WHEN UPPER_MENU_NO = MENU_NO THEN '1' ELSE UPPER_MENU_NO END AS UPPER_MENU_NO  
+			        ,MENU_ORDR  
+			        ,MENU_DC  
+			        ,RELATE_IMAGE_PATH  
+			        ,RELATE_IMAGE_NM
+					,1 AS LVL
+					,CONVERT(NVARCHAR(1000),'/' + CONCAT(right('00000'+CONVERT(NVARCHAR(1000),MENU_ORDR),3),MENU_NO)) AS SORT
+					,USE_YN
+			    FROM  EF_MENU
+				WHERE MENU_NO = 'ROOT'
+				UNION ALL
+				SELECT 
+					 AA.MENU_NM
+					,AA.MENU_EN_NM  
+			        ,AA.PROGRM_FILE_NM  
+			        ,AA.MENU_NO  
+			        ,CASE WHEN AA.UPPER_MENU_NO = AA.MENU_NO THEN '1' ELSE AA.UPPER_MENU_NO END AS UPPER_MENU_NO  
+			        ,AA.MENU_ORDR  
+			        ,AA.MENU_DC  
+			        ,AA.RELATE_IMAGE_PATH  
+			        ,AA.RELATE_IMAGE_NM
+					,BB.LVL + 1 AS LVL
+					,CONVERT(NVARCHAR(1000),BB.SORT + '/' + CONCAT(right('00000'+CONVERT(NVARCHAR(1000),AA.MENU_ORDR),3),AA.MENU_NO)) AS SORT
+					,AA.USE_YN
+				FROM EF_MENU AA INNER JOIN CTE_TABLE BB ON AA.UPPER_MENU_NO = BB.MENU_NO
+				WHERE AA.MENU_NO != 'ROOT'
+				)
+				SELECT * FROM (
+				SELECT 
+					MENU_NM AS menuNm,
+					MENU_EN_NM AS menuEnNm,    
+					PROGRM_FILE_NM AS programFileNm,  
+					AAA.MENU_NO AS menuNo,   
+					UPPER_MENU_NO AS upperMenuNo, 
+					MENU_ORDR AS menuOrder, 
+					MENU_DC AS menuDesc, 
+					RELATE_IMAGE_PATH AS relateImagePath, 
+					RELATE_IMAGE_NM AS relateImageNm, 
+					LVL AS lvl,
+					CASE WHEN BBB.MENU_NO IS NULL THEN 'N' ELSE 'Y' END AS regYn,
+					SORT,
+					CASE WHEN AAA.MENU_NO = 'ROOT' THEN 'Y'
+						 WHEN (
+                          	SELECT COUNT(*) FROM EF_MENU JJ WHERE JJ.MENU_NO = AAA.UPPER_MENU_NO AND JJ.USE_YN = 'Y'
+                          ) > 0 AND AAA.USE_YN = 'Y' THEN 'Y'
+                         ELSE 'N' 
+                      END AS VIEW_YN
+				 FROM 
+				 	CTE_TABLE AAA LEFT OUTER JOIN EF_AUTH_MENU BBB 
+			    ON AAA.MENU_NO = BBB.MENU_NO AND BBB.AUTHOR_CODE = #{authCode}
+			    ) FFF
+			    WHERE 1 = 1
+			    AND FFF.VIEW_YN = 'Y'
+				 ORDER BY SORT
          ]]>
     </select>
     

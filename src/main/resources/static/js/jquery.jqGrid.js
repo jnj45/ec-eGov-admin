@@ -1,7 +1,7 @@
 //This file should be used if you want to debug and develop
 function jqGridInclude()
 {
-    var pathtojsfiles = "../static/js/jqgrid/"; // need to be ajusted
+    var pathtojsfiles = "/static/js/jqgrid/"; // need to be ajusted
     // set include to false if you do not want some modules to be included
     var modules = [
         { include: true, incfile:'i18n/grid.locale-kr.js'}, // jqGrid translation

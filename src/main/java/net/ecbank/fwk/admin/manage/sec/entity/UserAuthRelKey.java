@@ -7,8 +7,7 @@ import lombok.Data;
 @Data
 public class UserAuthRelKey implements Serializable{
 	
-	private String userId;
-	private String userType;
+	private Long seq;
 	private String authInfo;
 	
 }

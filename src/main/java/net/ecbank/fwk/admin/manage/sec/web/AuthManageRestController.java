@@ -113,6 +113,15 @@ public class AuthManageRestController {
 		return convertToDtoList(list);
 	}
 	
+	@PostMapping("/deptAuthList")
+	@ResponseBody
+	public List<AuthInfoDto> deptAuthList(@RequestBody AuthInfoDto authInfoDto) {
+		
+		List<AuthInfo> list = authMngService.searchDeptAuthList(authInfoDto);
+		
+		return convertToDtoList(list);
+	}
+	
 	@PostMapping("/saveUserAuthRelation")
 	public AuthInfoDto saveUserAuthRelation(@RequestBody AuthInfoDto authInfoDto) {
 		
@@ -122,6 +131,29 @@ public class AuthManageRestController {
 		
 		try {
 			authMngService.saveUserAuthRelation(authInfoDto);
+			
+			res.setResponseCd("S");
+			res.setResponseMsg("처리가 완료되었습니다.");
+		}catch (Exception e) {
+			e.printStackTrace();
+			res.setResponseCd("E");
+			res.setResponseErrMsg(e.getMessage());
+		}
+		
+		authInfoDto.setResponse(res);
+		
+		return authInfoDto;
+	}
+	
+	@PostMapping("/saveDeptAuthRelation")
+	public AuthInfoDto saveDeptAuthRelation(@RequestBody AuthInfoDto authInfoDto) {
+		
+		System.out.println("save size : " + authInfoDto.getSaveList().size());
+		
+		Response res = new Response();
+		
+		try {
+			authMngService.saveDeptAuthRelation(authInfoDto);
 			
 			res.setResponseCd("S");
 			res.setResponseMsg("처리가 완료되었습니다.");

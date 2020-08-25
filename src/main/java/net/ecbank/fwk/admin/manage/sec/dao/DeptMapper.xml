@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="net.ecbank.fwk.admin.manage.sec.dao.DeptMapper">
+    
+    
+    <resultMap type="net.ecbank.fwk.admin.manage.sec.dto.DeptTreeDto" id="deptTreeDto" autoMapping="true" />
+    
+    <select id="selectDeptTreeList" resultMap="deptTreeDto" parameterType="String">
+        <![CDATA[
+            WITH CTE(CO_CD, UP_DEPT_CD, DEPT_CD, DEPT_NM, DEPT_NM_EN, TREE, LVL, DEPT_NM_PATH) 
+			AS
+			(
+			  SELECT CO_CD
+					,UP_DEPT_CD
+					,DEPT_CD
+					,DEPT_NM
+					,DEPT_NM_EN
+					,CONVERT(VARCHAR(max), (dbo.FN_LPAD(ISNULL(DEPT_CD,0), 5, '0')+ '_' + DEPT_CD ) ) as TREE
+					, 1 as LVL
+					,CONVERT(VARCHAR(max), (DEPT_NM ) ) as DEPT_NM_PATH
+			    FROM EM_DEPT WITH (NOLOCK)
+			   WHERE 
+					 CO_CD = #{coCd}
+				AND  dbo.FN_NVL(STS, 'C')    != 'D'
+				AND  UP_DEPT_CD = 'ROOT'
+			
+			   UNION ALL
+			
+			  SELECT a.CO_CD
+					,a.UP_DEPT_CD
+					,a.DEPT_CD
+					,a.DEPT_NM
+					,a.DEPT_NM_EN
+			        ,CONVERT(VARCHAR(max), (b.TREE + '.' + dbo.FN_LPAD(ISNULL(a.DEPT_CD,0), 5, '0')+ '_' + a.DEPT_CD) ) as tree
+					,b.LVL +1  as LVL
+					,CONVERT(VARCHAR(max), (b.DEPT_NM_PATH + ' > ' + a.DEPT_NM ) ) as DEPT_NM_PATH
+			    FROM EM_DEPT a WITH (NOLOCK)
+				   , CTE b 
+			   WHERE 
+					 a.CO_CD = #{coCd}
+				AND  dbo.FN_NVL(a.STS, 'C')    != 'D'
+				AND  a.CO_CD = b.CO_CD
+				AND  a.UP_DEPT_CD = b.DEPT_CD
+				AND  a.DEPT_CD != 'ROOT'
+			)
+			SELECT 
+					 r.TREE
+					,r.CO_CD AS coCd
+					,r.UP_DEPT_CD AS upperDeptCd
+					,r.DEPT_CD AS deptCd
+					,(CASE WHEN dbo.FN_NVL('ko', 'ko') = 'ko' THEN r.DEPT_NM ELSE dbo.FN_NVL( r.DEPT_NM_EN, r.DEPT_NM) END ) AS deptNm
+					,r.LVL as lvl
+					,(CASE WHEN r.LVL < LEAD( r.LVL) OVER( ORDER BY r.TREE) THEN '0' else '1' END ) AS isLeaf
+					,r.DEPT_NM_PATH
+			  FROM   CTE r 
+			
+			ORDER BY r.TREE
+         ]]>
+    </select>
+    
+</mapper>

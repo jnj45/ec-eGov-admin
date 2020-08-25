@@ -29,7 +29,7 @@ import net.ecbank.fwk.admin.manage.sec.dto.RoleInfoDto;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Data
-@Table(name="COMTNROLEINFO")
+@Table(name="EF_ROLE")
 //@ToString(exclude = {"codeClass", "codeDetails"})
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @JsonIgnoreProperties({"hibernateLazyInitializer"}) 
@@ -61,7 +61,7 @@ public class RoleInfo {
 	private String roleRegYn;
 	
 	/*@ManyToOne(optional = false)
-	@JoinTable(name = "COMTNAUTHORROLERELATE",
+	@JoinTable(name = "EF_AUTH_ROLE",
 				joinColumns = @JoinColumn(name = "ROLE_CODE"),
 				inverseJoinColumns = @JoinColumn(name = "AUTHOR_CODE")
 			  )

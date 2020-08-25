@@ -1,31 +1,37 @@
 package net.ecbank.fwk.admin.manage.sec.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import net.ecbank.fwk.admin.manage.sec.dto.UserAuthDto;
-import net.ecbank.fwk.admin.manage.user.repository.EmployeeRepository;
-import net.ecbank.fwk.admin.manage.user.repository.VendorUserRepository;
+import net.ecbank.fwk.admin.manage.user.repository.EcUserRepository;
 
 @Service
 public class UserAuthManageService {
 	
 	@Autowired
-	private EmployeeRepository empRep;
+	private EcUserRepository ecUserRep;
 	
-	@Autowired
-	private VendorUserRepository venUsrRep;
-	
-	public List searchUserList(UserAuthDto userAuthDto){
+	public Page<UserAuthDto> searchUserList(UserAuthDto userAuthDto){
 		
-		List list = null;
+		System.out.println(userAuthDto);
+		
+		System.out.println(userAuthDto.getPage());
+		
+		Page<UserAuthDto> list = null;
+		
+		PageRequest pr = PageRequest.of(userAuthDto.getPage()-1,userAuthDto.getRows(),Sort.by(Direction.DESC,"userCls"));
 		
 		if(userAuthDto.getUserGbn().equals("EMP")) {
-			list = empRep.findByEmpNoContainingAndEmpNmContaining(userAuthDto.getUserId(), userAuthDto.getUserNm());
+			//list = empRep.findByEmpNoContainingAndEmpNmContaining(userAuthDto.getUserId(), userAuthDto.getUserNm());
+			list = ecUserRep.findByUserIdContainingAndUserNmContainingAndUserClsAndCoCd(userAuthDto.getUserId(), userAuthDto.getUserNm(), "B",userAuthDto.getCoCd(), pr);
 		}else {
-			list = venUsrRep.findByUserIdContainingAndUserNmContaining(userAuthDto.getUserId(), userAuthDto.getUserNm());
+			list = ecUserRep.findByUserIdContainingAndUserNmContainingAndUserClsAndCoCd(userAuthDto.getUserId(), userAuthDto.getUserNm(), "S",userAuthDto.getCoCd(), pr);
+			//list = venUsrRep.findByUserIdContainingAndUserNmContaining(userAuthDto.getUserId(), userAuthDto.getUserNm());
 		}
 		
 		return list;

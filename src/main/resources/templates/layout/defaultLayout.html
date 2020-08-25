@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />	
     <title layout:title-pattern="$CONTENT_TITLE"></title>
     <th:block th:replace="fragments/main/common_header"></th:block>
     <th:block layout:fragment="pageCustomCss"></th:block>
@@ -34,20 +35,23 @@
 							<ul class="gnb-sub">
 								<li><a href="/log/logExplorer">시스템로그</a></li>
 								<li><a href="/log/loginLog">접속로그</a></li>
+								<li><a href="/log/mailLog">메일 전송 로그</a></li>
 							</ul>
 						</li> 
 						<li>
 							<a href="#none">시스템관리</a>
 							<ul class="gnb-sub">
 								<li><a href="/sys/codeManage">코드관리</a></li>
-								<li><a href="/sys/programManage">프로그램관리</a></li>
+								<!-- <li><a href="/sys/programManage">프로그램관리</a></li> -->
 								<li><a href="/sys/menuManage">메뉴관리</a></li>
 								<li><a href="/sys/menuAuthManage">메뉴생성관리</a></li>
-								<li><a href="/sys/propertyManage">프로퍼티관리</a></li>
+								<!-- <li><a href="/sys/propertyManage">프로퍼티관리</a></li> -->
 								<li><a href="/sec/roleManage">롤관리</a></li>
 								<li><a href="/sec/authManage">권한관리</a></li>
 								<li><a href="/sec/userAuthManage">사용자 권한관리</a></li>
-								<li><a href="/sec/loginPolicyManage">로그인 정책관리</a></li>
+								<li><a href="/sec/deptAuthManage">부서 권한관리</a></li>
+								<!-- <li><a href="/sec/loginPolicyManage">로그인 정책관리</a></li> -->
+								<li><a href="/sys/batchResultManage">배치결과관리</a></li>
 							</ul>
 						</li>
 						<li>
@@ -65,7 +69,7 @@
     	<th:block layout:fragment="content"></th:block>
     </section>
     <!-- 공통 footer -->
-    <footer th:replace="fragments/main/common_footer"></footer>
+    <!-- <footer th:replace="fragments/main/common_footer"></footer> -->
     </div>
 </body>
 </html>

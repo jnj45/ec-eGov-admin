@@ -20,13 +20,13 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name="COMTNLOGINLOG")
+@Table(name="EF_LOGIN_LOG")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class LoginLog {
 	
 	@Id
-	@Column(name="LOG_ID", columnDefinition ="char")
+	@Column(name="LOG_ID", columnDefinition ="bigint")
 	private String logId;
 	
 	@Column(name="CONECT_ID")
@@ -46,4 +46,8 @@ public class LoginLog {
 	
 	@Column(name="CREAT_DT")
 	private LocalDateTime createDate;
+	
+	@Column(name="CO_CD",columnDefinition="char")
+	private String coCode;
+	
 }
